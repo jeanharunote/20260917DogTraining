@@ -118,7 +118,7 @@ export function SignupForm() {
         <div className="mx-auto max-w-2xl px-5">
           <div
             role="status"
-            className="flex flex-col items-center gap-4 rounded-3xl border border-brand-200 bg-brand-50 px-7 py-14 text-center dark:border-brand-800 dark:bg-brand-900/25"
+            className="flex flex-col items-center gap-4 rounded-2xl border border-brand-200 bg-brand-50 px-7 py-14 text-center dark:border-brand-800 dark:bg-brand-900/25"
           >
             <span aria-hidden="true" className="text-5xl">
               🎉
@@ -165,13 +165,13 @@ export function SignupForm() {
           <form
             noValidate
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-7 sm:p-9"
+            className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-7 sm:p-9"
           >
             {/* 이름 */}
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="text-sm font-semibold text-ink">
                 {signup.fields.name.label}
-                <span className="ml-1 text-accent-500" aria-hidden="true">
+                <span className="ml-1 text-brand-400" aria-hidden="true">
                   *
                 </span>
               </label>
@@ -196,7 +196,7 @@ export function SignupForm() {
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-sm font-semibold text-ink">
                 {signup.fields.email.label}
-                <span className="ml-1 text-accent-500" aria-hidden="true">
+                <span className="ml-1 text-brand-400" aria-hidden="true">
                   *
                 </span>
               </label>
@@ -226,7 +226,7 @@ export function SignupForm() {
             <div className="flex flex-col gap-2">
               <label htmlFor="phone" className="text-sm font-semibold text-ink">
                 {signup.fields.phone.label}
-                <span className="ml-1 text-accent-500" aria-hidden="true">
+                <span className="ml-1 text-brand-400" aria-hidden="true">
                   *
                 </span>
               </label>
@@ -260,7 +260,7 @@ export function SignupForm() {
             >
               <legend className="text-sm font-semibold text-ink">
                 {signup.fields.career.label}
-                <span className="ml-1 text-accent-500" aria-hidden="true">
+                <span className="ml-1 text-brand-400" aria-hidden="true">
                   *
                 </span>
               </legend>
@@ -358,7 +358,7 @@ export function SignupForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-gradient font-display inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base shadow-lg shadow-brand-600/30 transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+              className="btn-gradient font-display inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-[0.95rem] font-medium transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? (
                 <>

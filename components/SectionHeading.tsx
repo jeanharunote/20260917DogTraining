@@ -27,17 +27,17 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <span className="inline-flex items-center rounded-full bg-brand-100 px-4 py-1.5 text-xs font-semibold tracking-wide text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+        <span className="inline-flex items-center rounded-full border border-line px-3.5 py-1.5 text-[11px] font-medium tracking-[0.08em] text-brand-600 dark:text-brand-300">
           {eyebrow}
         </span>
       ) : null}
 
-      <h2 className="font-display text-balance text-3xl leading-snug text-ink sm:text-4xl">
+      <h2 className="font-display text-balance text-[1.7rem] font-bold leading-[1.35] text-ink sm:text-[2.1rem]">
         {title}
       </h2>
 
       {description ? (
-        <p className="text-pretty text-base leading-relaxed text-ink-muted sm:text-lg">
+        <p className="text-pretty text-[0.95rem] leading-[1.8] text-ink-muted sm:text-base">
           {description}
         </p>
       ) : null}

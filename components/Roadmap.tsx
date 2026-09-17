@@ -71,8 +71,8 @@ export function Roadmap() {
                   className={cn(
                     "flex flex-col items-start gap-1 rounded-2xl border px-4 py-4 text-left transition-all duration-200",
                     isActive
-                      ? "border-brand-500 bg-brand-50 shadow-sm dark:bg-brand-900/30"
-                      : "border-line bg-surface-muted hover:border-brand-300",
+                      ? "border-brand-400 bg-brand-50 dark:border-brand-500 dark:bg-brand-900/30"
+                      : "border-line bg-surface-muted hover:border-brand-200",
                   )}
                 >
                   <span
@@ -100,7 +100,7 @@ export function Roadmap() {
               aria-label={`${activeWeek.label} 운동 강도`}
             >
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-brand-400 to-accent-500"
+                className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-400"
                 initial={false}
                 animate={{ width: `${activeWeek.intensity}%` }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -124,10 +124,10 @@ export function Roadmap() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className="rounded-3xl border border-line bg-surface-muted p-7 sm:p-9"
+                className="rounded-2xl border border-line bg-surface-muted p-7 sm:p-9"
               >
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="btn-gradient font-display rounded-full px-3 py-1 text-xs">
+                  <span className="font-display rounded-full bg-brand-600 px-3 py-1 text-[11px] font-medium text-white">
                     {activeWeek.label}
                   </span>
                   <span className="font-display text-lg text-ink sm:text-xl">

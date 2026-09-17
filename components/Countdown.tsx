@@ -37,9 +37,9 @@ export function Countdown() {
 
   return (
     <div className="flex flex-col items-center gap-3 sm:items-start">
-      <p className="text-xs font-semibold tracking-wide text-white/80">
+      <p className="text-xs font-medium tracking-wide text-white/70">
         {hero.countdownLabel}
-        <span className="ml-2 font-normal text-white/60">({challengeInfo.deadlineText})</span>
+        <span className="ml-2 font-normal text-white/45">({challengeInfo.deadlineText})</span>
       </p>
 
       <div
@@ -51,12 +51,12 @@ export function Countdown() {
         {units.map(({ key, label }) => (
           <div
             key={key}
-            className="flex min-w-[4rem] flex-col items-center rounded-2xl bg-white/15 px-3 py-3 backdrop-blur sm:min-w-[4.5rem]"
+            className="flex min-w-[4rem] flex-col items-center rounded-xl bg-white/8 px-3 py-3 ring-1 ring-inset ring-white/12 backdrop-blur sm:min-w-[4.5rem]"
           >
-            <span className="font-display tabular text-2xl text-white sm:text-3xl">
+            <span className="font-display tabular text-2xl font-semibold text-white sm:text-[1.75rem]">
               {timeLeft ? padTwo(timeLeft[key]) : "--"}
             </span>
-            <span className="mt-0.5 text-[11px] font-medium text-white/70">{label}</span>
+            <span className="mt-1 text-[10px] font-medium tracking-wide text-white/45">{label}</span>
           </div>
         ))}
       </div>

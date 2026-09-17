@@ -22,19 +22,22 @@ export function EmpathySection() {
               as="li"
               key={point.title}
               delay={index * 0.08}
-              className="flex flex-col gap-3 rounded-3xl border border-line bg-surface-muted p-7"
+              className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-muted p-7"
             >
-              <span aria-hidden="true" className="text-3xl">
+              <span
+                aria-hidden="true"
+                className="flex size-10 items-center justify-center rounded-xl bg-surface text-lg ring-1 ring-line"
+              >
                 {point.emoji}
               </span>
-              <h3 className="font-display text-lg text-ink">{point.title}</h3>
-              <p className="text-pretty text-sm leading-relaxed text-ink-muted">{point.body}</p>
+              <h3 className="font-display text-base text-ink sm:text-lg">{point.title}</h3>
+              <p className="text-pretty text-sm leading-[1.8] text-ink-muted">{point.body}</p>
             </Reveal>
           ))}
         </ul>
 
         <Reveal delay={0.1} className="mt-12 text-center">
-          <p className="font-display text-xl text-brand-700 dark:text-brand-300 sm:text-2xl">
+          <p className="font-display text-lg text-brand-600 dark:text-brand-300 sm:text-xl">
             {empathy.closing}
           </p>
         </Reveal>
