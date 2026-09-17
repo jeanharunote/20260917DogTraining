@@ -30,6 +30,11 @@ const API_KEY_STORAGE = "running-habit:gemini-api-key";
 
 type Status = "idle" | "loading" | "done" | "error";
 
+type KeyCheck = {
+  state: "unknown" | "checking" | "valid" | "invalid";
+  message: string;
+};
+
 export function AiCoach() {
   // API 키와 "기억하기" 체크는 브라우저에만 존재하는 값이라 ref 로 다룹니다.
   // (서버 렌더링 결과와 어긋나지 않게 하고, 불필요한 리렌더도 막습니다)
@@ -38,6 +43,10 @@ export function AiCoach() {
   const [status, setStatus] = useState<Status>("idle");
   const [result, setResult] = useState<CoachResult | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // 키가 제대로 들어갔는지 확인한 결과
+  const [keyCheck, setKeyCheck] = useState<KeyCheck>({ state: "unknown", message: "" });
+  const [showKey, setShowKey] = useState(false);
 
   const {
     register,
@@ -72,6 +81,42 @@ export function AiCoach() {
       }
     } catch {
       // 저장에 실패해도 기능 자체는 계속 동작합니다.
+    }
+  };
+
+  /** 입력한 키가 실제로 쓸 수 있는 키인지 확인합니다. (글 생성 없이 확인만 하므로 사용량이 들지 않아요) */
+  const checkApiKey = async () => {
+    const key = apiKeyRef.current?.value.trim() ?? "";
+
+    if (!key) {
+      setKeyCheck({ state: "invalid", message: "확인할 키를 먼저 입력해 주세요." });
+      apiKeyRef.current?.focus();
+
+      return;
+    }
+
+    setKeyCheck({ state: "checking", message: "" });
+
+    try {
+      const response = await fetch("/api/coach/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apiKey: key }),
+      });
+
+      const data = (await response.json()) as { ok?: boolean; error?: string };
+
+      if (data.ok) {
+        setKeyCheck({ state: "valid", message: aiCoach.apiKey.validLabel });
+        persistKey(key, rememberRef.current?.checked ?? false);
+      } else {
+        setKeyCheck({
+          state: "invalid",
+          message: data.error ?? "키를 확인하지 못했습니다.",
+        });
+      }
+    } catch {
+      setKeyCheck({ state: "invalid", message: "확인 중 문제가 생겼어요. 다시 시도해 주세요." });
     }
   };
 
@@ -151,17 +196,59 @@ export function AiCoach() {
                   *
                 </span>
               </label>
-              <input
-                ref={apiKeyRef}
-                id="coach-api-key"
-                type="password"
-                autoComplete="off"
-                spellCheck={false}
-                defaultValue=""
-                placeholder={aiCoach.apiKey.placeholder}
-                aria-describedby="coach-api-key-hint"
-                className={inputClass(false)}
-              />
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative flex-1">
+                  <input
+                    ref={apiKeyRef}
+                    id="coach-api-key"
+                    type={showKey ? "text" : "password"}
+                    autoComplete="off"
+                    spellCheck={false}
+                    defaultValue=""
+                    placeholder={aiCoach.apiKey.placeholder}
+                    aria-describedby="coach-api-key-hint"
+                    onChange={() => setKeyCheck({ state: "unknown", message: "" })}
+                    className={cn(
+                      inputClass(keyCheck.state === "invalid"),
+                      "pr-16",
+                      keyCheck.state === "valid" && "border-brand-400",
+                    )}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowKey((previous) => !previous)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-[11px] font-medium text-ink-muted transition-colors hover:text-ink"
+                  >
+                    {showKey ? aiCoach.apiKey.hideLabel : aiCoach.apiKey.showLabel}
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => void checkApiKey()}
+                  disabled={keyCheck.state === "checking"}
+                  className="shrink-0 rounded-xl border border-line bg-surface px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-brand-300 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {keyCheck.state === "checking"
+                    ? aiCoach.apiKey.checkingLabel
+                    : aiCoach.apiKey.checkLabel}
+                </button>
+              </div>
+
+              {/* 키 확인 결과 */}
+              {keyCheck.state === "valid" || keyCheck.state === "invalid" ? (
+                <p
+                  role="status"
+                  className={cn(
+                    "flex items-start gap-1.5 text-xs font-medium leading-relaxed",
+                    keyCheck.state === "valid"
+                      ? "text-brand-600 dark:text-brand-300"
+                      : "text-accent-600 dark:text-accent-400",
+                  )}
+                >
+                  <span aria-hidden="true">{keyCheck.state === "valid" ? "✓" : "✕"}</span>
+                  <span>{keyCheck.message}</span>
+                </p>
+              ) : null}
               <p id="coach-api-key-hint" className={hintClass}>
                 {aiCoach.apiKey.hint}{" "}
                 <a
