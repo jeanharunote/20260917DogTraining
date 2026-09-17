@@ -183,6 +183,11 @@ npm run lint         # 린트 검사
   브라우저에서 Google API 를 직접 부르면 CORS 문제가 생길 수 있어 중계 방식을 씁니다.
 - 키는 URL 이 아닌 `x-goog-api-key` 헤더로 전달해 주소창·접근 로그에 남지 않게 했습니다.
 
+### 배포 환경 주의사항
+
+AI 코치는 서버 라우트(`/api/coach`)를 사용합니다. 정적 호스팅(GitHub Pages 등)에는 올릴 수 없고,
+Netlify 에서는 `netlify.toml` 의 `@netlify/plugin-nextjs` 가 있어야 동작합니다.
+
 ### 모델 변경
 
 `data/challenge.ts` 의 `aiCoach.model` 값만 바꾸면 됩니다. (기본값: `gemini-3.5-flash-lite`)
@@ -198,10 +203,30 @@ npm run lint         # 린트 검사
 
 ---
 
-## 6. Vercel 배포 방법
+## 6. 배포 방법
 
-1. 이 저장소를 GitHub 에 올립니다.
-2. [vercel.com](https://vercel.com) 에서 **Add New → Project** 로 저장소를 가져옵니다.
+### Netlify (현재 사용 중)
+
+1. [netlify.com](https://netlify.com) 로그인 → **Add new site → Import an existing project**
+2. GitHub 저장소 `20260917DogTraining` 선택
+3. 빌드 설정은 저장소의 `netlify.toml` 이 알아서 잡아줍니다. (손댈 것 없음)
+   - 이 파일에 `@netlify/plugin-nextjs` 가 선언되어 있어야 **AI 코치(`/api/coach`)가 동작**합니다.
+     플러그인이 없으면 페이지는 보이지만 AI 코치 버튼에서 404 가 납니다.
+4. **Site configuration → Environment variables → Add a variable** 에서 아래를 등록합니다.
+
+   | Key | Value |
+   | --- | --- |
+   | `NEXT_PUBLIC_FORMSPREE_ENDPOINT` | `https://formspree.io/f/xxxxxxxx` |
+
+5. **Deploys → Trigger deploy → Clear cache and deploy site** 로 다시 배포합니다.
+   `NEXT_PUBLIC_` 값은 빌드 시점에 코드에 심어지므로 **등록만 하고 재배포하지 않으면 적용되지 않습니다.**
+
+> 배포 주소가 바뀌면 `data/challenge.ts` 의 `siteMeta.url` 도 함께 바꿔주세요.
+> (링크를 공유할 때 뜨는 미리보기 카드에 사용됩니다.)
+
+### Vercel (대안)
+
+1. [vercel.com](https://vercel.com) 에서 **Add New → Project** 로 저장소를 가져옵니다.
    (Next.js 프로젝트는 빌드 설정이 자동으로 잡힙니다.)
 3. **Settings → Environment Variables** 에 아래 값을 추가합니다.
 
@@ -210,7 +235,6 @@ npm run lint         # 린트 검사
    | `NEXT_PUBLIC_FORMSPREE_ENDPOINT` | `https://formspree.io/f/xxxxxxxx` | Production, Preview, Development |
 
 4. **Deploy** 를 누르면 배포가 끝납니다. 이후 기본 브랜치에 push 할 때마다 자동 배포됩니다.
-5. 배포 후 `data/challenge.ts` 의 `siteMeta.url` 을 실제 도메인으로 바꿔주세요. (SEO/공유 미리보기용)
 
 CLI 로 배포하려면:
 
