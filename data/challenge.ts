@@ -505,6 +505,9 @@ export const siteMeta = {
   title: `${challengeInfo.name} | 한 달 뒤, 러닝이 습관이 되어 있을 당신`,
   description:
     "혼자서는 작심삼일이지만 함께하면 습관이 됩니다. 걷기부터 시작하는 4주 러닝 습관 챌린지 참가자를 모집합니다.",
-  /** TODO: 배포 후 실제 도메인으로 교체하세요 */
-  url: "https://example.com",
+  /**
+   * 배포된 사이트 주소입니다. (카카오톡·인스타 공유 시 미리보기 카드에 사용)
+   * TODO: 나중에 직접 구매한 도메인을 연결하면 그 주소로 바꿔주세요.
+   */
+  url: "https://vermillion-entremet-bec89b.netlify.app",
 } as const;
