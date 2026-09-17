@@ -31,7 +31,7 @@ export function HabitSystem() {
                 {feature.emoji}
               </span>
               <div className="flex flex-col gap-2">
-                <h3 className="text-base font-bold text-ink sm:text-lg">{feature.title}</h3>
+                <h3 className="font-display text-base text-ink sm:text-lg">{feature.title}</h3>
                 <p className="text-pretty text-sm leading-relaxed text-ink-muted">{feature.body}</p>
               </div>
             </Reveal>
@@ -44,7 +44,7 @@ export function HabitSystem() {
             {habitSystem.stats.map((stat) => (
               <div key={stat.label} className="flex flex-col gap-1 bg-surface px-6 py-8 text-center">
                 <dt className="order-2 text-sm font-medium text-ink-muted">{stat.label}</dt>
-                <dd className="tabular order-1 text-3xl font-bold text-brand-600 dark:text-brand-400">
+                <dd className="font-display tabular order-1 bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-3xl text-transparent dark:from-brand-400 dark:to-accent-400">
                   {stat.value}
                 </dd>
                 <p className="order-3 text-[11px] text-ink-muted/70">{stat.caption}</p>

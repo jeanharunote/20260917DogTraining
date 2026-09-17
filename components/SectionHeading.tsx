@@ -32,7 +32,7 @@ export function SectionHeading({
         </span>
       ) : null}
 
-      <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight text-ink sm:text-4xl">
+      <h2 className="font-display text-balance text-3xl leading-snug text-ink sm:text-4xl">
         {title}
       </h2>
 

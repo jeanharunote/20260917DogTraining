@@ -47,7 +47,17 @@ async function sendSignup(values: SignupFormValues): Promise<void> {
       return;
     }
 
-    throw new Error("Formspree 엔드포인트가 설정되지 않았습니다.");
+    // 배포 환경에서 설정이 빠졌다면, 무엇을 해야 하는지 콘솔에 분명히 남깁니다.
+    console.error(
+      "[SignupForm] 신청을 보낼 주소가 없어서 전송에 실패했습니다.\n" +
+        "해결 방법: Formspree 에서 폼을 만든 뒤 발급받은 주소를\n" +
+        "  · 로컬에서는 .env.local 파일에\n" +
+        "  · Vercel 에서는 Settings > Environment Variables 에\n" +
+        "NEXT_PUBLIC_FORMSPREE_ENDPOINT 이름으로 등록하고 다시 배포하세요.\n" +
+        "(NEXT_PUBLIC_ 값은 빌드 시점에 포함되므로 등록 후 재배포가 필요합니다.)",
+    );
+
+    throw new Error("NEXT_PUBLIC_FORMSPREE_ENDPOINT 가 설정되지 않았습니다.");
   }
 
   const response = await fetch(endpoint, {
@@ -63,6 +73,13 @@ async function sendSignup(values: SignupFormValues): Promise<void> {
   });
 
   if (!response.ok) {
+    // Formspree 가 거절한 경우입니다. 주소 오타, 폼 비활성화, 무료 플랜 한도 초과 등이 원인일 수 있어요.
+    const detail = await response.text().catch(() => "");
+    console.error(
+      `[SignupForm] 전송 주소는 있지만 거절당했습니다. (status: ${response.status})`,
+      detail,
+    );
+
     throw new Error(`신청 전송에 실패했습니다. (status: ${response.status})`);
   }
 }
@@ -106,7 +123,7 @@ export function SignupForm() {
             <span aria-hidden="true" className="text-5xl">
               🎉
             </span>
-            <h2 className="text-2xl font-bold text-ink sm:text-3xl">{signup.successTitle}</h2>
+            <h2 className="font-display text-2xl text-ink sm:text-3xl">{signup.successTitle}</h2>
             <p className="text-pretty max-w-md text-sm leading-relaxed text-ink-muted sm:text-base">
               {signup.successMessage}
             </p>
@@ -138,7 +155,7 @@ export function SignupForm() {
             {signup.summary.map((item) => (
               <div key={item.label} className="bg-surface px-4 py-4 text-center">
                 <dt className="text-xs text-ink-muted">{item.label}</dt>
-                <dd className="mt-1 text-sm font-bold text-ink">{item.value}</dd>
+                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
               </div>
             ))}
           </dl>
@@ -341,7 +358,7 @@ export function SignupForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand-600/25 transition-all hover:bg-brand-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+              className="btn-gradient font-display inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base shadow-lg shadow-brand-600/30 transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? (
                 <>

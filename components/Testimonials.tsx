@@ -35,12 +35,12 @@ export function Testimonials() {
                   {/* 프로필 이미지 대신 이름 첫 글자를 사용합니다. (placeholder) */}
                   <span
                     aria-hidden="true"
-                    className="flex size-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300"
+                    className="font-display flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-accent-400 text-sm text-white"
                   >
                     {item.name.charAt(0)}
                   </span>
                   <span className="flex flex-col">
-                    <span className="text-sm font-bold text-ink">{item.name}</span>
+                    <span className="font-display text-sm text-ink">{item.name}</span>
                     <span className="text-xs text-ink-muted">{item.meta}</span>
                   </span>
                   <span className="ml-auto rounded-full bg-accent-100 px-3 py-1 text-[11px] font-semibold text-accent-600 dark:bg-accent-500/15 dark:text-accent-300">

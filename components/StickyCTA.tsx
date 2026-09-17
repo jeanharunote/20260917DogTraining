@@ -50,14 +50,14 @@ export function StickyCTA() {
         >
           <div className="mx-auto flex max-w-3xl items-center justify-between gap-4">
             <div className="hidden flex-col sm:flex">
-              <span className="text-sm font-bold text-ink">{challengeInfo.name}</span>
+              <span className="font-display text-sm text-ink">{challengeInfo.name}</span>
               <span className="text-xs text-ink-muted">
                 {challengeInfo.capacityText} 한정 · {challengeInfo.deadlineText} 마감
               </span>
             </div>
             <Link
               href={`#${cta.anchorId}`}
-              className="w-full rounded-full bg-brand-600 px-6 py-3.5 text-center text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-colors hover:bg-brand-700 sm:w-auto"
+              className="btn-gradient font-display w-full rounded-full px-6 py-3.5 text-center text-sm shadow-lg shadow-brand-600/30 transition-all sm:w-auto"
             >
               {cta.sticky}
             </Link>

@@ -31,7 +31,7 @@ export function WhyHabit() {
               >
                 {principle.emoji}
               </span>
-              <h3 className="text-lg font-bold text-ink">{principle.title}</h3>
+              <h3 className="font-display text-lg text-ink">{principle.title}</h3>
               <p className="text-pretty text-sm leading-relaxed text-ink-muted">{principle.body}</p>
             </Reveal>
           ))}
@@ -40,7 +40,7 @@ export function WhyHabit() {
         {/* 해결책 — "이 챌린지는 이렇게 습관을 만듭니다" */}
         <div className="mt-20">
           <Reveal className="mx-auto max-w-2xl text-center">
-            <h3 className="text-balance text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+            <h3 className="font-display text-balance text-2xl leading-snug text-ink sm:text-3xl">
               {whyHabit.solutionTitle}
             </h3>
           </Reveal>
@@ -55,12 +55,12 @@ export function WhyHabit() {
               >
                 <span
                   aria-hidden="true"
-                  className="tabular shrink-0 text-2xl font-bold text-brand-500/40"
+                  className="font-display tabular shrink-0 text-2xl text-brand-500/50"
                 >
                   {solution.step}
                 </span>
                 <div className="flex flex-col gap-2">
-                  <h4 className="text-base font-bold text-ink sm:text-lg">{solution.title}</h4>
+                  <h4 className="font-display text-base text-ink sm:text-lg">{solution.title}</h4>
                   <p className="text-pretty text-sm leading-relaxed text-ink-muted">
                     {solution.body}
                   </p>

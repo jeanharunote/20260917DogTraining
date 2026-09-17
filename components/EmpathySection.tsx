@@ -27,14 +27,14 @@ export function EmpathySection() {
               <span aria-hidden="true" className="text-3xl">
                 {point.emoji}
               </span>
-              <h3 className="text-lg font-bold text-ink">{point.title}</h3>
+              <h3 className="font-display text-lg text-ink">{point.title}</h3>
               <p className="text-pretty text-sm leading-relaxed text-ink-muted">{point.body}</p>
             </Reveal>
           ))}
         </ul>
 
         <Reveal delay={0.1} className="mt-12 text-center">
-          <p className="text-xl font-bold text-brand-700 dark:text-brand-300 sm:text-2xl">
+          <p className="font-display text-xl text-brand-700 dark:text-brand-300 sm:text-2xl">
             {empathy.closing}
           </p>
         </Reveal>

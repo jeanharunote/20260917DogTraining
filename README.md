@@ -6,7 +6,8 @@
 모바일 우선 랜딩페이지입니다.
 
 - **프레임워크**: Next.js (App Router) + TypeScript
-- **스타일**: Tailwind CSS v4 (다크모드 자동 대응)
+- **스타일**: Tailwind CSS v4 — 보라 그라데이션 테마, 다크모드 자동 대응
+- **글꼴**: Jua(제목·버튼, 둥글고 귀여운 느낌) + Noto Sans KR(본문, 깔끔함) — `next/font` 로 자체 호스팅
 - **애니메이션**: framer-motion (스크롤 등장, 아코디언, Sticky CTA)
 - **폼**: react-hook-form + zod
 - **신청 데이터 저장**: Formspree (엔드포인트는 환경변수로 분리)
@@ -87,9 +88,9 @@ npm run lint         # 린트 검사
 | 항목 | 변수명 | 현재 값(예시) |
 | --- | --- | --- |
 | 챌린지명 | `name` | 한 달 러닝 습관 챌린지 |
-| 챌린지 기간 | `periodText` | 2026-11-01 ~ 2026-11-30 |
-| 모집 마감일(카운트다운) | `deadline` | 2026-10-25T23:59:59+09:00 |
-| 모집 인원 | `capacityText` | 30명 |
+| 챌린지 기간 | `periodText` | 2026-10-01 ~ 2026-10-31 |
+| 모집 마감일(카운트다운) | `deadline` | 2026-09-27T23:59:59+09:00 |
+| 모집 인원 | `capacityText` | 10명 |
 | 참가비 | `feeText` | 29,000원 |
 | 완주 리워드 | `rewardText` | 완주 인증 시 러닝 양말 증정 |
 | 인증 방식 | `verificationText` | 매일 오픈채팅에 러닝 인증 사진 1장 |
@@ -98,6 +99,14 @@ npm run lint         # 린트 검사
 
 > 📌 `deadline` 날짜가 지나면 카운트다운 자리에 자동으로 "모집이 마감되었어요" 문구가 나옵니다.
 > 기수를 새로 열 때는 `periodText`, `deadline`, `deadlineText`, `hero.badge` 를 함께 바꿔주세요.
+
+### 색상과 글꼴 바꾸기
+
+- **색상**: `app/globals.css` 의 `--color-brand-*`(메인 보라)와 `--color-accent-*`(포인트 핑크빛 보라)
+  값만 바꾸면 버튼·링크·강조 텍스트·그라데이션이 한 번에 바뀝니다.
+  버튼 그라데이션의 각도나 색 배치는 `--gradient-brand` 에서 조정할 수 있습니다.
+- **글꼴**: `app/layout.tsx` 상단의 `Jua`, `Noto_Sans_KR` 를 다른 Google Fonts 한글 글꼴 이름으로
+  바꾸면 됩니다. (귀여운 계열: `Gaegu`, `Dongle`, `Do_Hyeon` / 깔끔한 계열: `Gowun_Dodum`, `IBM_Plex_Sans_KR`)
 
 ### 히어로 배경 이미지 넣기
 

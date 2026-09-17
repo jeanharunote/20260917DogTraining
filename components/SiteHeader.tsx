@@ -32,7 +32,7 @@ export function SiteHeader() {
         <Link
           href="#top"
           className={cn(
-            "text-sm font-bold tracking-tight transition-colors sm:text-base",
+            "font-display text-sm transition-colors sm:text-base",
             isScrolled ? "text-ink" : "text-white",
           )}
         >
@@ -58,7 +58,7 @@ export function SiteHeader() {
 
         <Link
           href={`#${cta.anchorId}`}
-          className="rounded-full bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-brand-700 sm:px-5 sm:text-sm"
+          className="btn-gradient font-display rounded-full px-4 py-2 text-xs transition-all sm:px-5 sm:text-sm"
         >
           신청하기
         </Link>

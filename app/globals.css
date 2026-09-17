@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
- * globals.css — 전체 색상/폰트 기준을 정의합니다. (Tailwind CSS v4)
+ * globals.css — 전체 색상/글꼴 기준을 정의합니다. (Tailwind CSS v4)
  *
  * TODO: 브랜드 색을 바꾸고 싶다면 아래 --color-brand-* 값만 교체하면
  *       버튼, 링크, 강조 텍스트 색이 한 번에 바뀝니다.
@@ -7,24 +7,24 @@
 @import "tailwindcss";
 
 @theme {
-  /* 메인 컬러: 에너지 있지만 부담 없는 프레시 그린 */
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  /* 메인 컬러: 퍼스널 컬러인 보라(바이올렛) 계열 */
+  --color-brand-50: #faf5ff;
+  --color-brand-100: #f3e8ff;
+  --color-brand-200: #e9d5ff;
+  --color-brand-300: #d8b4fe;
+  --color-brand-400: #c084fc;
+  --color-brand-500: #a855f7;
+  --color-brand-600: #9333ea;
+  --color-brand-700: #7e22ce;
+  --color-brand-800: #6b21a8;
+  --color-brand-900: #581c87;
 
-  /* 포인트 컬러: 따뜻한 선셋 오렌지 (CTA 강조, 뱃지) */
-  --color-accent-100: #ffedd5;
-  --color-accent-300: #fdba74;
-  --color-accent-400: #fb923c;
-  --color-accent-500: #f97316;
-  --color-accent-600: #ea580c;
+  /* 포인트 컬러: 그라데이션의 반대편을 맡는 핑크빛 보라(푸시아) */
+  --color-accent-100: #fae8ff;
+  --color-accent-300: #f0abfc;
+  --color-accent-400: #e879f9;
+  --color-accent-500: #d946ef;
+  --color-accent-600: #c026d3;
 
   /* 라이트/다크에 따라 자동으로 바뀌는 의미 기반 색상 */
   --color-surface: var(--surface);
@@ -34,30 +34,39 @@
   --color-ink-muted: var(--ink-muted);
   --color-line: var(--line);
 
+  /* 본문용(깔끔한) 글꼴 */
   --font-sans:
-    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+    var(--font-noto), "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+
+  /* 제목·버튼용(둥글고 귀여운) 글꼴 → font-display 클래스로 사용합니다 */
+  --font-display:
+    var(--font-jua), "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
 }
 
-/* 라이트 모드 (기본) — 뉴트럴 웜 그레이 배경 */
+/* 라이트 모드 (기본) — 아주 옅은 보라빛이 도는 뉴트럴 배경 */
 :root {
   --surface: #ffffff;
-  --surface-muted: #f7f7f4;
+  --surface-muted: #faf8fd;
   --surface-raised: #ffffff;
-  --ink: #1b1c1a;
-  --ink-muted: #5c605c;
-  --line: #e6e6e0;
+  --ink: #1c1724;
+  --ink-muted: #5d5670;
+  --line: #eae5f2;
+
+  /* 버튼·강조 요소에 공통으로 쓰는 보라 그라데이션 */
+  --gradient-brand: linear-gradient(135deg, #9333ea 0%, #a855f7 45%, #d946ef 100%);
+  --gradient-brand-hover: linear-gradient(135deg, #7e22ce 0%, #9333ea 45%, #c026d3 100%);
 }
 
 /* 다크 모드 — 사용자의 OS 설정을 그대로 따릅니다. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface: #0e1211;
-    --surface-muted: #151a18;
-    --surface-raised: #1a201d;
-    --ink: #f1f5f2;
-    --ink-muted: #a2aaa5;
-    --line: #26302b;
+    --surface: #100c16;
+    --surface-muted: #171120;
+    --surface-raised: #1d1629;
+    --ink: #f4f1f8;
+    --ink-muted: #a89fb8;
+    --line: #2e2440;
   }
 }
 
@@ -99,4 +108,22 @@ body {
 /* 카운트다운 숫자가 흔들리지 않도록 고정폭 숫자를 사용합니다. */
 .tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* 보라 그라데이션 버튼 — CTA 버튼에 공통으로 사용합니다. */
+.btn-gradient {
+  background-image: var(--gradient-brand);
+  color: #ffffff;
+}
+
+.btn-gradient:hover {
+  background-image: var(--gradient-brand-hover);
+}
+
+/* 글자 자체에 보라 그라데이션을 입힐 때 사용합니다. */
+.text-gradient {
+  background-image: linear-gradient(120deg, var(--color-brand-300) 0%, var(--color-accent-400) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
