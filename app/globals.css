@@ -1,0 +1,102 @@
+/* ---------------------------------------------------------------------------
+ * globals.css — 전체 색상/폰트 기준을 정의합니다. (Tailwind CSS v4)
+ *
+ * TODO: 브랜드 색을 바꾸고 싶다면 아래 --color-brand-* 값만 교체하면
+ *       버튼, 링크, 강조 텍스트 색이 한 번에 바뀝니다.
+ * ------------------------------------------------------------------------ */
+@import "tailwindcss";
+
+@theme {
+  /* 메인 컬러: 에너지 있지만 부담 없는 프레시 그린 */
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-200: #bbf7d0;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #15803d;
+  --color-brand-800: #166534;
+  --color-brand-900: #14532d;
+
+  /* 포인트 컬러: 따뜻한 선셋 오렌지 (CTA 강조, 뱃지) */
+  --color-accent-100: #ffedd5;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+
+  /* 라이트/다크에 따라 자동으로 바뀌는 의미 기반 색상 */
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+}
+
+/* 라이트 모드 (기본) — 뉴트럴 웜 그레이 배경 */
+:root {
+  --surface: #ffffff;
+  --surface-muted: #f7f7f4;
+  --surface-raised: #ffffff;
+  --ink: #1b1c1a;
+  --ink-muted: #5c605c;
+  --line: #e6e6e0;
+}
+
+/* 다크 모드 — 사용자의 OS 설정을 그대로 따릅니다. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #0e1211;
+    --surface-muted: #151a18;
+    --surface-raised: #1a201d;
+    --ink: #f1f5f2;
+    --ink-muted: #a2aaa5;
+    --line: #26302b;
+  }
+}
+
+html {
+  /* 앵커 네비게이션을 부드럽게 이동시킵니다. */
+  scroll-behavior: smooth;
+  /* 상단 고정 헤더에 제목이 가려지지 않도록 여백을 둡니다. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 키보드 사용자를 위한 또렷한 포커스 표시 (접근성) */
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 움직임을 줄이도록 설정한 사용자에게는 애니메이션을 최소화합니다. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* 카운트다운 숫자가 흔들리지 않도록 고정폭 숫자를 사용합니다. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
