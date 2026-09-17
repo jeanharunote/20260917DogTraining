@@ -45,7 +45,7 @@ export function FAQ() {
                     <span
                       aria-hidden="true"
                       className={cn(
-                        "flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700 transition-transform duration-300 dark:bg-brand-900/40 dark:text-brand-300",
+                        "flex size-7 shrink-0 items-center justify-center rounded-full border border-line text-brand-600 transition-transform duration-300 dark:text-brand-300",
                         isOpen && "rotate-45",
                       )}
                     >

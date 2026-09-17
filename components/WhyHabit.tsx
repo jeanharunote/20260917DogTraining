@@ -23,11 +23,11 @@ export function WhyHabit() {
               as="li"
               key={principle.title}
               delay={index * 0.08}
-              className="flex flex-col gap-3 rounded-3xl bg-surface p-7 shadow-sm ring-1 ring-line"
+              className="flex flex-col gap-3 rounded-2xl bg-surface p-7 card-soft ring-1 ring-line"
             >
               <span
                 aria-hidden="true"
-                className="flex size-12 items-center justify-center rounded-2xl bg-brand-100 text-2xl dark:bg-brand-900/40"
+                className="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-lg ring-1 ring-line dark:bg-brand-900/30"
               >
                 {principle.emoji}
               </span>
@@ -51,11 +51,11 @@ export function WhyHabit() {
                 as="li"
                 key={solution.step}
                 delay={index * 0.07}
-                className="flex gap-5 rounded-3xl border border-line bg-surface p-7"
+                className="flex gap-5 rounded-2xl border border-line bg-surface p-7"
               >
                 <span
                   aria-hidden="true"
-                  className="font-display tabular shrink-0 text-2xl text-brand-500/50"
+                  className="font-display tabular shrink-0 text-lg text-brand-400"
                 >
                   {solution.step}
                 </span>

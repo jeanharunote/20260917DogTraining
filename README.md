@@ -6,8 +6,8 @@
 모바일 우선 랜딩페이지입니다.
 
 - **프레임워크**: Next.js (App Router) + TypeScript
-- **스타일**: Tailwind CSS v4 — 보라 그라데이션 테마, 다크모드 자동 대응
-- **글꼴**: Jua(제목·버튼, 둥글고 귀여운 느낌) + Noto Sans KR(본문, 깔끔함) — `next/font` 로 자체 호스팅
+- **스타일**: Tailwind CSS v4 — 차분한 보라(아이리스) 테마, 다크모드 자동 대응
+- **글꼴**: IBM Plex Sans KR(제목·버튼, 단정한 느낌) + Noto Sans KR(본문) — `next/font` 로 자체 호스팅
 - **애니메이션**: framer-motion (스크롤 등장, 아코디언, Sticky CTA)
 - **폼**: react-hook-form + zod
 - **신청 데이터 저장**: Formspree (엔드포인트는 환경변수로 분리)
@@ -102,11 +102,11 @@ npm run lint         # 린트 검사
 
 ### 색상과 글꼴 바꾸기
 
-- **색상**: `app/globals.css` 의 `--color-brand-*`(메인 보라)와 `--color-accent-*`(포인트 핑크빛 보라)
+- **색상**: `app/globals.css` 의 `--color-brand-*`(메인 보라)와 `--color-accent-*`(포인트 노을빛 살구)
   값만 바꾸면 버튼·링크·강조 텍스트·그라데이션이 한 번에 바뀝니다.
   버튼 그라데이션의 각도나 색 배치는 `--gradient-brand` 에서 조정할 수 있습니다.
-- **글꼴**: `app/layout.tsx` 상단의 `Jua`, `Noto_Sans_KR` 를 다른 Google Fonts 한글 글꼴 이름으로
-  바꾸면 됩니다. (귀여운 계열: `Gaegu`, `Dongle`, `Do_Hyeon` / 깔끔한 계열: `Gowun_Dodum`, `IBM_Plex_Sans_KR`)
+- **글꼴**: `app/layout.tsx` 상단의 `IBM_Plex_Sans_KR`, `Noto_Sans_KR` 를 다른 Google Fonts 한글 글꼴
+  이름으로 바꾸면 됩니다. (세련된 계열: `Gowun_Dodum`, `Hahmlet` / 부드러운 계열: `Jua`, `Do_Hyeon`)
 
 ### 히어로 배경 이미지 넣기
 

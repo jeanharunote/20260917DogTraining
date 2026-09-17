@@ -10,7 +10,8 @@ type CtaButtonProps = {
   children: React.ReactNode;
   /** 이동할 위치. 기본값은 신청 폼 섹션입니다. */
   href?: string;
-  variant?: "primary" | "secondary" | "ghost";
+  /** light 는 어두운 배경(히어로) 위에서 대비를 주기 위한 밝은 버튼입니다. */
+  variant?: "primary" | "secondary" | "ghost" | "light";
   size?: "md" | "lg";
   className?: string;
   /** 스크린리더 사용자를 위한 추가 설명 */
@@ -19,15 +20,17 @@ type CtaButtonProps = {
 
 const variantStyles: Record<NonNullable<CtaButtonProps["variant"]>, string> = {
   primary:
-    "btn-gradient shadow-lg shadow-brand-600/30 hover:shadow-brand-700/40 active:scale-[0.98]",
+    "btn-gradient active:scale-[0.99]",
   secondary:
-    "bg-surface-raised text-ink border border-line hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-300 active:scale-[0.98]",
-  ghost: "bg-white/10 text-white backdrop-blur border border-white/30 hover:bg-white/20",
+    "bg-surface-raised text-ink border border-line hover:border-brand-300 hover:text-brand-700 dark:hover:text-brand-300 active:scale-[0.99]",
+  ghost: "bg-white/5 text-white/90 backdrop-blur border border-white/20 hover:bg-white/10 hover:text-white",
+  light:
+    "bg-brand-50 text-brand-800 hover:bg-white active:scale-[0.99] shadow-[0_8px_28px_-12px_rgba(0,0,0,0.6)]",
 };
 
 const sizeStyles: Record<NonNullable<CtaButtonProps["size"]>, string> = {
   md: "px-6 py-3 text-sm",
-  lg: "px-8 py-4 text-base",
+  lg: "px-7 py-3.5 text-[0.95rem]",
 };
 
 export function CtaButton({

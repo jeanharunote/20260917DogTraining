@@ -57,7 +57,7 @@ export function StickyCTA() {
             </div>
             <Link
               href={`#${cta.anchorId}`}
-              className="btn-gradient font-display w-full rounded-full px-6 py-3.5 text-center text-sm shadow-lg shadow-brand-600/30 transition-all sm:w-auto"
+              className="btn-gradient font-display w-full rounded-full px-6 py-3.5 text-center text-sm font-medium transition-all sm:w-auto"
             >
               {cta.sticky}
             </Link>

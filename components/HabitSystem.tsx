@@ -22,11 +22,11 @@ export function HabitSystem() {
               as="li"
               key={feature.title}
               delay={index * 0.07}
-              className="flex gap-5 rounded-3xl bg-surface p-7 shadow-sm ring-1 ring-line"
+              className="flex gap-5 rounded-2xl bg-surface p-7 card-soft ring-1 ring-line"
             >
               <span
                 aria-hidden="true"
-                className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent-100 text-2xl dark:bg-accent-500/15"
+                className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent-100 text-lg ring-1 ring-line dark:bg-accent-500/10"
               >
                 {feature.emoji}
               </span>
@@ -40,14 +40,14 @@ export function HabitSystem() {
 
         {/* 신뢰 통계 — TODO: data/challenge.ts 의 habitSystem.stats 를 실제 수치로 교체하세요 */}
         <Reveal delay={0.1} className="mt-8">
-          <dl className="grid gap-px overflow-hidden rounded-3xl bg-line sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-2 lg:grid-cols-4">
             {habitSystem.stats.map((stat) => (
               <div key={stat.label} className="flex flex-col gap-1 bg-surface px-6 py-8 text-center">
                 <dt className="order-2 text-sm font-medium text-ink-muted">{stat.label}</dt>
-                <dd className="font-display tabular order-1 bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-3xl text-transparent dark:from-brand-400 dark:to-accent-400">
+                <dd className="font-display tabular order-1 text-[1.75rem] font-bold text-brand-600 dark:text-brand-300">
                   {stat.value}
                 </dd>
-                <p className="order-3 text-[11px] text-ink-muted/70">{stat.caption}</p>
+                <p className="order-3 mt-1 text-[10px] tracking-wide text-ink-muted/60">{stat.caption}</p>
               </div>
             ))}
           </dl>
