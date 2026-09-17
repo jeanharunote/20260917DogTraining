@@ -258,6 +258,12 @@ export const aiCoach = {
     helpLabel: "API 키는 어디서 받나요?",
     helpUrl: "https://aistudio.google.com/apikey",
     rememberLabel: "이 브라우저에 키 기억하기",
+    /** 키가 제대로 들어갔는지 확인하는 버튼 */
+    checkLabel: "키 확인하기",
+    checkingLabel: "확인 중...",
+    validLabel: "사용할 수 있는 키예요!",
+    showLabel: "키 보기",
+    hideLabel: "키 가리기",
   },
 
   /** 입력 항목 안내 문구 */
