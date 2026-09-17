@@ -12,12 +12,12 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-5">
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="flex max-w-sm flex-col gap-3">
-            <p className="text-lg font-bold text-ink">{challengeInfo.brandName}</p>
+            <p className="font-display text-lg text-ink">{challengeInfo.brandName}</p>
             <p className="text-pretty text-sm leading-relaxed text-ink-muted">{footer.tagline}</p>
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className="text-sm font-bold text-ink">문의</h2>
+            <h2 className="font-display text-sm text-ink">문의</h2>
             <p className="text-sm text-ink-muted">
               {footer.contact.emailLabel}{" "}
               <a
@@ -33,7 +33,7 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className="text-sm font-bold text-ink">채널</h2>
+            <h2 className="font-display text-sm text-ink">채널</h2>
             <ul className="flex flex-col gap-2">
               {footer.socials.map((social) => (
                 <li key={social.label}>

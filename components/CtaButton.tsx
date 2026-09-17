@@ -19,7 +19,7 @@ type CtaButtonProps = {
 
 const variantStyles: Record<NonNullable<CtaButtonProps["variant"]>, string> = {
   primary:
-    "bg-brand-600 text-white shadow-lg shadow-brand-600/25 hover:bg-brand-700 hover:shadow-brand-700/30 active:scale-[0.98]",
+    "btn-gradient shadow-lg shadow-brand-600/30 hover:shadow-brand-700/40 active:scale-[0.98]",
   secondary:
     "bg-surface-raised text-ink border border-line hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-300 active:scale-[0.98]",
   ghost: "bg-white/10 text-white backdrop-blur border border-white/30 hover:bg-white/20",
@@ -43,7 +43,7 @@ export function CtaButton({
       href={href}
       aria-label={ariaLabel}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200",
+        "font-display inline-flex items-center justify-center gap-2 rounded-full transition-all duration-200",
         variantStyles[variant],
         sizeStyles[size],
         className,

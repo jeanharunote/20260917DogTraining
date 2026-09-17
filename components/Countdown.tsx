@@ -53,7 +53,7 @@ export function Countdown() {
             key={key}
             className="flex min-w-[4rem] flex-col items-center rounded-2xl bg-white/15 px-3 py-3 backdrop-blur sm:min-w-[4.5rem]"
           >
-            <span className="tabular text-2xl font-bold text-white sm:text-3xl">
+            <span className="font-display tabular text-2xl text-white sm:text-3xl">
               {timeLeft ? padTwo(timeLeft[key]) : "--"}
             </span>
             <span className="mt-0.5 text-[11px] font-medium text-white/70">{label}</span>

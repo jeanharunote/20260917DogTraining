@@ -83,7 +83,7 @@ export function Roadmap() {
                   >
                     {week.label}
                   </span>
-                  <span className="text-sm font-bold text-ink sm:text-base">{week.keyword}</span>
+                  <span className="font-display text-sm text-ink sm:text-base">{week.keyword}</span>
                 </button>
               );
             })}
@@ -127,15 +127,15 @@ export function Roadmap() {
                 className="rounded-3xl border border-line bg-surface-muted p-7 sm:p-9"
               >
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">
+                  <span className="btn-gradient font-display rounded-full px-3 py-1 text-xs">
                     {activeWeek.label}
                   </span>
-                  <span className="text-lg font-bold text-ink sm:text-xl">
+                  <span className="font-display text-lg text-ink sm:text-xl">
                     {activeWeek.keyword}
                   </span>
                 </div>
 
-                <p className="mt-5 text-base font-semibold text-brand-700 dark:text-brand-300 sm:text-lg">
+                <p className="font-display mt-5 text-base text-brand-700 dark:text-brand-300 sm:text-lg">
                   {activeWeek.goal}
                 </p>
                 <p className="mt-3 text-pretty text-sm leading-relaxed text-ink-muted sm:text-base">

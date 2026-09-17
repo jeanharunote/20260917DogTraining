@@ -41,7 +41,7 @@ export function FAQ() {
                     onClick={() => setOpenIndex(isOpen ? null : index)}
                     className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-surface-muted"
                   >
-                    <span className="text-sm font-bold text-ink sm:text-base">{item.question}</span>
+                    <span className="font-display text-sm text-ink sm:text-base">{item.question}</span>
                     <span
                       aria-hidden="true"
                       className={cn(

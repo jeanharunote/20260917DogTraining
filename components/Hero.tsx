@@ -16,16 +16,16 @@ export function Hero() {
       {/* 배경: 러닝 분위기의 그래디언트 (placeholder) */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-20 bg-[radial-gradient(120%_120%_at_20%_0%,#166534_0%,#0f3d24_45%,#0b2a1a_100%)]"
+        className="absolute inset-0 -z-20 bg-[radial-gradient(125%_125%_at_15%_0%,#9333ea_0%,#6b21a8_35%,#3b0f63_70%,#25084a_100%)]"
       />
       {/* 해질 무렵 느낌을 주는 오렌지 빛 번짐 */}
       <div
         aria-hidden="true"
-        className="absolute -right-24 -top-24 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent-500/25 blur-3xl"
+        className="absolute -right-24 -top-24 -z-10 h-[28rem] w-[28rem] rounded-full bg-accent-500/35 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="absolute -bottom-32 -left-24 -z-10 h-[24rem] w-[24rem] rounded-full bg-brand-400/20 blur-3xl"
+        className="absolute -bottom-32 -left-24 -z-10 h-[24rem] w-[24rem] rounded-full bg-brand-400/30 blur-3xl"
       />
 
       {/*
@@ -51,7 +51,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.05}>
-            <h1 className="text-balance text-4xl font-bold leading-[1.15] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-balance text-4xl leading-[1.25] text-white sm:text-5xl lg:text-6xl">
               {hero.headline.map((line) => (
                 <span key={line} className="block">
                   {line}
@@ -61,7 +61,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.1} className="flex flex-col gap-3">
-            <p className="text-xl font-semibold text-brand-200 sm:text-2xl">{hero.subCopy}</p>
+            <p className="font-display text-gradient text-xl sm:text-2xl">{hero.subCopy}</p>
             <p className="max-w-xl text-pretty text-base leading-relaxed text-white/75 sm:text-lg">
               {hero.description}
             </p>
@@ -82,9 +82,9 @@ export function Hero() {
           <Reveal delay={0.25} className="w-full">
             <dl className="grid w-full max-w-lg grid-cols-1 gap-px overflow-hidden rounded-2xl bg-white/15 sm:grid-cols-3">
               {hero.highlights.map((item) => (
-                <div key={item.label} className="bg-brand-900/60 px-4 py-4 backdrop-blur">
+                <div key={item.label} className="bg-brand-900/50 px-4 py-4 backdrop-blur">
                   <dt className="text-xs font-medium text-white/60">{item.label}</dt>
-                  <dd className="mt-1 text-sm font-bold text-white sm:text-base">{item.value}</dd>
+                  <dd className="font-display mt-1 text-sm text-white sm:text-base">{item.value}</dd>
                 </div>
               ))}
             </dl>
