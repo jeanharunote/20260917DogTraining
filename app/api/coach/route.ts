@@ -5,14 +5,22 @@
  *   브라우저에서 Google API 를 직접 부르면 CORS 문제가 생길 수 있어서,
  *   이 라우트가 요청만 그대로 전달합니다.
  *
+ * 어떤 API 키를 쓰나요?
+ *   1순위: 서버 환경변수 GEMINI_API_KEY (운영자가 등록해 둔 키)
+ *          → 방문자는 아무것도 입력하지 않고 바로 사용합니다.
+ *   2순위: 방문자가 직접 입력한 키 (운영자 키가 없을 때의 대비책)
+ *
  * API 키 취급 원칙
- *   - 키는 방문자가 입력한 값을 이 요청에서만 사용합니다.
- *   - 서버에 저장하지 않고, 로그로도 남기지 않습니다.
- *   - 응답에도 키를 절대 포함하지 않습니다.
+ *   - 운영자 키는 NEXT_PUBLIC_ 이 아닌 서버 전용 환경변수라 브라우저에 노출되지 않습니다.
+ *   - 방문자가 입력한 키는 이 요청에서만 쓰고 저장하지 않습니다.
+ *   - 어떤 키도 로그나 응답에 포함하지 않습니다.
+ *
+ * 운영자 키를 쓸 때는 사용량이 함부로 소진되지 않도록 호출 횟수를 제한합니다.
  */
 import { NextResponse } from "next/server";
 
 import { aiCoach, signup } from "@/data/challenge";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import {
   calculateBmi,
   coachPayloadSchema,
@@ -76,13 +84,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "요청 형식이 올바르지 않습니다." }, { status: 400 });
   }
 
-  const { apiKey, ...rest } = (body ?? {}) as Record<string, unknown>;
+  const { apiKey: visitorKey, ...rest } = (body ?? {}) as Record<string, unknown>;
 
-  if (typeof apiKey !== "string" || apiKey.trim().length === 0) {
-    return NextResponse.json(
-      { error: "Gemini API 키를 입력해 주세요." },
-      { status: 400 },
-    );
+  // 운영자가 등록해 둔 키가 있으면 그것을 먼저 씁니다.
+  const ownerKey = process.env.GEMINI_API_KEY?.trim();
+  const usingOwnerKey = Boolean(ownerKey);
+  const apiKey =
+    ownerKey ?? (typeof visitorKey === "string" ? visitorKey.trim() : "");
+
+  if (!apiKey) {
+    return NextResponse.json({ error: "Gemini API 키를 입력해 주세요." }, { status: 400 });
+  }
+
+  // 운영자 키를 쓸 때만 호출 횟수를 제한합니다.
+  // (방문자가 자기 키를 쓰는 경우는 본인 사용량이라 막지 않습니다)
+  if (usingOwnerKey) {
+    const limit = checkRateLimit(getClientIdentifier(request));
+
+    if (!limit.allowed) {
+      const minutes = Math.ceil(limit.retryAfterSeconds / 60);
+
+      return NextResponse.json(
+        {
+          error: `잠시만요! 요청이 너무 많아요. ${minutes}분 뒤에 다시 시도해 주세요.`,
+        },
+        { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+      );
+    }
   }
 
   const parsed = coachPayloadSchema.safeParse(rest);
@@ -102,7 +130,7 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json",
         // 키를 URL 이 아닌 헤더로 보냅니다. (주소창·로그에 남지 않도록)
-        "x-goog-api-key": apiKey.trim(),
+        "x-goog-api-key": apiKey,
       },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
@@ -142,7 +170,9 @@ export async function POST(request: Request) {
       rawMessage.toLowerCase().includes("api key");
 
     const message = isKeyProblem
-      ? "API 키가 올바르지 않거나 권한이 없습니다. 키를 다시 확인해 주세요."
+      ? usingOwnerKey
+        ? "AI 코치 설정에 문제가 있어요. 운영자에게 알려주시면 확인하겠습니다."
+        : "API 키가 올바르지 않거나 권한이 없습니다. 키를 다시 확인해 주세요."
       : status === 429
         ? "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요."
         : status === 404

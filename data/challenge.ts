@@ -250,7 +250,10 @@ export const aiCoach = {
    */
   model: "gemini-3.5-flash-lite",
 
-  /** API 키 입력 안내 */
+  /** 운영자가 키를 등록해 둬서 방문자가 아무것도 입력하지 않아도 될 때 보여줄 안내 */
+  readyNotice: "바로 사용하실 수 있어요. 아래 정보만 알려주시면 됩니다.",
+
+  /** API 키 입력 안내 (운영자 키가 없을 때만 화면에 나옵니다) */
   apiKey: {
     label: "Gemini API 키",
     placeholder: "AIza... 로 시작하는 키를 붙여넣어 주세요",
