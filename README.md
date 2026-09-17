@@ -20,6 +20,7 @@
 ```
 .
 ├── app/
+│   ├── api/coach/route.ts   # AI 코치 요청을 Gemini 로 중계
 │   ├── globals.css          # 색상 토큰, 다크모드, 폰트, 접근성 기본 스타일
 │   ├── layout.tsx           # 공통 레이아웃 · 메타 정보(SEO)
 │   └── page.tsx             # 섹션 조립 순서
@@ -31,6 +32,7 @@
 │   ├── HabitSystem.tsx      # 5) 습관 지원 장치 & 신뢰 통계
 │   ├── Testimonials.tsx     # 6) 후기 카드
 │   ├── FAQ.tsx              # 7) 아코디언 FAQ
+│   ├── AiCoach.tsx          # 7-1) AI 러닝 코치 (Gemini)
 │   ├── SignupForm.tsx       # 8) 신청 폼 (CTA 3/3)
 │   ├── Footer.tsx           # 9) 문의처 · SNS · 저작권
 │   ├── SiteHeader.tsx       # 상단 고정 헤더 + 앵커 네비게이션
@@ -44,9 +46,11 @@
 ├── data/
 │   └── challenge.ts         # ⭐ 모든 문구와 수치 (비개발자 수정 지점)
 ├── lib/
+│   ├── coach-schema.ts      # AI 코치 입력 검증 + 응답 형태
 │   ├── schema.ts            # zod 검증 스키마 + 에러 메시지
 │   ├── utils.ts             # 카운트다운 계산, 클래스 병합 유틸
 │   └── __tests__/
+│       ├── coach-schema.test.ts  # AI 코치 입력 검증 테스트
 │       └── schema.test.ts   # 폼 검증 로직 단위 테스트
 ├── .env.example             # 환경변수 템플릿
 ├── eslint.config.mjs
@@ -160,7 +164,41 @@ npm run lint         # 린트 검사
 
 ---
 
-## 5. Vercel 배포 방법
+## 5. AI 러닝 코치 (Gemini)
+
+방문자가 **자신의 Gemini API 키를 직접 입력**하면, 키·체중·러닝 경험·가능 일수·선호 시간대를
+바탕으로 4주 계획과 부상 예방 조언을 받아볼 수 있습니다.
+
+### 방문자 사용 방법
+
+1. [Google AI Studio](https://aistudio.google.com/apikey) 에서 API 키를 발급받습니다. (무료 등급 있음)
+2. 랜딩페이지의 **AI 러닝 코치** 섹션에 키를 붙여넣습니다.
+3. 키·체중·러닝 경험 등을 입력하고 버튼을 누르면 결과가 나옵니다.
+
+### API 키 취급
+
+- 키는 **운영자가 준비하지 않습니다.** 방문자 각자가 자기 키를 넣습니다.
+- "이 브라우저에 키 기억하기"를 체크하면 해당 방문자의 브라우저(`localStorage`)에만 저장됩니다.
+- 서버(`app/api/coach/route.ts`)는 요청을 Gemini 로 **전달만** 하고 저장·로그를 남기지 않습니다.
+  브라우저에서 Google API 를 직접 부르면 CORS 문제가 생길 수 있어 중계 방식을 씁니다.
+- 키는 URL 이 아닌 `x-goog-api-key` 헤더로 전달해 주소창·접근 로그에 남지 않게 했습니다.
+
+### 모델 변경
+
+`data/challenge.ts` 의 `aiCoach.model` 값만 바꾸면 됩니다. (기본값: `gemini-3.5-flash-lite`)
+
+### 안전 장치
+
+- 응답은 Gemini 의 구조화 출력(`responseSchema`)으로 형태를 고정하고, 화면에 그리기 전에
+  zod 로 한 번 더 확인합니다.
+- 시스템 프롬프트에서 **체형 평가·감량 권유를 금지**하고, 사용자가 말한 가능 일수를 넘기지
+  않도록 제한했습니다.
+- 건강 관련 내용이므로 **의학적 조언이 아니라는 안내 문구**를 폼과 결과 양쪽에 노출합니다.
+  (`data/challenge.ts` 의 `aiCoach.disclaimer`)
+
+---
+
+## 6. Vercel 배포 방법
 
 1. 이 저장소를 GitHub 에 올립니다.
 2. [vercel.com](https://vercel.com) 에서 **Add New → Project** 로 저장소를 가져옵니다.
@@ -184,19 +222,20 @@ vercel --prod   # 운영 배포
 
 ---
 
-## 6. 테스트
+## 7. 테스트
 
 ```bash
 npm test
 ```
 
 - `lib/__tests__/schema.test.ts` — 필수 항목 미입력, 이메일/연락처 형식, 동의 체크 검증
+- `lib/__tests__/coach-schema.test.ts` — AI 코치 입력 범위 검증, 문자열→숫자 변환, AI 응답 형태 검증
 - `components/__tests__/SignupForm.test.tsx` — 빈 폼 제출 시 **화면에 에러 메시지가 실제로 노출되는지**,
   `aria-invalid` 가 붙는지, 정상 입력 시 성공 메시지가 보이는지 확인
 
 ---
 
-## 7. 접근성 · 반응형 메모
+## 8. 접근성 · 반응형 메모
 
 - 모바일 우선으로 설계했고, 모든 섹션이 375px 폭부터 자연스럽게 동작합니다.
 - 시맨틱 태그(`section`, `fieldset`, `blockquote`, `dl`)와 `label`, `aria-*` 속성을 적용했습니다.

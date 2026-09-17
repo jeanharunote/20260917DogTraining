@@ -62,6 +62,7 @@ export const navLinks = [
   { label: "습관 원리", href: "#why-habit" },
   { label: "4주 로드맵", href: "#roadmap" },
   { label: "지원 장치", href: "#system" },
+  { label: "AI 코치", href: "#ai-coach" },
   { label: "후기", href: "#testimonials" },
   { label: "자주 묻는 질문", href: "#faq" },
 ] as const;
@@ -229,6 +230,84 @@ export const roadmap = {
       tips: ["다음 달 루틴 미리 정하기", "완주 소감 남기기", "5km는 선택, 부담 없이 결정하기"],
     },
   ],
+} as const;
+
+/* ===========================================================================
+ * 7-1) AI 러닝 코치 (Gemini)
+ *   방문자가 자신의 Gemini API 키를 직접 넣고, 키·체중·경험에 맞춘
+ *   운동 계획을 받아보는 섹션입니다.
+ * ======================================================================== */
+export const aiCoach = {
+  eyebrow: "AI 러닝 코치",
+  title: "내 몸에 맞춘 4주 계획을 받아보세요",
+  description:
+    "키와 체중, 러닝 경험을 알려주시면 AI 코치가 주당 횟수와 부상 예방 팁, 나에게 맞는 운동 시간대를 정리해 드려요. 신청 전에 부담 없이 먼저 확인해 보세요.",
+
+  /**
+   * 사용할 Gemini 모델
+   * TODO: 다른 모델로 바꾸려면 이 값만 수정하세요.
+   *       (예: gemini-3.5-flash, gemini-3.1-flash-lite)
+   */
+  model: "gemini-3.5-flash-lite",
+
+  /** API 키 입력 안내 */
+  apiKey: {
+    label: "Gemini API 키",
+    placeholder: "AIza... 로 시작하는 키를 붙여넣어 주세요",
+    hint: "키는 이 브라우저에만 저장되고 서버에 보관하지 않습니다.",
+    helpLabel: "API 키는 어디서 받나요?",
+    helpUrl: "https://aistudio.google.com/apikey",
+    rememberLabel: "이 브라우저에 키 기억하기",
+  },
+
+  /** 입력 항목 안내 문구 */
+  fields: {
+    height: { label: "키", unit: "cm", placeholder: "165" },
+    weight: { label: "체중", unit: "kg", placeholder: "58" },
+    age: { label: "나이", unit: "세", placeholder: "30", optional: "선택" },
+    experience: { label: "러닝 경험" },
+    daysPerWeek: { label: "일주일에 뛸 수 있는 날", unit: "일" },
+    preferredTime: { label: "선호하는 시간대" },
+    concern: {
+      label: "걱정되는 점",
+      optional: "선택",
+      placeholder: "예: 예전에 무릎이 아팠어요 / 발목이 약한 편이에요",
+    },
+  },
+
+  /** 선호 시간대 선택지 */
+  timeOptions: [
+    { value: "morning", label: "아침" },
+    { value: "lunch", label: "점심" },
+    { value: "evening", label: "저녁" },
+    { value: "night", label: "밤" },
+    { value: "unsure", label: "잘 모르겠어요" },
+  ],
+
+  submitLabel: "AI 코치에게 물어보기",
+  submittingLabel: "코치가 계획을 짜는 중...",
+  resetLabel: "다시 받아보기",
+
+  /** 결과 화면의 제목들 */
+  result: {
+    summaryTitle: "코치 한마디",
+    bodyTitle: "키·체중 기준 피드백",
+    planTitle: "주차별 추천 계획",
+    timeTitle: "추천 운동 시간대",
+    injuryTitle: "부상 예방 팁",
+    cautionTitle: "이것만은 조심해요",
+  },
+
+  /** 오류 안내 */
+  errorTitle: "결과를 받아오지 못했어요",
+  errorFallback: "잠시 후 다시 시도해 주세요. 키가 올바른지도 한 번 확인해 주세요.",
+
+  /**
+   * 건강 관련 내용이므로 반드시 함께 노출합니다.
+   * TODO: 문구는 바꿔도 되지만, 의료 조언이 아니라는 안내는 남겨두세요.
+   */
+  disclaimer:
+    "AI가 생성한 일반적인 참고 정보이며 의학적 진단이나 치료를 대신할 수 없습니다. 통증이 있거나 지병이 있다면 반드시 전문의와 상의해 주세요.",
 } as const;
 
 /* ===========================================================================
