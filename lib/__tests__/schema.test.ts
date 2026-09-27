@@ -21,7 +21,7 @@ const validValues = {
   name: "홍길동",
   email: "runner@example.com",
   phone: "010-1234-5678",
-  career: "none",
+  career: "beginner",
   motivation: "올해는 러닝을 습관으로 만들고 싶어요.",
   agree: true,
 };
@@ -57,7 +57,7 @@ describe("signupSchema — 필수 항목 미입력", () => {
     expect(errors.phone).toBe("연락처를 알려주세요.");
   });
 
-  it("러닝 경력을 고르지 않으면 선택 안내 메시지가 나온다", () => {
+  it("희망 코스를 고르지 않으면 선택 안내 메시지가 나온다", () => {
     const errors = collectErrors({ ...validValues, career: "" });
 
     expect(errors.career).toBeDefined();

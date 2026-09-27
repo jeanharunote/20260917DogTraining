@@ -8,7 +8,7 @@ import { z } from "zod";
 
 import { signup } from "@/data/challenge";
 
-/** data/challenge.ts 의 careerOptions 값에서 선택지를 자동으로 가져옵니다. */
+/** data/challenge.ts 의 careerOptions(희망 코스) 값에서 선택지를 자동으로 가져옵니다. */
 export type CareerValue = (typeof signup.careerOptions)[number]["value"];
 
 const careerValues = signup.careerOptions.map((option) => option.value) as [
@@ -45,7 +45,7 @@ export const signupSchema = z.object({
     ),
 
   career: z.enum(careerValues, {
-    message: "지금 상태에 가장 가까운 항목을 골라주세요. 어떤 선택도 괜찮아요.",
+    message: "희망하는 코스를 골라주세요. 중간에 바꿔도 괜찮아요.",
   }),
 
   /** 참가 동기는 선택 항목이라 비워 두어도 통과합니다. */

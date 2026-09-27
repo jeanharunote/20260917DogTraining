@@ -112,6 +112,12 @@ export function SignupForm() {
 
   const isSubmitting = status === "submitting";
 
+  // data/challenge.ts 의 signup.mode 가 "google" 이면 구글폼으로 연결합니다.
+  // (신청 내역이 구글폼 응답 시트에 그대로 쌓여서 가장 안전한 방식입니다)
+  if (signup.mode === "google") {
+    return <GoogleFormSection />;
+  }
+
   if (status === "success") {
     return (
       <section id="signup" className="bg-surface-muted py-20 sm:py-28">
@@ -375,6 +381,50 @@ export function SignupForm() {
 
             <p className="text-center text-xs text-ink-muted">{signup.reassurance}</p>
           </form>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/** 구글폼으로 신청을 받을 때 보여주는 섹션입니다. */
+function GoogleFormSection() {
+  return (
+    <section id="signup" className="bg-surface-muted py-20 sm:py-28">
+      <div className="mx-auto max-w-3xl px-5">
+        <SectionHeading
+          eyebrow={signup.eyebrow}
+          title={signup.title}
+          description={signup.description}
+        />
+
+        <Reveal delay={0.05} className="mt-10">
+          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-4">
+            {signup.summary.map((item) => (
+              <div key={item.label} className="bg-surface px-4 py-4 text-center">
+                <dt className="text-xs text-ink-muted">{item.label}</dt>
+                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        <Reveal delay={0.1} className="mt-8">
+          <div className="flex flex-col items-center gap-5 rounded-2xl border border-line bg-surface p-9 text-center">
+            <p className="text-sm leading-relaxed text-ink-muted">{signup.google.notice}</p>
+
+            <a
+              href={signup.googleFormUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="btn-gradient font-display inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-[0.95rem] font-medium transition-all active:scale-[0.99] sm:w-auto"
+            >
+              {signup.google.buttonLabel}
+              <span aria-hidden="true">→</span>
+            </a>
+
+            <p className="text-xs text-ink-muted">{signup.reassurance}</p>
+          </div>
         </Reveal>
       </div>
     </section>
