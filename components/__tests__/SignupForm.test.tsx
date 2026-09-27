@@ -8,7 +8,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SignupForm } from "@/components/SignupForm";
 
-describe("SignupForm", () => {
+// 이 파일은 "페이지 안에서 직접 입력받는 폼" 모드를 검증합니다.
+// (data/challenge.ts 의 signup.mode 기본값이 "google" 이라 여기서만 바꿔 끼웁니다)
+vi.mock("@/data/challenge", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/data/challenge")>();
+
+  return { ...actual, signup: { ...actual.signup, mode: "form" as const } };
+});
+
+describe("SignupForm — 직접 입력 폼 모드", () => {
   beforeEach(() => {
     // 실제 Formspree 주소 대신 테스트용 주소를 넣어둡니다.
     vi.stubEnv("NEXT_PUBLIC_FORMSPREE_ENDPOINT", "https://formspree.io/f/test-endpoint");
@@ -53,7 +61,7 @@ describe("SignupForm", () => {
     await user.type(screen.getByLabelText(/이름/), "홍길동");
     await user.type(screen.getByLabelText(/이메일/), "runner@example.com");
     await user.type(screen.getByLabelText(/연락처/), "010-1234-5678");
-    await user.click(screen.getByRole("radio", { name: /안 해봤어요/ }));
+    await user.click(screen.getByRole("radio", { name: /입문/ }));
     await user.click(screen.getByRole("button", { name: /참가 신청하기/ }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("동의");
@@ -74,7 +82,7 @@ describe("SignupForm", () => {
     await user.type(screen.getByLabelText(/이름/), "홍길동");
     await user.type(screen.getByLabelText(/이메일/), "runner@example.com");
     await user.type(screen.getByLabelText(/연락처/), "010-1234-5678");
-    await user.click(screen.getByRole("radio", { name: /안 해봤어요/ }));
+    await user.click(screen.getByRole("radio", { name: /입문/ }));
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: /참가 신청하기/ }));
 

@@ -47,7 +47,6 @@ export function HabitSystem() {
                 <dd className="font-display tabular order-1 text-[1.75rem] font-bold text-brand-600 dark:text-brand-300">
                   {stat.value}
                 </dd>
-                <p className="order-3 mt-1 text-[10px] tracking-wide text-ink-muted/60">{stat.caption}</p>
               </div>
             ))}
           </dl>
