@@ -7,6 +7,7 @@
  * 검증 규칙(필수 여부, 에러 메시지)은 lib/schema.ts 를 편집하세요.
  */
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -116,6 +117,11 @@ export function SignupForm() {
   // (신청 내역이 구글폼 응답 시트에 그대로 쌓여서 가장 안전한 방식입니다)
   if (signup.mode === "google") {
     return <GoogleFormSection />;
+  }
+
+  // "app" 모드: 구글 로그인 후 /apply 에서 신청 → 마이페이지·인증·피드로 이어집니다.
+  if (signup.mode === "app") {
+    return <AppSignupSection />;
   }
 
   if (status === "success") {
@@ -381,6 +387,49 @@ export function SignupForm() {
 
             <p className="text-center text-xs text-ink-muted">{signup.reassurance}</p>
           </form>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/** 로그인 후 신청 페이지(/apply)로 안내하는 섹션입니다. */
+function AppSignupSection() {
+  return (
+    <section id="signup" className="bg-surface-muted py-20 sm:py-28">
+      <div className="mx-auto max-w-3xl px-5">
+        <SectionHeading eyebrow={signup.eyebrow} title={signup.title} description={signup.description} />
+
+        <Reveal delay={0.05} className="mt-10">
+          <dl className="grid gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-4">
+            {signup.summary.map((item) => (
+              <div key={item.label} className="bg-surface px-4 py-4 text-center">
+                <dt className="text-xs text-ink-muted">{item.label}</dt>
+                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        <Reveal delay={0.1} className="mt-8">
+          <div className="flex flex-col items-center gap-5 rounded-2xl border border-line bg-surface p-9 text-center">
+            <p className="text-sm leading-relaxed text-ink-muted">{signup.app.notice}</p>
+
+            <Link
+              href="/apply"
+              className="btn-gradient font-display inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-[0.95rem] font-medium transition-all active:scale-[0.99] sm:w-auto"
+            >
+              {signup.app.buttonLabel}
+              <span aria-hidden="true">→</span>
+            </Link>
+
+            <p className="text-xs text-ink-muted">
+              이미 신청하셨나요?{" "}
+              <Link href="/me" className="font-medium text-brand-600 underline-offset-4 hover:underline dark:text-brand-300">
+                마이페이지에서 확인하기
+              </Link>
+            </p>
+          </div>
         </Reveal>
       </div>
     </section>

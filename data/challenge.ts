@@ -24,6 +24,16 @@ export const challengeInfo = {
   brandName: "러널스하이",
   /** 기수 표시 */
   cohortText: "1기",
+  /**
+   * 기수 고유 ID — 데이터베이스에서 기수를 구분하는 값입니다.
+   * TODO: 2기를 열 때 "cohort-2" 로 바꾸면 신청·인증이 새 기수로 따로 쌓입니다.
+   */
+  cohortId: "cohort-1",
+  /** 목표 인증 횟수 (주 4회 × 4주) — 마이페이지 진행률 계산에 씁니다 */
+  targetCheckins: 16,
+  /** 챌린지 시작일 · 종료일 (인증 가능 기간) */
+  startDate: "2026-10-05",
+  endDate: "2026-11-01",
   /** 챌린지 진행 기간 */
   periodText: "2026년 10월 5일(월) ~ 11월 1일(일) · 4주",
   /**
@@ -388,20 +398,38 @@ export const faq = {
 } as const;
 
 /* ===========================================================================
+ * 10-1) 참가비 입금 안내
+ *
+ *   카드·간편결제는 PG사 계약과 결제 검증 서버가 필요해 무료 요금제(Spark)로는 어렵습니다.
+ *   그래서 1기는 "계좌 입금 → 운영자 확인 → 참가 확정" 방식으로 운영합니다.
+ *   신청자가 입금하면, 관리자 페이지(/admin)에서 [입금 확인]을 눌러 참가를 확정하세요.
+ *
+ *   TODO: 실제 계좌 정보로 반드시 바꿔주세요.
+ * ======================================================================== */
+export const payment = {
+  bankName: "[은행명]",
+  accountNumber: "[계좌번호]",
+  accountHolder: "[예금주]",
+  /** 입금 기한 안내 */
+  dueText: `${challengeInfo.deadlineText}까지`,
+  notice:
+    "신청하신 이름과 같은 이름으로 입금해 주세요. 입금이 확인되면 참가가 확정되고 마이페이지에서 인증을 시작할 수 있어요.",
+} as const;
+
+/* ===========================================================================
  * 11) 신청 폼 섹션
  * ======================================================================== */
 export const signup = {
   /**
    * ⭐ 신청서를 어디로 받을지 정하는 값입니다.
    *
-   *   "google" — 아래 googleFormUrl 로 연결합니다. (가장 안전하고 간단합니다)
-   *              신청 내역은 구글폼 응답 시트에 그대로 쌓입니다.
-   *   "form"   — 이 페이지 안의 폼을 사용합니다.
-   *              .env.local 의 NEXT_PUBLIC_FORMSPREE_ENDPOINT 설정이 반드시 필요합니다.
-   *
-   * TODO: 구글폼을 쓰려면 아래를 "google" 로 두고 googleFormUrl 만 채우면 됩니다.
+   *   "app"      — 구글 로그인 후 신청 페이지(/apply)에서 받습니다. ← 권장
+   *                신청 → 입금 → 관리자 확인 → 마이페이지·인증·피드까지 이어집니다.
+   *   "google"   — 구글폼 링크로 연결합니다. 신청 내역은 구글폼 응답 시트에 쌓입니다.
+   *   "form"     — 이 페이지 안의 폼으로 받아 Formspree 로 메일 전송합니다.
+   *                .env.local 의 NEXT_PUBLIC_FORMSPREE_ENDPOINT 설정이 필요합니다.
    */
-  mode: "google" as "google" | "form",
+  mode: "app" as "app" | "google" | "form",
 
   /** TODO: 구글폼 주소를 여기에 붙여넣으세요. (mode 가 "google" 일 때 사용) */
   googleFormUrl: "https://forms.gle/여기에-구글폼-주소를-넣으세요",
@@ -417,6 +445,12 @@ export const signup = {
     { label: "모집 인원", value: `${challengeInfo.capacityText} 한정` },
     { label: "참가비", value: `${challengeInfo.feeText} (대회비 별도)` },
   ],
+
+  /** mode 가 "app" 일 때 보여줄 버튼/안내 */
+  app: {
+    buttonLabel: "구글로 로그인하고 신청하기",
+    notice: "구글 계정으로 3초 만에 로그인하고 바로 신청할 수 있어요.",
+  },
 
   /** mode 가 "google" 일 때 보여줄 버튼/안내 */
   google: {
@@ -481,9 +515,11 @@ export const footer = {
     { label: "인스타그램", href: "https://instagram.com/example" },
     { label: "스레드", href: "https://www.threads.com/@runurse_high" },
   ],
+  /** 법적 고지 문서 — 유료 서비스라 반드시 노출해야 합니다 (내용은 data/legal.ts) */
   links: [
-    { label: "이용약관", href: "#" },
-    { label: "개인정보처리방침", href: "#" },
+    { label: "이용약관", href: "/legal/terms" },
+    { label: "개인정보처리방침", href: "/legal/privacy" },
+    { label: "환불규정", href: "/legal/refund" },
   ],
   copyright: `© ${new Date().getFullYear()} ${challengeInfo.brandName}. All rights reserved.`,
 } as const;

@@ -74,3 +74,43 @@ export const signupDefaultValues: SignupFormValues = {
   motivation: "",
   agree: false as unknown as true,
 };
+
+/* ===========================================================================
+ * 러닝 인증 입력 검증
+ * (firestore.rules 의 isValidCheckin 과 같은 기준을 화면에서도 미리 확인합니다)
+ * ======================================================================== */
+export const checkinSchema = z.object({
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "날짜를 골라주세요." }),
+  distanceKm: z
+    .string()
+    .trim()
+    .min(1, { message: "달린 거리를 알려주세요." })
+    .transform(Number)
+    .pipe(
+      z
+        .number({ message: "거리는 숫자로 적어주세요." })
+        .gt(0, { message: "거리는 0보다 커야 해요." })
+        .max(100, { message: "100km 이하로 적어주세요." }),
+    ),
+  minutes: z
+    .union([
+      z.literal(""),
+      z
+        .string()
+        .transform(Number)
+        .pipe(
+          z
+            .number({ message: "시간은 숫자로 적어주세요." })
+            .int({ message: "분 단위 정수로 적어주세요." })
+            .min(0, { message: "0분 이상으로 적어주세요." })
+            .max(600, { message: "600분 이하로 적어주세요." }),
+        ),
+    ])
+    .optional(),
+  memo: z.string().trim().max(300, { message: "메모는 300자 이내로 적어주세요." }).optional(),
+});
+
+export type CheckinFormValues = z.input<typeof checkinSchema>;
+export type CheckinPayload = z.output<typeof checkinSchema>;

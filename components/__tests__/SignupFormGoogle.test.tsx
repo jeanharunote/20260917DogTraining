@@ -4,15 +4,20 @@
  * 페이지 안에 입력칸을 만들지 않고 구글폼 링크만 보여주는지 확인합니다.
  */
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { SignupForm } from "@/components/SignupForm";
 import { signup } from "@/data/challenge";
 
+// 이 파일은 구글폼 모드를 검증합니다.
+// (기본값은 "app" 이라 여기서만 "google" 로 바꿔 끼웁니다)
+vi.mock("@/data/challenge", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/data/challenge")>();
+
+  return { ...actual, signup: { ...actual.signup, mode: "google" as const } };
+});
+
 describe("SignupForm — 구글폼 모드", () => {
-  it("기본 설정은 구글폼 모드다", () => {
-    expect(signup.mode).toBe("google");
-  });
 
   it("구글폼 버튼이 새 창으로 열리는 링크로 보인다", () => {
     render(<SignupForm />);

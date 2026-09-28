@@ -1,0 +1,133 @@
+// ===========================================================================
+// Firestore 보안 규칙 — 반드시 Firebase 콘솔에 적용해야 합니다!
+//
+// 적용 방법: Firebase 콘솔 → Firestore Database → 규칙 탭 → 통째로 붙여넣고 [게시]
+//
+// 왜 중요한가요?
+//   Firebase 설정값은 브라우저에 공개되므로 누구나 데이터베이스에 접근을 "시도"할 수 있습니다.
+//   이 규칙이 신청자 개인정보와 결제 상태를 지키는 유일한 장치입니다.
+//
+// 핵심 원칙
+//   1. 참가자는 자기 정보만 볼 수 있다.
+//   2. 참가자는 절대로 스스로 "결제 완료(paid)"로 바꿀 수 없다. (관리자만 가능)
+//   3. 결제가 확인된 참가자만 러닝 인증을 올리고 피드를 볼 수 있다.
+//   4. 관리자 지정은 Firebase 콘솔에서만 할 수 있다. (웹에서는 불가)
+//
+// 이 규칙은 tests/firestore.rules.test.ts 로 검증되어 있습니다. (npm run test:rules)
+// ===========================================================================
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── 공통 도우미 ─────────────────────────────────────────────────────
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function enrollmentPath(cohortId, uid) {
+      return /databases/$(database)/documents/enrollments/$(cohortId + '_' + uid);
+    }
+
+    // 해당 기수에 결제가 확인된 참가자인지
+    function isPaidIn(cohortId) {
+      return signedIn()
+        && exists(enrollmentPath(cohortId, request.auth.uid))
+        && get(enrollmentPath(cohortId, request.auth.uid)).data.status == 'paid';
+    }
+
+    // ── 관리자 목록 ─────────────────────────────────────────────────────
+    // 웹에서는 "내가 관리자인지"만 확인할 수 있고, 누구도 추가·삭제할 수 없습니다.
+    // 관리자 추가는 Firebase 콘솔에서 admins/{내 UID} 문서를 직접 만들어야 합니다.
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // ── 회원 프로필 ─────────────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'photoURL', 'updatedAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 50;
+      allow delete: if false;
+    }
+
+    // ── 참가 신청 (문서 ID = {기수ID}_{UID}) ─────────────────────────────
+    match /enrollments/{enrollmentId} {
+      // 본인 신청서 또는 관리자만 볼 수 있습니다.
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+
+      // 신청은 본인 것만, 반드시 "입금 대기(pending)" 상태로만 만들 수 있습니다.
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && enrollmentId == request.resource.data.cohortId + '_' + request.auth.uid
+        && request.resource.data.status == 'pending'
+        && isValidEnrollment(request.resource.data);
+
+      // 상태 변경(입금 확인·환불)은 관리자만 할 수 있습니다.
+      // 관리자도 신청자 본인 정보와 기수는 바꿀 수 없고, 상태 관련 항목만 바꿉니다.
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'paidAt', 'refundedAt', 'adminMemo', 'updatedAt'])
+        && request.resource.data.status in ['pending', 'paid', 'refunded', 'cancelled'];
+
+      allow delete: if isAdmin();
+    }
+
+    function isValidEnrollment(data) {
+      return data.keys().hasOnly([
+          'uid', 'cohortId', 'name', 'email', 'phone', 'course',
+          'motivation', 'agree', 'status', 'appliedAt'
+        ])
+        && data.keys().hasAll(['uid', 'cohortId', 'name', 'email', 'phone', 'course', 'agree', 'status'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 30
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 100
+        && data.phone is string && data.phone.size() > 0 && data.phone.size() <= 20
+        && data.course in ['beginner', 'ten-k', 'half']
+        && data.agree == true
+        && (!('motivation' in data) || (data.motivation is string && data.motivation.size() <= 500));
+    }
+
+    // ── 러닝 인증 (문서 ID = {기수ID}_{UID}_{날짜} → 하루 1회) ──────────────
+    match /checkins/{checkinId} {
+      // 같은 기수의 결제 확인된 참가자끼리만 볼 수 있습니다. (공동 피드)
+      allow read: if isAdmin() || isPaidIn(resource.data.cohortId);
+
+      // 결제 확인된 참가자만, 본인 이름으로, 하루 한 번 올릴 수 있습니다.
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && isPaidIn(request.resource.data.cohortId)
+        && checkinId == request.resource.data.cohortId + '_' + request.auth.uid + '_' + request.resource.data.date
+        && isValidCheckin(request.resource.data);
+
+      // 인증 기록은 수정할 수 없고, 본인 또는 관리자만 지울 수 있습니다.
+      allow update: if false;
+      allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    function isValidCheckin(data) {
+      return data.keys().hasOnly([
+          'uid', 'cohortId', 'date', 'distanceKm', 'minutes',
+          'memo', 'displayName', 'course', 'createdAt'
+        ])
+        && data.keys().hasAll(['uid', 'cohortId', 'date', 'distanceKm', 'displayName'])
+        && data.date is string && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && data.distanceKm is number && data.distanceKm > 0 && data.distanceKm <= 100
+        && (!('minutes' in data) || (data.minutes is number && data.minutes >= 0 && data.minutes <= 600))
+        && (!('memo' in data) || (data.memo is string && data.memo.size() <= 300))
+        && data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 30;
+    }
+
+    // ── 위에 적지 않은 나머지는 전부 차단 ─────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
