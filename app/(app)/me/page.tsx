@@ -223,27 +223,29 @@ function ParticipantDashboard({
           })}
         </ol>
 
-        {/* 보증금 안내 */}
+        {/* 완주 안내 — 4주 모두 주 4회 이상이어야 완주로 인정됩니다 */}
         <div className="mt-4">
           {stats.completed ? (
             <Notice tone="success">
-              🏅 4주 모두 주 {stats.perWeek}회 달성! 보증금 {challengeInfo.depositText} 환급 대상이에요. 챌린지가 끝나고{" "}
-              {challengeInfo.depositReturnDays}일 안에 입금하신 계좌로 돌려드릴게요.
+              🏅 4주 모두 주 {stats.perWeek}회 달성! 챌린지 완주를 축하해요. 이제 러닝은 &lsquo;그냥 하는 일&rsquo;이
+              됐어요.
             </Notice>
           ) : missedWeeks.length > 0 ? (
             <Notice>
-              {missedWeeks.map((index) => `${index + 1}주차`).join(", ")} 인증이 {stats.perWeek}회에 못 미쳐서 이번
-              보증금은 돌려드리기 어려워요. 그래도 끝까지 같이 달려요. 4주 뒤 &lsquo;그냥 뛰는 사람&rsquo;이 된
+              {missedWeeks.map((index) => `${index + 1}주차`).join(", ")} 인증이 {stats.perWeek}회에 못 미쳐서 이번엔
+              완주로 인정되기 어려워요. 그래도 끝까지 같이 달려요. 4주 뒤 &lsquo;그냥 뛰는 사람&rsquo;이 된
               나 자신이 진짜 보상이니까요.
             </Notice>
           ) : currentWeek !== null ? (
             <Notice>
-              💰 이번 주({currentWeek + 1}주차){" "}
+              🏃 이번 주({currentWeek + 1}주차){" "}
               {thisWeekLeft > 0 ? `${thisWeekLeft}회 더 인증하면 목표 달성!` : "목표 달성! 잘하고 있어요."} 4주 모두
-              주 {stats.perWeek}회를 채우면 보증금 {challengeInfo.depositText}을 돌려받아요.
+              주 {stats.perWeek}회를 채우면 완주예요.
             </Notice>
           ) : (
-            <Notice>💰 {challengeInfo.depositRule}.</Notice>
+            <Notice>
+              🏃 {challengeInfo.totalWeeks}주 동안 매주 {stats.perWeek}회 이상 인증하면 완주로 인정돼요.
+            </Notice>
           )}
         </div>
       </Card>

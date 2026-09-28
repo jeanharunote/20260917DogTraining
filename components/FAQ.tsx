@@ -7,6 +7,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
+import { WithFee } from "@/components/FeePrice";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { faq } from "@/data/challenge";
@@ -67,7 +68,7 @@ export function FAQ() {
                       className="overflow-hidden"
                     >
                       <p className="text-pretty px-6 pb-6 text-sm leading-relaxed text-ink-muted">
-                        {item.answer}
+                        <WithFee text={item.answer} />
                       </p>
                     </motion.div>
                   ) : null}

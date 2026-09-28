@@ -223,7 +223,7 @@ npm run lint         # 린트 검사
 | 기간 | `periodText` | 2026년 10월 5일(월) ~ 11월 1일(일) · 4주 |
 | 모집 마감(카운트다운) | `deadline` | 2026-10-02T23:59:59+09:00 |
 | 모집 인원 | `capacityText` | 10명 |
-| 참가비 | `feeText` / `feeNote` | 50,000원 / 대회 참가비 별도 |
+| 참가비 | `feeText` / `regularFeeText` / `feeLabel` / `feeNote` | 30,000원(실제 입금액) / 정가 50,000원(취소선) / 1기 한정 / 대회 참가비 별도 |
 | 인증 방식 | `verificationText` | 주 4회 러닝 인증 사진 |
 | 완주 리워드 | `rewardText` | 완주 인증 시 러닝 양말 증정 |
 

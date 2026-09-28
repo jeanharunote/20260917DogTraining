@@ -2,7 +2,7 @@
 import type { EnrollmentStatus } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export function PageTitle({ title, description }: { title: string; description?: string }) {
+export function PageTitle({ title, description }: { title: string; description?: React.ReactNode }) {
   return (
     <header className="mb-8">
       <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">{title}</h1>
