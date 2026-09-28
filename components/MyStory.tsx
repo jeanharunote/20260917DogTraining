@@ -79,11 +79,11 @@ export function MyStory() {
           </Reveal>
         ) : null}
 
-        {/* 이야기 본문 — 잘못된 믿음 → 진심 → 변화 → 깨달음 */}
+        {/* 이야기 본문 — 잘못된 믿음 → 진심 → 변화 → 깨달음 순서 (단계 이름은 화면에 보이지 않습니다) */}
         <ol className="mt-10 flex flex-col gap-4">
           {myStory.chapters.map((chapter, index) => (
             <Reveal
-              key={chapter.step}
+              key={chapter.title}
               as="li"
               delay={0.05 * index}
               className={cn(
@@ -91,14 +91,9 @@ export function MyStory() {
                 index === myStory.chapters.length - 1 ? "border-brand-300 dark:border-brand-700" : "border-line",
               )}
             >
-              <div className="flex flex-col gap-2">
-                <span className="text-xs font-semibold tracking-wide text-brand-600 dark:text-brand-300">
-                  {String(index + 1).padStart(2, "0")} · {chapter.step}
-                </span>
-                <h3 className="font-display text-balance text-lg leading-snug text-ink sm:text-xl">
-                  {chapter.title}
-                </h3>
-              </div>
+              <h3 className="font-display text-balance text-lg leading-snug text-ink sm:text-xl">
+                {chapter.title}
+              </h3>
               {chapter.body.map((paragraph) => (
                 <p key={paragraph} className="text-pretty text-sm leading-[1.9] text-ink-muted sm:text-base">
                   {paragraph}
