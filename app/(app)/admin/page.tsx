@@ -17,8 +17,10 @@ import { SignInCard } from "@/components/app/SignInCard";
 import {
   Card,
   courseLabel,
+  inputClass,
   Notice,
   PageTitle,
+  primaryButton,
   secondaryButton,
   Spinner,
   StatusBadge,
@@ -26,9 +28,12 @@ import {
 import { challengeInfo } from "@/data/challenge";
 import { useAuth } from "@/lib/auth";
 import {
+  adminGetParticipantChat,
   adminListCheckins,
   adminListEnrollments,
+  adminSaveParticipantChat,
   adminSetStatus,
+  isOpenChatUrl,
   summarize,
   type Checkin,
   type Enrollment,
@@ -58,7 +63,10 @@ export default function AdminPage() {
         title="관리자"
         description={`${challengeInfo.name} ${challengeInfo.cohortText} · 신청자 명단과 인증 현황`}
       />
-      <AdminDashboard />
+      <div className="flex flex-col gap-4">
+        <ParticipantChatSettings />
+        <AdminDashboard />
+      </div>
     </>
   );
 }
@@ -107,6 +115,114 @@ function NotAdmin({ uid }: { uid: string }) {
         </ol>
       </Card>
     </>
+  );
+}
+
+/**
+ * 참가자 전용 오픈채팅 설정
+ * 여기 저장한 링크·비밀번호는 "참가 확정"된 참가자의 신청 페이지·마이페이지에만 나타납니다.
+ * (코드에 적지 않고 Firestore 에만 저장해서, 공개된 코드로는 알 수 없습니다)
+ */
+function ParticipantChatSettings() {
+  const [chatUrl, setChatUrl] = useState("");
+  const [chatPassword, setChatPassword] = useState("");
+  const [loaded, setLoaded] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ tone: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    adminGetParticipantChat()
+      .then((chat) => {
+        if (!active) return;
+        if (chat) {
+          setChatUrl(chat.chatUrl);
+          setChatPassword(chat.chatPassword);
+        }
+        setLoaded(true);
+      })
+      .catch((caught) => {
+        console.error("[admin] 오픈채팅 설정 불러오기 실패", caught);
+        if (!active) return;
+        setMessage({ tone: "error", text: "설정을 불러오지 못했어요. 보안 규칙(firestore.rules)을 최신으로 게시했는지 확인해 주세요." });
+        setLoaded(true);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const save = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setMessage(null);
+
+    const url = chatUrl.trim();
+
+    if (!isOpenChatUrl(url)) {
+      setMessage({ tone: "error", text: "카카오톡 오픈채팅 주소(https://open.kakao.com/...)를 넣어주세요." });
+
+      return;
+    }
+
+    if (chatPassword.trim().length > 50) {
+      setMessage({ tone: "error", text: "비밀번호는 50자 이내로 넣어주세요." });
+
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      await adminSaveParticipantChat({ chatUrl: url, chatPassword });
+      setMessage({ tone: "success", text: "저장했어요. 참가 확정자 화면에 바로 반영돼요." });
+    } catch (caught) {
+      console.error("[admin] 오픈채팅 설정 저장 실패", caught);
+      setMessage({ tone: "error", text: "저장하지 못했어요. 보안 규칙(firestore.rules)을 최신으로 게시했는지 확인해 주세요." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Card title="참가자 전용 오픈채팅">
+      <p className="mb-4 text-xs leading-relaxed text-ink-muted">
+        입금 확인(참가 확정)된 참가자에게만 입장 버튼과 비밀번호가 보여요. 입금 대기 중인 신청자에게는 보이지 않아요.
+      </p>
+      {!loaded ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={(event) => void save(event)} className="flex flex-col gap-3">
+          <label className="flex flex-col gap-1.5 text-xs text-ink-muted">
+            오픈채팅 링크
+            <input
+              type="url"
+              value={chatUrl}
+              onChange={(event) => setChatUrl(event.target.value)}
+              placeholder="https://open.kakao.com/o/..."
+              className={inputClass}
+              autoComplete="off"
+            />
+          </label>
+          <label className="flex flex-col gap-1.5 text-xs text-ink-muted">
+            입장 비밀번호
+            <input
+              type="text"
+              value={chatPassword}
+              onChange={(event) => setChatPassword(event.target.value)}
+              placeholder="비밀번호가 없으면 비워두세요"
+              className={inputClass}
+              autoComplete="off"
+            />
+          </label>
+          {message ? <Notice tone={message.tone}>{message.text}</Notice> : null}
+          <button type="submit" disabled={saving} className={`${primaryButton} self-start`}>
+            {saving ? "저장 중..." : "저장하기"}
+          </button>
+        </form>
+      )}
+    </Card>
   );
 }
 

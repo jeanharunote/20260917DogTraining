@@ -16,7 +16,9 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   addCheckin,
   adminListCheckins,
+  adminGetParticipantChat,
   adminListEnrollments,
+  adminSaveParticipantChat,
   adminSetStatus,
   checkIsAdmin,
   createEnrollment,
@@ -26,6 +28,10 @@ import {
   listFeed,
   listMyCheckins,
   saveProfile,
+  watchMyEnrollment,
+  watchParticipantChat,
+  type Enrollment,
+  type ParticipantChat,
 } from "@/lib/data";
 import { __setTestDb } from "@/lib/firebase";
 
@@ -159,5 +165,77 @@ describe("🔐 실제 앱 코드로 시도하는 공격", () => {
     as(RUNNER);
     await createEnrollment(application);
     await expect(createEnrollment({ ...application, name: "다른이름" })).rejects.toThrow();
+  });
+});
+
+/** 조건이 참이 될 때까지 기다립니다. (실시간 반영 확인용) */
+async function eventually(check: () => boolean, timeoutMs = 5000) {
+  const started = Date.now();
+
+  while (!check()) {
+    if (Date.now() - started > timeoutMs) throw new Error("시간 안에 반영되지 않았어요");
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+}
+
+describe("📡 입금 확인 → 새로고침 없이 참가 확정 + 오픈채팅 안내", () => {
+  it("관리자가 입금 확인을 누르면 참가자 화면 데이터가 실시간으로 바뀐다", async () => {
+    // 관리자가 오픈채팅 정보를 저장해 둔다
+    as(ADMIN);
+    const chat = { chatUrl: "https://open.kakao.com/o/test-room", chatPassword: "test-pw" };
+    await adminSaveParticipantChat(chat);
+    expect(await adminGetParticipantChat()).toEqual(chat);
+
+    // 참가자가 로그인한 채로 내 신청서를 지켜본다 (아직 신청 전)
+    as(RUNNER);
+    let mine: Enrollment | null | undefined;
+    let watchError: Error | undefined;
+    const stop = watchMyEnrollment(
+      RUNNER,
+      (value) => {
+        mine = value;
+      },
+      (error) => {
+        watchError = error;
+      },
+    );
+    await eventually(() => mine !== undefined || watchError !== undefined);
+    expect(watchError).toBeUndefined();
+    expect(mine).toBeNull();
+
+    // 신청하면 "입금 대기"로 바로 바뀐다
+    await createEnrollment(application);
+    await eventually(() => mine?.status === "pending");
+
+    // 입금 대기 중에는 오픈채팅 정보를 받을 수 없다
+    let pendingError: Error | undefined;
+    const stopPending = watchParticipantChat(
+      () => undefined,
+      (error) => {
+        pendingError = error;
+      },
+    );
+    await eventually(() => pendingError !== undefined);
+    stopPending();
+
+    // 관리자가 입금 확인 → 참가자는 새로고침 없이 "참가 확정"
+    as(ADMIN);
+    await adminSetStatus(enrollmentId(RUNNER), "paid");
+    await eventually(() => mine?.status === "paid");
+    expect(watchError).toBeUndefined();
+    stop();
+
+    // 참가 확정 후에는 오픈채팅 정보를 받을 수 있다
+    as(RUNNER);
+    let received: ParticipantChat | null | undefined;
+    const stopChat = watchParticipantChat(
+      (value) => {
+        received = value;
+      },
+      () => undefined,
+    );
+    await eventually(() => received !== undefined);
+    expect(received).toEqual(chat);
+    stopChat();
   });
 });

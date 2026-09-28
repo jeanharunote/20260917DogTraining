@@ -342,3 +342,68 @@ describe("🚫 그 밖의 경로", () => {
     await assertFails(setDoc(doc(db(ADMIN), "secrets", "x"), { a: 1 }));
   });
 });
+
+/* ========================================================================= */
+describe("💬 참가자 전용 오픈채팅", () => {
+  const chat = { chatUrl: "https://open.kakao.com/o/test-room", chatPassword: "test-pw" };
+  const chatDoc = (uid?: string) => doc(db(uid), "participantChats", COHORT);
+
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async (c) => {
+      await setDoc(doc(c.firestore(), "participantChats", COHORT), chat);
+    });
+  });
+
+  it("✅ 참가 확정(결제 완료)자는 링크와 비밀번호를 볼 수 있다", async () => {
+    await assertSucceeds(getDoc(chatDoc(ALICE)));
+  });
+
+  it("❌ 입금 대기 신청자는 볼 수 없다", async () => {
+    await assertFails(getDoc(chatDoc(BOB)));
+  });
+
+  it("❌ 신청하지 않은 사람은 볼 수 없다", async () => {
+    await assertFails(getDoc(chatDoc(MALLORY)));
+  });
+
+  it("❌ 로그인하지 않으면 볼 수 없다", async () => {
+    await assertFails(getDoc(chatDoc()));
+  });
+
+  it("❌ 환불 처리된 참가자는 더 이상 볼 수 없다", async () => {
+    await updateDoc(doc(db(ADMIN), "enrollments", `${COHORT}_${ALICE}`), { status: "refunded" });
+    await assertFails(getDoc(chatDoc(ALICE)));
+  });
+
+  it("✅ 관리자는 링크와 비밀번호를 저장할 수 있다", async () => {
+    await assertSucceeds(setDoc(chatDoc(ADMIN), { ...chat, chatPassword: "new-pw" }));
+  });
+
+  it("❌ 참가자는 링크를 바꿀 수 없다", async () => {
+    await assertFails(setDoc(chatDoc(ALICE), { ...chat, chatUrl: "https://open.kakao.com/o/fake" }));
+  });
+
+  it("❌ 관리자도 카카오 오픈채팅이 아닌 주소는 넣을 수 없다", async () => {
+    await assertFails(setDoc(chatDoc(ADMIN), { ...chat, chatUrl: "https://evil.example.com/" }));
+  });
+
+  it("❌ 관리자도 정해지지 않은 항목은 넣을 수 없다", async () => {
+    await assertFails(setDoc(chatDoc(ADMIN), { ...chat, extra: "x" }));
+  });
+});
+
+/* ========================================================================= */
+describe("📡 내 신청서 실시간 확인", () => {
+  it("✅ 아직 신청하지 않았어도 '내 신청서 자리'는 확인할 수 있다 (없음으로 나옴)", async () => {
+    await assertSucceeds(getDoc(doc(db(MALLORY), "enrollments", `${COHORT}_${MALLORY}`)));
+  });
+
+  it("❌ 남의 신청서 자리(신청 여부)는 엿볼 수 없다", async () => {
+    await assertFails(getDoc(doc(db(MALLORY), "enrollments", `${COHORT}_${BOB}`)));
+    await assertFails(getDoc(doc(db(MALLORY), "enrollments", `${COHORT}_someone-else`)));
+  });
+
+  it("❌ 내 UID 로 끝나는 척하는 다른 문서 ID 로 엿볼 수 없다", async () => {
+    await assertFails(getDoc(doc(db(MALLORY), "enrollments", `${COHORT}_x_${MALLORY}`)));
+  });
+});
