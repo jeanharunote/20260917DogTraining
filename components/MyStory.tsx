@@ -79,16 +79,34 @@ export function MyStory() {
           </Reveal>
         ) : null}
 
-        {/* 이야기 본문 */}
-        <Reveal delay={0.15} className="mt-10">
-          <div className="flex flex-col gap-5 rounded-2xl border border-line bg-surface p-7 sm:p-9">
-            {myStory.paragraphs.map((paragraph) => (
-              <p key={paragraph} className="text-pretty text-sm leading-[1.9] text-ink sm:text-base">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        </Reveal>
+        {/* 이야기 본문 — 잘못된 믿음 → 진심 → 변화 → 깨달음 */}
+        <ol className="mt-10 flex flex-col gap-4">
+          {myStory.chapters.map((chapter, index) => (
+            <Reveal
+              key={chapter.step}
+              as="li"
+              delay={0.05 * index}
+              className={cn(
+                "flex flex-col gap-4 rounded-2xl border bg-surface p-7 sm:p-9",
+                index === myStory.chapters.length - 1 ? "border-brand-300 dark:border-brand-700" : "border-line",
+              )}
+            >
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-semibold tracking-wide text-brand-600 dark:text-brand-300">
+                  {String(index + 1).padStart(2, "0")} · {chapter.step}
+                </span>
+                <h3 className="font-display text-balance text-lg leading-snug text-ink sm:text-xl">
+                  {chapter.title}
+                </h3>
+              </div>
+              {chapter.body.map((paragraph) => (
+                <p key={paragraph} className="text-pretty text-sm leading-[1.9] text-ink-muted sm:text-base">
+                  {paragraph}
+                </p>
+              ))}
+            </Reveal>
+          ))}
+        </ol>
 
         {/* 변화 요약 */}
         <Reveal delay={0.2} className="mt-6">
