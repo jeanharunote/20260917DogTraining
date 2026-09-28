@@ -58,8 +58,11 @@ export const challengeInfo = {
   deadlineText: "2026년 10월 2일(금) 자정",
   /** 모집 인원 */
   capacityText: "10명",
-  /** 모집 방식 — 신청 순서대로 마감합니다 */
+  /** 정원 (숫자) — 관리자 페이지에서 정원이 찼는지 확인하는 데 씁니다. capacityText 와 같아야 합니다 */
+  capacity: 10,
+  /** 모집 방식 — 입금이 확인된 순서대로 마감합니다 */
   recruitText: "선착순",
+  recruitRule: "입금 확인 순서대로 마감돼요",
   /**
    * 참가비 — "1기 한정 특가"
    *   feeText        실제로 입금받는 금액 (입금 안내·환불규정에 쓰입니다) ← 금액은 여기서만 바꾸세요
@@ -555,6 +558,10 @@ export const faq = {
       answer: `${FEE_TOKEN}이에요. ${challengeInfo.cohortText} 참가자분들께만 드리는 가격이에요. 신청 후 안내해 드리는 계좌로 ${challengeInfo.feeText}을 입금해 주시면 됩니다. ${challengeInfo.feeNote}입니다.`,
     },
     {
+      question: "선착순은 어떻게 정해지나요?",
+      answer: `신청한 순서가 아니라 입금이 확인된 순서예요. ${challengeInfo.recruitText} ${challengeInfo.capacityText}의 입금이 확인되면 모집을 마감해요. 정원이 찬 뒤에 입금하신 분께는 입금액을 전액 돌려드려요. 자리를 확실히 잡고 싶다면 신청 후 바로 입금해 주세요.`,
+    },
+    {
       question: "주 4회를 다 못 채우면 어떻게 되나요?",
       answer: `챌린지는 끝까지 함께할 수 있어요. 다만 완주는 4주 모두 매주 ${challengeInfo.checkinsPerWeek}회 이상 인증했을 때만 인정돼요. 한 주를 놓친 걸 다음 주에 몰아서 채우는 건 인정되지 않아요. 몰아서 뛰면 습관이 아니라 벼락치기가 되니까요. 대신 매주 중간에 남은 횟수를 알려드려서 놓치지 않게 챙겨드릴게요.`,
     },
@@ -586,7 +593,7 @@ export const payment = {
   /** 입금 기한 안내 */
   dueText: `${challengeInfo.deadlineText}까지`,
   notice:
-    "신청하신 이름과 같은 이름으로 입금해 주세요. 입금이 확인되면 참가가 확정되고 마이페이지에서 인증을 시작할 수 있어요.",
+    `신청하신 이름과 같은 이름으로 입금해 주세요. 입금이 확인되면 참가가 확정되고 마이페이지에서 인증을 시작할 수 있어요. 정원 ${challengeInfo.capacityText}은 ${challengeInfo.recruitRule}. 정원이 찬 뒤 입금하신 분께는 입금액을 전액 돌려드려요.`,
 } as const;
 
 /* ===========================================================================
@@ -609,7 +616,7 @@ export const signup = {
 
   eyebrow: "참가 신청",
   title: "이번 4주, 같이 뛰어봐요",
-  description: `${challengeInfo.cohortText}는 ${challengeInfo.recruitText} ${challengeInfo.capacityText}만 받아요. 신청 순서대로 마감되니 서둘러 주세요. 신청 후 1~2일 내에 안내를 드려요.`,
+  description: `${challengeInfo.cohortText}는 ${challengeInfo.recruitText} ${challengeInfo.capacityText}만 받아요. 신청이 아니라 ${challengeInfo.recruitRule}. 자리를 잡으려면 신청 후 바로 입금해 주세요.`,
 
   /** 폼 위에 보여줄 요약 정보 */
   summary: [

@@ -322,6 +322,19 @@ function AdminDashboard() {
         ))}
       </dl>
 
+      {/* 정원 안내 — 선착순은 입금 확인 순서입니다 */}
+      {counts.paid >= challengeInfo.capacity ? (
+        <Notice tone="success">
+          정원 {challengeInfo.capacityText}이 모두 찼어요. 이후 입금하신 분께는 입금액을 전액 돌려드리고 [정원 마감 · 환불
+          처리]를 눌러 주세요.
+        </Notice>
+      ) : (
+        <Notice>
+          선착순은 입금 확인 순서예요. 남은 자리 {challengeInfo.capacity - counts.paid}명 · 입금한 순서대로 [입금 확인]을
+          눌러 주세요.
+        </Notice>
+      )}
+
       {/* 필터 + 내려받기 */}
       <div className="flex flex-wrap items-center gap-2">
         {filters.map((item) => (
@@ -403,11 +416,35 @@ function AdminDashboard() {
                         type="button"
                         disabled={busy}
                         onClick={() =>
-                          void changeStatus(item, "paid", `${item.name}님의 입금을 확인하고 참가를 확정할까요?`)
+                          void changeStatus(
+                            item,
+                            "paid",
+                            counts.paid >= challengeInfo.capacity
+                              ? `⚠️ 정원 ${challengeInfo.capacityText}이 이미 찼어요. 그래도 ${item.name}님의 참가를 확정할까요?`
+                              : `${item.name}님의 입금을 확인하고 참가를 확정할까요? (남은 자리 ${challengeInfo.capacity - counts.paid}명)`,
+                          )
                         }
                         className="btn-gradient rounded-full px-4 py-2 text-xs font-medium disabled:opacity-60"
                       >
                         입금 확인 → 참가 확정
+                      </button>
+                    ) : null}
+
+                    {/* 정원이 찬 뒤 입금한 분: 참가 확정 대신 전액 환불 */}
+                    {item.status === "pending" && counts.paid >= challengeInfo.capacity ? (
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() =>
+                          void changeStatus(
+                            item,
+                            "refunded",
+                            `정원이 차서 ${item.name}님을 환불 처리할까요?\n(입금하셨다면 전액 송금은 따로 해주셔야 합니다)`,
+                          )
+                        }
+                        className={cn(secondaryButton, "px-4 py-2 text-xs")}
+                      >
+                        정원 마감 · 환불 처리
                       </button>
                     ) : null}
 
