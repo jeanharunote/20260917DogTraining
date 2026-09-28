@@ -22,7 +22,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3 px-5">
         <Link href="/" className="font-display text-sm font-semibold text-ink">
-          {challengeInfo.brandName}
+          {challengeInfo.name}
         </Link>
 
         <nav aria-label="내 메뉴" className="flex items-center gap-1">
