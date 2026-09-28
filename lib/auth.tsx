@@ -5,7 +5,7 @@
  *
  * 로그인하면 다음을 한 번에 불러옵니다.
  *   - 로그인한 사용자 정보 (구글 계정)
- *   - 이번 기수 신청서 (입금 대기 / 참가 확정 등)
+ *   - 이번 기수 신청서 (입금 대기 / 참가 확정 등, 실시간)
  *   - 관리자 여부
  */
 import {
@@ -17,7 +17,7 @@ import {
 } from "firebase/auth";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { checkIsAdmin, getMyEnrollment, saveProfile, type Enrollment } from "@/lib/data";
+import { checkIsAdmin, getMyEnrollment, saveProfile, watchMyEnrollment, type Enrollment } from "@/lib/data";
 import { getFirebaseAuth } from "@/lib/firebase";
 
 type AuthState = {
@@ -66,8 +66,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
 
   // 로그인 상태가 바뀔 때마다 (외부 시스템인 Firebase 를 구독) 관련 정보를 불러옵니다.
+  // 신청서는 실시간으로 지켜봐서, 관리자가 입금 확인을 누르면 새로고침 없이 화면이 바뀝니다.
   useEffect(() => {
+    let stopEnrollment: (() => void) | null = null;
+
     const unsubscribe = onAuthStateChanged(getFirebaseAuth(), async (nextUser) => {
+      stopEnrollment?.();
+      stopEnrollment = null;
       setUser(nextUser);
 
       if (!nextUser) {
@@ -78,21 +83,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
+      // 첫 신청서 정보가 도착할 때까지 "불러오는 중"을 유지합니다.
+      let markLoaded: () => void = () => undefined;
+      const firstSnapshot = new Promise<void>((resolve) => {
+        markLoaded = resolve;
+      });
+
+      stopEnrollment = watchMyEnrollment(
+        nextUser.uid,
+        (mine) => {
+          setEnrollment(mine);
+          markLoaded();
+        },
+        (error) => {
+          console.error("[auth] 신청서 실시간 연결 실패", error);
+          markLoaded();
+        },
+      );
+
       try {
-        const [, admin, mine] = await Promise.all([
+        const [, admin] = await Promise.all([
           saveProfile(nextUser).catch(() => undefined),
           checkIsAdmin(nextUser),
-          getMyEnrollment(nextUser.uid).catch(() => null),
+          firstSnapshot,
         ]);
 
-        setIsAdmin(admin);
-        setEnrollment(mine);
+        // 그 사이 다른 계정으로 바뀌었다면 이전 계정의 결과는 버립니다.
+        if (getFirebaseAuth().currentUser?.uid === nextUser.uid) setIsAdmin(admin);
       } finally {
         setLoading(false);
       }
     });
 
-    return unsubscribe;
+    return () => {
+      stopEnrollment?.();
+      unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
@@ -106,9 +132,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await firebaseSignOut(getFirebaseAuth());
   }, []);
 
+  // 실시간 연결이 있어 보통은 필요 없지만, 신청 직후 확실히 반영하려고 한 번 더 읽습니다.
   const refreshEnrollment = useCallback(async () => {
     if (!user) return;
-    setEnrollment(await getMyEnrollment(user.uid).catch(() => null));
+    const mine = await getMyEnrollment(user.uid).catch(() => undefined);
+    if (mine !== undefined) setEnrollment(mine);
   }, [user]);
 
   const value = useMemo<AuthState>(

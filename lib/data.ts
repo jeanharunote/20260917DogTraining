@@ -11,6 +11,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -138,6 +139,23 @@ export async function getMyEnrollment(uid: string): Promise<Enrollment | null> {
   return snapshot.exists() ? toEnrollment(snapshot.id, snapshot.data()) : null;
 }
 
+/**
+ * 내 신청서를 실시간으로 지켜봅니다.
+ * 관리자가 입금 확인을 누르면 새로고침하지 않아도 바로 "참가 확정"으로 바뀝니다.
+ * 돌려받은 함수를 부르면 지켜보기를 멈춥니다.
+ */
+export function watchMyEnrollment(
+  uid: string,
+  onChange: (enrollment: Enrollment | null) => void,
+  onError: (error: Error) => void,
+): () => void {
+  return onSnapshot(
+    doc(getDb(), COLLECTIONS.enrollments, enrollmentId(uid)),
+    (snapshot) => onChange(snapshot.exists() ? toEnrollment(snapshot.id, snapshot.data()) : null),
+    onError,
+  );
+}
+
 export async function createEnrollment(input: {
   uid: string;
   name: string;
@@ -160,6 +178,41 @@ export async function createEnrollment(input: {
     status: "pending",
     appliedAt: serverTimestamp(),
   });
+}
+
+/* ===========================================================================
+ * 참가자 전용 오픈채팅
+ *
+ * 링크와 비밀번호는 코드에 적지 않고 Firestore 에만 저장합니다.
+ * 코드에 적으면 누구나 볼 수 있는 자바스크립트 파일과 GitHub 저장소에 그대로 드러나기 때문입니다.
+ * firestore.rules 가 "참가 확정(paid)된 사람과 관리자"만 이 문서를 읽을 수 있게 막습니다.
+ * ======================================================================== */
+
+export type ParticipantChat = { chatUrl: string; chatPassword: string };
+
+/** 카카오톡 오픈채팅 주소인지 (보안 규칙과 같은 조건) */
+export function isOpenChatUrl(url: string): boolean {
+  return /^https:\/\/open\.kakao\.com\/.+/.test(url) && url.length <= 200;
+}
+
+/** 오픈채팅 정보를 실시간으로 지켜봅니다. 관리자가 아직 저장하지 않았으면 null 입니다. */
+export function watchParticipantChat(
+  onChange: (chat: ParticipantChat | null) => void,
+  onError: (error: Error) => void,
+): () => void {
+  return onSnapshot(
+    doc(getDb(), COLLECTIONS.participantChats, COHORT),
+    (snapshot) => {
+      const data = snapshot.data();
+
+      onChange(
+        data && typeof data.chatUrl === "string"
+          ? { chatUrl: data.chatUrl, chatPassword: typeof data.chatPassword === "string" ? data.chatPassword : "" }
+          : null,
+      );
+    },
+    onError,
+  );
 }
 
 /* ===========================================================================
@@ -258,6 +311,21 @@ export async function adminSetStatus(id: string, status: EnrollmentStatus, memo?
   if (memo !== undefined) patch.adminMemo = memo.slice(0, 300);
 
   await updateDoc(doc(getDb(), COLLECTIONS.enrollments, id), patch);
+}
+
+export async function adminGetParticipantChat(): Promise<ParticipantChat | null> {
+  const snapshot = await getDoc(doc(getDb(), COLLECTIONS.participantChats, COHORT));
+  const data = snapshot.data();
+
+  return data ? { chatUrl: String(data.chatUrl ?? ""), chatPassword: String(data.chatPassword ?? "") } : null;
+}
+
+export async function adminSaveParticipantChat(chat: ParticipantChat): Promise<void> {
+  await setDoc(doc(getDb(), COLLECTIONS.participantChats, COHORT), {
+    chatUrl: chat.chatUrl.trim(),
+    chatPassword: chat.chatPassword.trim(),
+    updatedAt: serverTimestamp(),
+  });
 }
 
 /* ===========================================================================

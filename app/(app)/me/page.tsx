@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { CheckinForm } from "@/components/app/CheckinForm";
+import { ParticipantChatCard } from "@/components/app/ParticipantChatCard";
 import { SignInCard } from "@/components/app/SignInCard";
 import {
   Card,
@@ -69,7 +70,7 @@ export default function MyPage() {
           {enrollment.status === "pending" ? (
             <>
               <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-                입금이 확인되면 참가가 확정되고, 이곳에서 러닝 인증을 시작할 수 있어요.
+                입금이 확인되면 참가가 확정되고, 이곳에서 참가자 전용 오픈채팅방 안내와 러닝 인증이 열려요.
               </p>
               <Link href="/apply" className={`${secondaryButton} mt-5`}>
                 입금 안내 다시 보기
@@ -152,6 +153,9 @@ function ParticipantDashboard({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* 참가자 전용 오픈채팅 — 이 대시보드는 참가 확정자에게만 그려집니다 */}
+      <ParticipantChatCard />
+
       {/* 진행률 */}
       <Card>
         <div className="flex items-center justify-between gap-3">

@@ -63,4 +63,6 @@ export const COLLECTIONS = {
   enrollments: "enrollments",
   checkins: "checkins",
   admins: "admins",
+  /** 참가 확정자 전용 오픈채팅 링크·비밀번호 (문서 ID = 기수ID) */
+  participantChats: "participantChats",
 } as const;

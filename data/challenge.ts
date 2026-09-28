@@ -696,7 +696,7 @@ export const footer = {
   /** SNS 링크 — 인스타그램 등을 추가하려면 { label, href } 한 줄을 더 적으세요 */
   socials: [
     { label: "유튜브", href: "https://www.youtube.com/@Runurse_high" },
-    { label: "스레드", href: "https://www.threads.com/@runurse_high" },
+    { label: "스레드", href: "https://www.threads.com/@runnurse_high" },
   ],
   /** 법적 고지 문서 — 유료 서비스라 반드시 노출해야 합니다 (내용은 data/legal.ts) */
   links: [

@@ -11,7 +11,8 @@
 //   1. 참가자는 자기 정보만 볼 수 있다.
 //   2. 참가자는 절대로 스스로 "결제 완료(paid)"로 바꿀 수 없다. (관리자만 가능)
 //   3. 결제가 확인된 참가자만 러닝 인증을 올리고 피드를 볼 수 있다.
-//   4. 관리자는 아래 adminEmails() 의 구글 계정이거나, 콘솔에서 admins/{UID} 로 지정한 사람이다.
+//   4. 참가자 전용 오픈채팅 링크·비밀번호는 결제 확인된 참가자와 관리자만 읽을 수 있다.
+//   5. 관리자는 아래 adminEmails() 의 구글 계정이거나, 콘솔에서 admins/{UID} 로 지정한 사람이다.
 //      웹에서는 누구도 관리자를 추가할 수 없다.
 //
 // 이 규칙은 tests/firestore.rules.test.ts 로 검증되어 있습니다. (npm run test:rules)
@@ -78,7 +79,12 @@ service cloud.firestore {
     // ── 참가 신청 (문서 ID = {기수ID}_{UID}) ─────────────────────────────
     match /enrollments/{enrollmentId} {
       // 본인 신청서 또는 관리자만 볼 수 있습니다.
-      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      // 아직 신청하지 않았을 때도 "내 신청서 자리"는 확인할 수 있어야 실시간 연결이 끊기지 않습니다.
+      // (문서 ID 가 {기수ID}_{내 UID} 인 경우만 — 남의 신청 여부는 엿볼 수 없습니다)
+      allow read: if signedIn() && (
+        (resource == null && enrollmentId.matches('^[A-Za-z0-9-]+_' + request.auth.uid + '$'))
+        || (resource != null && resource.data.uid == request.auth.uid)
+        || isAdmin());
 
       // 신청은 본인 것만, 반드시 "입금 대기(pending)" 상태로만 만들 수 있습니다.
       allow create: if signedIn()
@@ -139,6 +145,22 @@ service cloud.firestore {
         && (!('minutes' in data) || (data.minutes is number && data.minutes >= 0 && data.minutes <= 600))
         && (!('memo' in data) || (data.memo is string && data.memo.size() <= 300))
         && data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 30;
+    }
+
+    // ── 참가자 전용 오픈채팅 (문서 ID = 기수ID) ───────────────────────────
+    // 링크와 입장 비밀번호는 결제가 확인된 참가자와 관리자만 볼 수 있습니다.
+    match /participantChats/{cohortId} {
+      allow read: if isAdmin() || isPaidIn(cohortId);
+
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['chatUrl', 'chatPassword', 'updatedAt'])
+        && request.resource.data.chatUrl is string
+        && request.resource.data.chatUrl.size() <= 200
+        && request.resource.data.chatUrl.matches('^https://open[.]kakao[.]com/.+')
+        && request.resource.data.chatPassword is string
+        && request.resource.data.chatPassword.size() <= 50;
+
+      allow delete: if isAdmin();
     }
 
     // ── 위에 적지 않은 나머지는 전부 차단 ─────────────────────────────────

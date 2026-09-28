@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { ApplyForm } from "@/components/app/ApplyForm";
+import { ParticipantChatCard } from "@/components/app/ParticipantChatCard";
 import { SignInCard } from "@/components/app/SignInCard";
-import { Card, Notice, PageTitle, primaryButton, Spinner, StatusBadge } from "@/components/app/ui";
+import { Card, Notice, PageTitle, secondaryButton, Spinner, StatusBadge } from "@/components/app/ui";
 import { challengeInfo, payment } from "@/data/challenge";
 import { useAuth } from "@/lib/auth";
 
@@ -43,16 +44,14 @@ function EnrollmentStatusCard() {
 
   if (!enrollment) return null;
 
+  // 참가 확정일 때만 오픈채팅 안내를 그립니다. (입금 대기 상태에서는 아예 만들지 않습니다)
   if (enrollment.status === "paid") {
     return (
-      <Card className="flex flex-col items-center gap-4 py-12 text-center">
-        <span aria-hidden="true" className="text-4xl">🎉</span>
-        <h2 className="font-display text-xl text-ink">참가가 확정됐어요!</h2>
-        <p className="text-sm text-ink-muted">마이페이지에서 러닝 인증을 시작해 보세요.</p>
-        <Link href="/me" className={primaryButton}>
-          마이페이지로 가기
+      <ParticipantChatCard>
+        <Link href="/me" className={secondaryButton}>
+          마이페이지에서 러닝 인증하기
         </Link>
-      </Card>
+      </ParticipantChatCard>
     );
   }
 
@@ -83,7 +82,7 @@ function EnrollmentStatusCard() {
             <StatusBadge status={enrollment.status} />
           </div>
           <p className="mt-3 text-xs text-ink-muted">
-            입금 확인은 보통 하루 안에 처리돼요. 확인되면 이 화면이 &lsquo;참가 확정&rsquo;으로 바뀝니다.
+            입금 확인은 보통 하루 안에 처리돼요. 확인되면 새로고침하지 않아도 이 화면이 &lsquo;참가 확정&rsquo;으로 바뀌고, 참가자 전용 오픈채팅방 입장 안내가 나타나요.
           </p>
         </Card>
       </div>
