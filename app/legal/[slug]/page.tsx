@@ -8,6 +8,9 @@ import { legalDocs } from "@/data/legal";
 
 type Params = { slug: string };
 
+/** 아래 세 문서 외의 주소는 만들지 않습니다. (정적 내보내기) */
+export const dynamicParams = false;
+
 /** 세 문서 모두 미리 만들어 둡니다. (정적 페이지) */
 export function generateStaticParams(): Params[] {
   return legalDocs.map((doc) => ({ slug: doc.slug }));
