@@ -5,7 +5,15 @@
 import { describe, expect, it } from "vitest";
 
 import { challengeInfo } from "@/data/challenge";
-import { checkinId, enrollmentId, isWithinChallenge, summarize, todayKST, type Checkin } from "@/lib/data";
+import {
+  checkinId,
+  enrollmentId,
+  isAdminEmail,
+  isWithinChallenge,
+  summarize,
+  todayKST,
+  type Checkin,
+} from "@/lib/data";
 
 const make = (date: string, distanceKm: number): Checkin => ({
   id: `x_${date}`,
@@ -74,5 +82,24 @@ describe("summarize — 진행률", () => {
 
   it("부동소수점 오차 없이 소수 첫째 자리로 반올림한다", () => {
     expect(summarize([make("2026-10-05", 0.1), make("2026-10-06", 0.2)]).totalKm).toBe(0.3);
+  });
+});
+
+describe("isAdminEmail — 화면에 관리자 메뉴를 보여줄지", () => {
+  it("운영자 이메일이고 인증됐으면 관리자", () => {
+    expect(isAdminEmail("runnursehigh@gmail.com", true)).toBe(true);
+  });
+
+  it("대소문자가 달라도 같은 이메일로 본다", () => {
+    expect(isAdminEmail("RunNurseHigh@Gmail.com", true)).toBe(true);
+  });
+
+  it("인증되지 않은 이메일이면 아니다", () => {
+    expect(isAdminEmail("runnursehigh@gmail.com", false)).toBe(false);
+  });
+
+  it("다른 이메일이거나 이메일이 없으면 아니다", () => {
+    expect(isAdminEmail("someone@gmail.com", true)).toBe(false);
+    expect(isAdminEmail(null, true)).toBe(false);
   });
 });

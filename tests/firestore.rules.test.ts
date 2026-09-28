@@ -138,6 +138,55 @@ describe("🔐 관리자 사칭 방지", () => {
 });
 
 /* ========================================================================= */
+describe("👑 운영자 이메일 (runnursehigh@gmail.com)", () => {
+  const OWNER_EMAIL = "runnursehigh@gmail.com";
+
+  /** 구글 로그인 토큰을 흉내 냅니다. */
+  const owner = (
+    overrides: { email?: string; verified?: boolean; provider?: "google.com" | "password" } = {},
+  ) =>
+    env
+      .authenticatedContext("owner-uid", {
+        email: overrides.email ?? OWNER_EMAIL,
+        email_verified: overrides.verified ?? true,
+        firebase: { sign_in_provider: overrides.provider ?? "google.com" },
+      })
+      .firestore();
+
+  const roster = (database: ReturnType<typeof owner>) =>
+    getDocs(query(collection(database, "enrollments"), where("cohortId", "==", COHORT)));
+
+  it("✅ 운영자 구글 계정은 UID 등록 없이 바로 명단을 볼 수 있다", async () => {
+    await assertSucceeds(roster(owner()));
+  });
+
+  it("✅ 운영자 구글 계정은 입금 확인을 할 수 있다", async () => {
+    await assertSucceeds(updateDoc(doc(owner(), "enrollments", `${COHORT}_${BOB}`), { status: "paid" }));
+  });
+
+  it("✅ 운영자 구글 계정은 인증 현황을 볼 수 있다", async () => {
+    await assertSucceeds(getDocs(query(collection(owner(), "checkins"), where("cohortId", "==", COHORT))));
+  });
+
+  it("❌ 인증되지 않은 이메일이면 관리자로 인정하지 않는다", async () => {
+    await assertFails(roster(owner({ verified: false })));
+  });
+
+  it("❌ 같은 이메일이라도 구글이 아닌 방식(이메일/비밀번호)으로 로그인하면 인정하지 않는다", async () => {
+    await assertFails(roster(owner({ provider: "password" })));
+  });
+
+  it("❌ 비슷한 이메일로는 관리자가 될 수 없다", async () => {
+    await assertFails(roster(owner({ email: "runnursehigh@gmail.com.evil.com" })));
+    await assertFails(roster(owner({ email: "xrunnursehigh@gmail.com" })));
+  });
+
+  it("❌ 운영자도 웹에서 다른 관리자를 추가할 수는 없다", async () => {
+    await assertFails(setDoc(doc(owner(), "admins", MALLORY), { note: "추가" }));
+  });
+});
+
+/* ========================================================================= */
 describe("🔐 개인정보 보호 (신청서)", () => {
   it("✅ 내 신청서는 볼 수 있다", async () => {
     await assertSucceeds(getDoc(doc(db(BOB), "enrollments", `${COHORT}_${BOB}`)));

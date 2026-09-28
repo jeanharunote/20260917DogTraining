@@ -82,7 +82,7 @@ describe("🏃 한 참가자의 여정 — 실제 앱 코드로", () => {
     // 1) 로그인하면 프로필을 저장한다
     as(RUNNER);
     await saveProfile({ uid: RUNNER, displayName: "김러너", email: "runner@example.com", photoURL: null });
-    expect(await checkIsAdmin(RUNNER)).toBe(false);
+    expect(await checkIsAdmin({ uid: RUNNER, email: "runner@example.com", emailVerified: true })).toBe(false);
 
     // 2) 신청하면 "입금 대기" 상태가 된다
     await createEnrollment(application);
@@ -93,7 +93,7 @@ describe("🏃 한 참가자의 여정 — 실제 앱 코드로", () => {
 
     // 4) 관리자가 명단을 보고 입금을 확인한다
     as(ADMIN);
-    expect(await checkIsAdmin(ADMIN)).toBe(true);
+    expect(await checkIsAdmin({ uid: ADMIN, email: null, emailVerified: false })).toBe(true);
     const roster = await adminListEnrollments();
     expect(roster.map((item) => item.name)).toContain("김러너");
     await adminSetStatus(enrollmentId(RUNNER), "paid");

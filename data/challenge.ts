@@ -29,6 +29,11 @@ export const challengeInfo = {
    * TODO: 2기를 열 때 "cohort-2" 로 바꾸면 신청·인증이 새 기수로 따로 쌓입니다.
    */
   cohortId: "cohort-1",
+  /**
+   * 운영자 구글 계정 — 이 이메일로 구글 로그인하면 관리자 메뉴가 보입니다.
+   * ⚠️ 실제 권한은 firestore.rules 의 adminEmails() 가 결정합니다. 바꿀 때는 두 곳을 함께 바꾸세요.
+   */
+  adminEmails: ["runnursehigh@gmail.com"],
   /** 목표 인증 횟수 (주 4회 × 4주) — 마이페이지 진행률 계산에 씁니다 */
   targetCheckins: 16,
   /** 챌린지 시작일 · 종료일 (인증 가능 기간) */
