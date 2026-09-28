@@ -39,11 +39,14 @@ export const metadata: Metadata = {
     url: siteMeta.url,
     type: "website",
     locale: "ko_KR",
+    // 링크를 공유했을 때 뜨는 미리보기 이미지 (public/og.jpg, 1200×630)
+    images: [{ url: siteMeta.ogImage, width: 1200, height: 630, alt: siteMeta.ogImageAlt }],
   },
   twitter: {
     card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
+    images: [siteMeta.ogImage],
   },
 };
 
