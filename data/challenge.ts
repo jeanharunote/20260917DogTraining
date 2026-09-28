@@ -58,6 +58,8 @@ export const challengeInfo = {
   deadlineText: "2026년 10월 2일(금) 자정",
   /** 모집 인원 */
   capacityText: "10명",
+  /** 모집 방식 — 신청 순서대로 마감합니다 */
+  recruitText: "선착순",
   /**
    * 참가비 — "1기 한정 특가"
    *   feeText        실제로 입금받는 금액 (입금 안내·환불규정에 쓰입니다) ← 금액은 여기서만 바꾸세요
@@ -124,7 +126,7 @@ export const navLinks = [
  * ======================================================================== */
 export const hero = {
   /** 모집 중임을 알리는 작은 뱃지 */
-  badge: `${challengeInfo.name} ${challengeInfo.cohortText} · ${challengeInfo.capacityText} 모집 중`,
+  badge: `${challengeInfo.name} ${challengeInfo.cohortText} · ${challengeInfo.recruitText} ${challengeInfo.capacityText} 모집 중`,
   /** 가장 큰 제목 (줄바꿈은 배열의 항목을 나누면 됩니다) */
   headline: ["마라톤 나가보고 싶은데,", "같이 나갈 사람이 없다면"],
   /** 제목 아래 한 줄 */
@@ -139,7 +141,7 @@ export const hero = {
   /** 히어로 하단에 노출되는 핵심 정보 요약 */
   highlights: [
     { label: "기간", value: "10/5 ~ 11/1 · 4주" },
-    { label: "모집 인원", value: `${challengeInfo.capacityText} 한정` },
+    { label: "모집 인원", value: `${challengeInfo.recruitText} ${challengeInfo.capacityText}` },
     // fee: true 인 항목은 값 대신 "정가 → 1기 한정가" 표시(FeePrice)로 보여줍니다.
     { label: "참가비", value: FEE_PLAIN_TEXT, fee: true },
   ],
@@ -516,7 +518,7 @@ export const habitSystem = {
    *    대신 확인 가능한 "프로그램 정보"만 숫자로 보여줍니다.
    */
   stats: [
-    { value: challengeInfo.capacityText, label: `${challengeInfo.cohortText} 한정 모집` },
+    { value: challengeInfo.capacityText, label: `${challengeInfo.cohortText} ${challengeInfo.recruitText} 모집` },
     { value: "주 4회", label: "러닝 인증" },
     { value: "4주", label: "프로그램 기간" },
     { value: "10K · 하프", label: "목표 대회 종목" },
@@ -607,13 +609,13 @@ export const signup = {
 
   eyebrow: "참가 신청",
   title: "이번 4주, 같이 뛰어봐요",
-  description: `${challengeInfo.cohortText} ${challengeInfo.capacityText} 한정이며 신청 순서대로 마감됩니다. 신청 후 1~2일 내에 안내를 드려요.`,
+  description: `${challengeInfo.cohortText}는 ${challengeInfo.recruitText} ${challengeInfo.capacityText}만 받아요. 신청 순서대로 마감되니 서둘러 주세요. 신청 후 1~2일 내에 안내를 드려요.`,
 
   /** 폼 위에 보여줄 요약 정보 */
   summary: [
     { label: "챌린지 기간", value: "10/5(월) ~ 11/1(일)" },
     { label: "모집 마감", value: challengeInfo.deadlineText },
-    { label: "모집 인원", value: `${challengeInfo.capacityText} 한정` },
+    { label: "모집 인원", value: `${challengeInfo.recruitText} ${challengeInfo.capacityText}` },
     // fee: true 인 항목은 값 대신 "정가 → 1기 한정가" 표시(FeePrice)로 보여줍니다.
     { label: "참가비", value: FEE_PLAIN_TEXT, fee: true },
   ],
