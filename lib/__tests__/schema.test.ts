@@ -120,3 +120,38 @@ describe("signupSchema — 정상 입력", () => {
     }
   });
 });
+
+/* ========================================================================= */
+import { checkinSchema } from "@/lib/schema";
+
+describe("checkinSchema — 러닝 인증 입력", () => {
+  const valid = { date: "2026-10-06", distanceKm: "3.5", minutes: "25", memo: "완료!" };
+
+  it("정상 입력은 통과하고 숫자로 바뀐다", () => {
+    const result = checkinSchema.safeParse(valid);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.distanceKm).toBe(3.5);
+      expect(result.data.minutes).toBe(25);
+    }
+  });
+
+  it("시간과 메모는 비워도 된다", () => {
+    expect(checkinSchema.safeParse({ ...valid, minutes: "", memo: "" }).success).toBe(true);
+  });
+
+  it.each([
+    ["거리 미입력", { distanceKm: "" }],
+    ["거리 0", { distanceKm: "0" }],
+    ["음수 거리", { distanceKm: "-2" }],
+    ["100km 초과", { distanceKm: "120" }],
+    ["숫자가 아닌 거리", { distanceKm: "많이" }],
+    ["소수 분", { minutes: "12.5" }],
+    ["600분 초과", { minutes: "700" }],
+    ["날짜 형식 오류", { date: "10/06" }],
+    ["메모 300자 초과", { memo: "가".repeat(301) }],
+  ])("%s 은(는) 거부한다", (_label, overrides) => {
+    expect(checkinSchema.safeParse({ ...valid, ...overrides }).success).toBe(false);
+  });
+});

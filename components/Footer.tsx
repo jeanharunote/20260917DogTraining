@@ -5,6 +5,7 @@
 import Link from "next/link";
 
 import { challengeInfo, footer } from "@/data/challenge";
+import { businessInfo } from "@/data/legal";
 
 export function Footer() {
   return (
@@ -51,7 +52,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* 사업자 정보 — 전자상거래법상 표시 의무 항목 (data/legal.ts 에서 수정) */}
+        <address className="mt-12 flex flex-col gap-1 border-t border-line pt-6 text-[11px] not-italic leading-relaxed text-ink-muted">
+          <span>
+            상호 {businessInfo.companyName} · 대표 {businessInfo.representative} · 사업자등록번호{" "}
+            {businessInfo.businessNumber}
+          </span>
+          <span>통신판매업 신고 {businessInfo.mailOrderNumber}</span>
+          <span>
+            주소 {businessInfo.address} · 이메일 {businessInfo.email} · 연락처 {businessInfo.phone}
+          </span>
+        </address>
+
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-ink-muted">{footer.copyright}</p>
           <ul className="flex gap-5">
             {footer.links.map((link) => (
