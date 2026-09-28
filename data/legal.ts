@@ -24,10 +24,18 @@ export const businessInfo = {
   businessNumber: "[사업자등록번호 000-00-00000]",
   mailOrderNumber: "[통신판매업 신고번호 제0000-서울○○-0000호]",
   address: "[사업장 주소]",
-  email: "[문의 이메일]",
+  email: "runnursehigh@gmail.com",
   phone: "[연락처]",
   privacyOfficer: "[개인정보 보호책임자 이름]",
 } as const;
+
+/** [대괄호]로 남아 있는 값은 아직 채우지 않은 것으로 보고 화면에 보여주지 않습니다. */
+export function isFilled(value: string): boolean {
+  return value.trim().length > 0 && !value.trim().startsWith("[");
+}
+
+/** 약관에 쓰는 운영자 이름 — 상호명을 채우기 전에는 브랜드명을 씁니다. */
+const operatorName = isFilled(businessInfo.companyName) ? businessInfo.companyName : "러널스하이";
 
 /** 문서 시행일 — TODO: 실제 게시일로 바꿔주세요 */
 export const EFFECTIVE_DATE = "2026년 10월 1일";
@@ -129,7 +137,10 @@ export const privacyPolicy: LegalDoc = {
     },
     {
       heading: "6. 개인정보 보호책임자",
-      body: [`성명: ${businessInfo.privacyOfficer}`, `연락처: ${businessInfo.email}`],
+      body: [
+        ...(isFilled(businessInfo.privacyOfficer) ? [`성명: ${businessInfo.privacyOfficer}`] : []),
+        `연락처: ${businessInfo.email}`,
+      ],
     },
   ],
 };
@@ -145,7 +156,7 @@ export const termsOfService: LegalDoc = {
     {
       heading: "제1조 (목적)",
       body: [
-        `이 약관은 ${businessInfo.companyName}(이하 "운영자")가 제공하는 러닝 챌린지 서비스의 이용 조건과 절차, 운영자와 참가자의 권리·의무를 정하는 것을 목적으로 합니다.`,
+        `이 약관은 ${operatorName}(이하 "운영자")가 제공하는 러닝 챌린지 서비스의 이용 조건과 절차, 운영자와 참가자의 권리·의무를 정하는 것을 목적으로 합니다.`,
       ],
     },
     {

@@ -5,7 +5,7 @@
 import Link from "next/link";
 
 import { challengeInfo, footer } from "@/data/challenge";
-import { businessInfo } from "@/data/legal";
+import { businessInfo, isFilled } from "@/data/legal";
 
 export function Footer() {
   return (
@@ -29,7 +29,15 @@ export function Footer() {
               </a>
             </p>
             <p className="text-sm text-ink-muted">
-              {footer.contact.kakaoLabel} {footer.contact.kakaoText}
+              {footer.contact.kakaoLabel}{" "}
+              <a
+                href={footer.contact.kakaoUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="font-medium text-brand-600 underline-offset-4 hover:underline dark:text-brand-400"
+              >
+                {footer.contact.kakaoText}
+              </a>
             </p>
           </div>
 
@@ -52,16 +60,31 @@ export function Footer() {
           </div>
         </div>
 
-        {/* 사업자 정보 — 전자상거래법상 표시 의무 항목 (data/legal.ts 에서 수정) */}
+        {/*
+          사업자 정보 — 전자상거래법상 표시 항목 (data/legal.ts 에서 수정)
+          아직 [대괄호]로 남은 항목은 보여주지 않고, 값을 채우면 자동으로 나타납니다.
+        */}
         <address className="mt-12 flex flex-col gap-1 border-t border-line pt-6 text-[11px] not-italic leading-relaxed text-ink-muted">
-          <span>
-            상호 {businessInfo.companyName} · 대표 {businessInfo.representative} · 사업자등록번호{" "}
-            {businessInfo.businessNumber}
-          </span>
-          <span>통신판매업 신고 {businessInfo.mailOrderNumber}</span>
-          <span>
-            주소 {businessInfo.address} · 이메일 {businessInfo.email} · 연락처 {businessInfo.phone}
-          </span>
+          {[
+            [
+              ["상호", businessInfo.companyName],
+              ["대표", businessInfo.representative],
+              ["사업자등록번호", businessInfo.businessNumber],
+            ],
+            [["통신판매업 신고", businessInfo.mailOrderNumber]],
+            [
+              ["주소", businessInfo.address],
+              ["이메일", businessInfo.email],
+              ["연락처", businessInfo.phone],
+            ],
+          ]
+            .map((line) => line.filter(([, value]) => isFilled(value)))
+            .filter((line) => line.length > 0)
+            .map((line) => (
+              <span key={line.map(([label]) => label).join()}>
+                {line.map(([label, value]) => `${label} ${value}`).join(" · ")}
+              </span>
+            ))}
         </address>
 
         <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

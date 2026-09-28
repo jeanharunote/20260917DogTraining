@@ -62,7 +62,7 @@ export const challengeInfo = {
   communityText: "카카오톡 오픈채팅",
   /** 함께 나갈 대회 — TODO: 대회명과 일정이 확정되면 정확히 적어주세요 */
   raceText: "서울 마라톤 대회",
-  raceNote: "[대회명·일정 확정 후 기재]",
+  raceNote: "대회명과 일정은 확정되는 대로 참가자분들께 먼저 안내드려요.",
 } as const;
 
 /* ===========================================================================
@@ -167,7 +167,7 @@ export const myStory = {
   paragraphs: [
     "실외 마스크 해제되던 날, 답답한 마음에 무작정 밖으로 나가 뛰었습니다. 10분도 못 가 숨이 턱까지 찼어요. 그게 시작이었습니다.",
     "교대 근무를 하다 보니 얼굴이 늘 부어 있었고, 기분도 자주 가라앉았습니다. 뛰고 나면 붓기가 빠지고 머리가 맑아지는 게 느껴졌어요. 그 느낌 때문에 다음 날 또 나가게 됐습니다.",
-    "삼시세끼를 챙겨 먹고 군것질을 끊었습니다. 굶지 않았어요. 그렇게 [○]개월 동안 [○]kg이 빠졌습니다.",
+    "삼시세끼를 챙겨 먹고 군것질을 끊었습니다. 굶지 않았어요. 그렇게 체중이 10kg 줄었습니다.",
     "하지만 진짜 달라진 건 체중이 아니라 '뛰는 게 당연한 사람'이 된 거였어요. 그 다음 목표가 마라톤이었고, 이번엔 같이 나갈 사람들을 찾고 있습니다.",
   ],
 
@@ -181,10 +181,10 @@ export const myStory = {
     beforeAlt: "러닝을 시작하기 전 모습",
     beforeLabel: "Before",
     afterImage: "",
-    afterAlt: "4개월 뒤 달라진 모습",
+    afterAlt: "러닝을 이어온 지금의 모습",
     afterLabel: "After",
-    /** 사진 아래 설명 — TODO: 실제 기간과 감량 수치를 넣어주세요 */
-    caption: "[○]개월 · [○]kg 감량 · 굶지 않고 삼시세끼 + 간식 끊기",
+    /** 사진 아래 설명 */
+    caption: "러닝 5년차 · 10kg 감량 · 굶지 않고 삼시세끼 + 간식 끊기",
   },
 
   /**
@@ -192,8 +192,8 @@ export const myStory = {
    *   확인되지 않은 숫자는 쓰지 마세요. 애매하면 항목 자체를 지우는 게 낫습니다.
    */
   changes: [
-    { label: "달린 기간", value: "[○]개월" },
-    { label: "체중 변화", value: "[○]kg 감량" },
+    { label: "달린 기간", value: "5년차" },
+    { label: "체중 변화", value: "10kg 감량" },
     { label: "지금 목표", value: "마라톤 완주" },
   ],
 
@@ -381,6 +381,10 @@ export const faq = {
       answer: `아니요, 대회 참가비는 포함되어 있지 않고 개인 부담입니다. 챌린지 참가비 ${challengeInfo.feeText}과 대회 신청비는 별도로 생각해 주세요. 신청은 다 같이 도와드립니다.`,
     },
     {
+      question: "어떤 대회에 나가나요?",
+      answer: `서울에서 열리는 마라톤 대회를 함께 신청할 예정이에요. ${challengeInfo.raceNote} 대회 참가비는 개인 부담입니다.`,
+    },
+    {
       question: "하프는 누구나 가능한가요?",
       answer:
         "하프 코스는 10K 완주 경험이 있는 분께 추천드려요. 처음이시라면 입문이나 10K 코스로 시작하시는 편이 훨씬 안전하고 재미있습니다. 코스는 중간에 바꿔도 괜찮아요.",
@@ -412,9 +416,9 @@ export const faq = {
  *   TODO: 실제 계좌 정보로 반드시 바꿔주세요.
  * ======================================================================== */
 export const payment = {
-  bankName: "[은행명]",
-  accountNumber: "[계좌번호]",
-  accountHolder: "[예금주]",
+  bankName: "국민은행",
+  accountNumber: "801302-01-605209",
+  accountHolder: "전아연",
   /** 입금 기한 안내 */
   dueText: `${challengeInfo.deadlineText}까지`,
   notice:
@@ -510,14 +514,14 @@ export const footer = {
   tagline: "혼자였다면 미뤘을 출발선에, 같이 섭니다.",
   contact: {
     emailLabel: "문의 이메일",
-    email: "hello@example.com",
-    kakaoLabel: "카카오톡 문의",
-    kakaoText: "@러널스하이",
+    email: "runnursehigh@gmail.com",
+    kakaoLabel: "카카오톡 1:1 문의",
+    kakaoText: "오픈채팅으로 문의하기",
+    kakaoUrl: "https://open.kakao.com/o/sRfbRQPi",
   },
-  /** SNS 링크 — TODO: 실제 주소로 바꿔주세요 */
+  /** SNS 링크 — 인스타그램 등을 추가하려면 { label, href } 한 줄을 더 적으세요 */
   socials: [
     { label: "유튜브", href: "https://www.youtube.com/@Runurse_high" },
-    { label: "인스타그램", href: "https://instagram.com/example" },
     { label: "스레드", href: "https://www.threads.com/@runurse_high" },
   ],
   /** 법적 고지 문서 — 유료 서비스라 반드시 노출해야 합니다 (내용은 data/legal.ts) */
