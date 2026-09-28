@@ -12,6 +12,7 @@ import {
   isWithinChallenge,
   summarize,
   todayKST,
+  weekIndexOf,
   type Checkin,
 } from "@/lib/data";
 
@@ -57,30 +58,70 @@ describe("isWithinChallenge — 인증 가능 기간", () => {
   });
 });
 
-describe("summarize — 진행률", () => {
+describe("weekIndexOf — 주차 계산 (시작일 월요일부터 7일씩)", () => {
+  it.each([
+    ["2026-10-05", 0],
+    ["2026-10-11", 0],
+    ["2026-10-12", 1],
+    ["2026-10-25", 2],
+    ["2026-10-26", 3],
+    ["2026-11-01", 3],
+  ])("%s 는 %i번째 주(0부터)", (date, week) => {
+    expect(weekIndexOf(date)).toBe(week);
+  });
+
+  it("기간 밖의 날짜는 주차가 없다", () => {
+    expect(weekIndexOf("2026-10-04")).toBeNull();
+    expect(weekIndexOf("2026-11-02")).toBeNull();
+  });
+});
+
+/** 각 주에 원하는 만큼 인증을 만듭니다. counts = [1주차, 2주차, 3주차, 4주차] */
+const weeksOf = (counts: number[]) => {
+  const start = new Date("2026-10-05T00:00:00Z");
+
+  return counts.flatMap((count, week) =>
+    Array.from({ length: count }, (_, day) => {
+      const date = new Date(start.getTime() + (week * 7 + day) * 86400000).toISOString().slice(0, 10);
+
+      return make(date, 3);
+    }),
+  );
+};
+
+describe("summarize — 진행률과 보증금 환급 (매주 4회 규칙)", () => {
   it("기록이 없으면 0%", () => {
     expect(summarize([])).toMatchObject({ count: 0, percent: 0, totalKm: 0, completed: false });
   });
 
-  it("횟수·거리·달성률을 계산한다", () => {
-    const result = summarize([make("2026-10-05", 3.2), make("2026-10-06", 4.1)]);
-
-    expect(result.count).toBe(2);
-    expect(result.totalKm).toBe(7.3);
-    expect(result.percent).toBe(Math.round((2 / challengeInfo.targetCheckins) * 100));
+  it("주차별 인증 횟수를 센다", () => {
+    expect(summarize(weeksOf([4, 2, 0, 1])).weekly).toEqual([4, 2, 0, 1]);
   });
 
-  it("목표 횟수를 채우면 완주로 표시하고 100%를 넘지 않는다", () => {
-    const many = Array.from({ length: challengeInfo.targetCheckins + 3 }, (_, i) =>
-      make(`2026-10-${String(5 + i).padStart(2, "0")}`, 3),
-    );
-    const result = summarize(many);
+  it("4주 모두 주 4회를 채우면 환급 대상, 100%", () => {
+    const result = summarize(weeksOf([4, 4, 4, 4]));
 
     expect(result.completed).toBe(true);
     expect(result.percent).toBe(100);
   });
 
-  it("부동소수점 오차 없이 소수 첫째 자리로 반올림한다", () => {
+  it("❌ 총 16회를 채워도 한 주가 3회면 환급 대상이 아니다 (몰아서 채우기 불가)", () => {
+    const result = summarize(weeksOf([5, 4, 3, 4]));
+
+    expect(result.total).toBe(16);
+    expect(result.completed).toBe(false);
+  });
+
+  it("한 주에 4회를 넘게 해도 진행률에는 4회까지만 반영한다", () => {
+    const result = summarize(weeksOf([7, 4, 3, 4]));
+
+    expect(result.total).toBe(18);
+    expect(result.count).toBe(15); // 4 + 4 + 3 + 4
+    expect(result.percent).toBe(94);
+    expect(result.completed).toBe(false);
+  });
+
+  it("거리는 소수 첫째 자리로 반올림한다", () => {
     expect(summarize([make("2026-10-05", 0.1), make("2026-10-06", 0.2)]).totalKm).toBe(0.3);
   });
 });

@@ -276,17 +276,54 @@ export function isWithinChallenge(date: string): boolean {
   return date >= challengeInfo.startDate && date <= challengeInfo.endDate;
 }
 
-/** 진행률 요약 */
+/**
+ * 날짜가 몇 주차인지 (0부터). 챌린지 기간 밖이면 null.
+ * 시작일부터 7일씩 끊습니다. (1주차 = 0)
+ */
+export function weekIndexOf(date: string): number | null {
+  const start = Date.parse(`${challengeInfo.startDate}T00:00:00Z`);
+  const day = Date.parse(`${date}T00:00:00Z`);
+
+  if (Number.isNaN(day)) return null;
+
+  const index = Math.floor((day - start) / (7 * 24 * 60 * 60 * 1000));
+
+  return index >= 0 && index < challengeInfo.totalWeeks ? index : null;
+}
+
+/**
+ * 진행률 요약
+ *
+ * 규칙: 4주 동안 "매주" 4회 이상 인증해야 보증금 환급 대상입니다.
+ * 그래서 한 주에 4회를 넘게 해도 그 주는 4회까지만 진행률에 반영합니다.
+ * (다른 주에 몰아서 채워 100%가 되는데 환급은 안 되는 혼란을 막기 위해서입니다)
+ */
 export function summarize(checkins: Checkin[]) {
-  const count = checkins.length;
+  const perWeek = challengeInfo.checkinsPerWeek;
+  const weekly = Array.from({ length: challengeInfo.totalWeeks }, () => 0);
+
+  checkins.forEach((item) => {
+    const index = weekIndexOf(item.date);
+    if (index !== null) weekly[index] += 1;
+  });
+
+  const credited = weekly.reduce((sum, count) => sum + Math.min(count, perWeek), 0);
   const totalKm = checkins.reduce((sum, item) => sum + item.distanceKm, 0);
   const target = challengeInfo.targetCheckins;
+  const depositEligible = weekly.every((count) => count >= perWeek);
 
   return {
-    count,
+    /** 전체 인증 횟수 */
+    total: checkins.length,
+    /** 진행률에 인정되는 횟수 (주마다 최대 4회) */
+    count: credited,
     target,
+    /** 주차별 인증 횟수 */
+    weekly,
+    perWeek,
     totalKm: Math.round(totalKm * 10) / 10,
-    percent: Math.min(100, Math.round((count / target) * 100)),
-    completed: count >= target,
+    percent: Math.min(100, Math.round((credited / target) * 100)),
+    /** 보증금 환급 대상인지 (4주 모두 주 4회 이상) */
+    completed: depositEligible,
   };
 }

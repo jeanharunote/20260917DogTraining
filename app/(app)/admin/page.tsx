@@ -270,8 +270,14 @@ function AdminDashboard() {
 
                   {item.status === "paid" ? (
                     <p className="mt-3 text-xs text-ink-muted">
-                      인증 {stats?.count ?? 0}/{challengeInfo.targetCheckins}회 · {stats?.totalKm ?? 0}km
+                      주차별 {(stats?.weekly ?? [0, 0, 0, 0]).join(" · ")} (주 {challengeInfo.checkinsPerWeek}회 기준) ·{" "}
+                      {stats?.totalKm ?? 0}km
                       {stats?.lastDate ? ` · 마지막 인증 ${stats.lastDate}` : " · 아직 인증 없음"}
+                      {stats?.completed ? (
+                        <span className="ml-2 rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">
+                          보증금 환급 대상
+                        </span>
+                      ) : null}
                     </p>
                   ) : null}
 
@@ -341,9 +347,27 @@ function formatDateTime(date: Date): string {
 /** 엑셀에서 한글이 깨지지 않도록 BOM 을 붙여 CSV 로 내려받습니다. */
 function downloadCsv(
   list: Enrollment[],
-  statsByUid: Map<string, { count: number; totalKm: number; lastDate?: string }>,
+  statsByUid: Map<
+    string,
+    { total: number; weekly: number[]; totalKm: number; completed: boolean; lastDate?: string }
+  >,
 ) {
-  const header = ["이름", "이메일", "연락처", "코스", "상태", "신청일시", "인증 횟수", "누적 거리(km)", "참가 동기"];
+  const header = [
+    "이름",
+    "이메일",
+    "연락처",
+    "코스",
+    "상태",
+    "신청일시",
+    "전체 인증 횟수",
+    "1주차",
+    "2주차",
+    "3주차",
+    "4주차",
+    "누적 거리(km)",
+    "보증금 환급 대상",
+    "참가 동기",
+  ];
   const statusText: Record<EnrollmentStatus, string> = {
     pending: "입금 대기",
     paid: "참가 확정",
@@ -361,8 +385,10 @@ function downloadCsv(
       courseLabel[item.course] ?? item.course,
       statusText[item.status],
       item.appliedAt ? item.appliedAt.toLocaleString("ko-KR") : "",
-      String(stats?.count ?? 0),
+      String(stats?.total ?? 0),
+      ...(stats?.weekly ?? [0, 0, 0, 0]).map(String),
       String(stats?.totalKm ?? 0),
+      item.status === "paid" && stats?.completed ? "O" : "",
       item.motivation ?? "",
     ];
   });

@@ -34,6 +34,13 @@ export const challengeInfo = {
    * ⚠️ 실제 권한은 firestore.rules 의 adminEmails() 가 결정합니다. 바꿀 때는 두 곳을 함께 바꾸세요.
    */
   adminEmails: ["runnursehigh@gmail.com"],
+  /**
+   * 인증 규칙: 4주 동안 "매주" 4회 이상
+   *   총 16회를 채워도 한 주라도 4회에 못 미치면 보증금 환급 대상이 아닙니다.
+   *   주차는 시작일(월요일) 기준 7일씩 나눕니다. (1주차: 10/5~10/11)
+   */
+  checkinsPerWeek: 4,
+  totalWeeks: 4,
   /** 목표 인증 횟수 (주 4회 × 4주) — 마이페이지 진행률 계산에 씁니다 */
   targetCheckins: 16,
   /** 챌린지 시작일 · 종료일 (인증 가능 기간) */
@@ -51,9 +58,20 @@ export const challengeInfo = {
   deadlineText: "2026년 10월 2일(금) 자정",
   /** 모집 인원 */
   capacityText: "10명",
-  /** 참가비 — 대회 참가비가 별도라는 점을 반드시 함께 적습니다 */
+  /**
+   * 참가비 = 참여비 + 보증금
+   *   입금은 합계(feeText)로 받고, 인증을 모두 채우면 보증금을 돌려드립니다.
+   *   대회 참가비는 별도라는 점을 반드시 함께 적습니다.
+   */
   feeText: "50,000원",
+  participationFeeText: "20,000원",
+  depositText: "30,000원",
+  feeBreakdown: "참여비 2만원 + 보증금 3만원",
   feeNote: "대회 참가비 별도 (개인 부담)",
+  /** 보증금 환급 기준 — checkinsPerWeek · totalWeeks 와 같아야 합니다 */
+  depositRule: "4주 동안 매주 4회 이상 인증하면 보증금 3만원을 돌려드려요",
+  /** 챌린지 종료 후 며칠 안에 보증금을 돌려줄지 */
+  depositReturnDays: 7,
   /** 완주했을 때 드리는 선물 — TODO: 실제로 줄 수 있는 것만 적어주세요 */
   rewardText: "완주 인증 시 러닝 양말 증정",
   /** 인증 방식 */
@@ -88,6 +106,7 @@ export const navLinks = [
   { label: "습관 원리", href: "#why-habit" },
   { label: "4주 코스", href: "#roadmap" },
   { label: "지원 장치", href: "#system" },
+  { label: "보증금", href: "#deposit" },
   { label: "자주 묻는 질문", href: "#faq" },
 ] as const;
 
@@ -103,7 +122,7 @@ export const hero = {
   subCopy: "4주 동안 같이 뛰고, 같이 대회 신청해요. 훈련은 다 떠먹여 드릴게요.",
   /** 조금 더 자세한 설명 */
   description:
-    "혼자였다면 미뤘을 대회 신청을, 같이 하면 그냥 하게 됩니다. 레벨에 맞는 주차별 훈련표를 드리고, 주 4회 인증으로 서로를 붙잡아 줍니다.",
+    "혼자였다면 미뤘을 대회 신청을, 같이 하면 그냥 하게 됩니다. 레벨에 맞는 주차별 훈련표를 드리고, 주 4회 인증으로 서로를 붙잡아 줍니다. 4주 내내 매주 4회씩 인증하면 보증금 3만원은 그대로 돌려드려요.",
   /** 카운트다운 위에 붙는 설명 */
   countdownLabel: "모집 마감까지 남은 시간",
   /** 마감이 지났을 때 보여줄 문구 */
@@ -112,7 +131,7 @@ export const hero = {
   highlights: [
     { label: "기간", value: "10/5 ~ 11/1 · 4주" },
     { label: "모집 인원", value: `${challengeInfo.capacityText} 한정` },
-    { label: "참가비", value: `${challengeInfo.feeText} (대회비 별도)` },
+    { label: "참가비", value: "5만원 · 완주 시 3만원 환급" },
   ],
   /**
    * 배경 이미지 (선택)
@@ -324,7 +343,7 @@ export const roadmap = {
         { week: 3, plan: "걷기 1분 + 달리기 4분 × 4세트" },
         { week: 4, plan: "쉬지 않고 20분 달리기" },
       ],
-      tips: ["숨이 차면 무조건 걷기", "대화 가능한 속도 유지", "주 4회 중 3회만 해도 성공"],
+      tips: ["숨이 차면 무조건 걷기", "대화 가능한 속도 유지", "짧게 뛰어도 인증 1회로 인정"],
     },
     {
       id: "ten-k",
@@ -409,6 +428,63 @@ export const habitSystem = {
 } as const;
 
 /* ===========================================================================
+ * 9-1) 보증금 제도 — 왜 보증금이 있는지 설득하는 섹션
+ *
+ *   ⚠️ 연구 내용은 원문과 정확히 맞춰 적었습니다. 숫자를 부풀리지 마세요.
+ *      이 연구들은 "우리 챌린지"의 성과가 아니라 일반적인 행동과학 근거입니다.
+ * ======================================================================== */
+export const depositPitch = {
+  eyebrow: "왜 보증금이 있나요?",
+  title: "3만원은 벌금이 아니라, 나를 붙잡아 줄 약속이에요",
+  lead: `참가비 ${challengeInfo.feeText} 중 ${challengeInfo.depositText}은 보증금이에요. 4주 동안 매주 ${challengeInfo.checkinsPerWeek}회 이상 인증하면 그대로 돌려드려요.`,
+
+  reasons: [
+    {
+      emoji: "⚖️",
+      title: "잃는 아픔은 얻는 기쁨보다 2배 커요",
+      body: "사람은 같은 금액이라도 얻을 때의 기쁨보다 잃을 때의 아픔을 약 2배 크게 느껴요. 노벨 경제학상 수상자 대니얼 카너먼이 아모스 트버스키와 함께 밝힌 '손실 회피' 현상이에요. 그래서 '뛰면 3만원을 받는다'보다 '안 뛰면 3만원을 잃는다'가 훨씬 강하게 나를 움직여요.",
+      source: "Tversky & Kahneman (1992)",
+    },
+    {
+      emoji: "🔬",
+      title: "실제로 운동량이 늘었어요",
+      body: "2016년 미국 펜실베이니아대 연구팀은 성인 281명에게 하루 7,000보 목표를 주고 13주 동안 지켜봤어요. 돈을 미리 주고 목표를 못 채운 날 빼가는 방식이, 아무것도 없을 때보다 목표 달성 일수를 약 50% 늘렸어요. 같은 금액을 달성할 때마다 주는 방식은 뚜렷한 효과가 없었고요.",
+      source: "Patel et al. (2016)",
+    },
+    {
+      emoji: "📅",
+      title: "그래서 '매주' 4회예요",
+      body: "한 주를 쉬고 다음 주에 몰아서 뛰면 습관이 아니라 벼락치기가 돼요. 매주 꾸준히 반복해야 러닝이 '큰 결심'이 아니라 '그냥 하는 일'이 됩니다. 그래서 총 횟수가 아니라 매주 4회를 확인해요.",
+      source: "",
+    },
+  ],
+
+  /** 환급 규칙 요약 (화면에 표로 나옵니다) */
+  rules: [
+    { label: "참가비", value: `${challengeInfo.feeText} (${challengeInfo.feeBreakdown})` },
+    { label: "환급 조건", value: `4주 모두 매주 ${challengeInfo.checkinsPerWeek}회 이상 인증` },
+    { label: "환급 금액", value: `보증금 ${challengeInfo.depositText}` },
+    { label: "환급 시기", value: `챌린지 종료 후 ${challengeInfo.depositReturnDays}일 이내` },
+  ],
+
+  closing: "돌려받는 3만원이 목표는 아니에요. 4주 뒤 '그냥 뛰는 사람'이 된 나 자신이 진짜 보상이에요.",
+
+  /** 출처 — 화면 하단에 작게 표시됩니다 */
+  references: [
+    {
+      label:
+        "Tversky, A., & Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. Journal of Risk and Uncertainty, 5, 297–323.",
+      href: "https://doi.org/10.1007/BF00122574",
+    },
+    {
+      label:
+        "Patel, M. S., et al. (2016). Framing Financial Incentives to Increase Physical Activity Among Overweight and Obese Adults: A Randomized, Controlled Trial. Annals of Internal Medicine, 164(6), 385–394.",
+      href: "https://doi.org/10.7326/M15-1635",
+    },
+  ],
+} as const;
+
+/* ===========================================================================
  * 10) FAQ
  * ======================================================================== */
 export const faq = {
@@ -422,7 +498,7 @@ export const faq = {
     },
     {
       question: "대회 참가비도 포함인가요?",
-      answer: `아니요, 대회 참가비는 포함되어 있지 않고 개인 부담입니다. 챌린지 참가비 ${challengeInfo.feeText}과 대회 신청비는 별도로 생각해 주세요. 신청은 다 같이 도와드립니다.`,
+      answer: `아니요, 대회 참가비는 포함되어 있지 않고 개인 부담입니다. 챌린지 참가비 ${challengeInfo.feeText}(${challengeInfo.feeBreakdown})과 대회 신청비는 별도로 생각해 주세요. 신청은 다 같이 도와드립니다.`,
     },
     {
       question: "어떤 대회에 나가나요?",
@@ -434,9 +510,12 @@ export const faq = {
         "하프 코스는 10K 완주 경험이 있는 분께 추천드려요. 처음이시라면 입문이나 10K 코스로 시작하시는 편이 훨씬 안전하고 재미있습니다. 코스는 중간에 바꿔도 괜찮아요.",
     },
     {
+      question: "보증금은 어떻게 돌려받나요?",
+      answer: `참가비 ${challengeInfo.feeText}은 ${challengeInfo.feeBreakdown}이에요. ${challengeInfo.depositRule}. 챌린지가 끝나고 ${challengeInfo.depositReturnDays}일 안에 입금하신 계좌로 보내드립니다. 진행 상황은 마이페이지에서 언제든 확인할 수 있어요.`,
+    },
+    {
       question: "주 4회를 다 못 채우면 어떻게 되나요?",
-      answer:
-        "괜찮습니다. 못 지킨 날을 벌충하려고 무리하지 않는 게 더 중요해요. 며칠 빠졌더라도 다음 인증부터 다시 이어가면 되고, 매주 일요일 결산 때 다음 주 계획을 같이 조정해 드립니다.",
+      answer: `챌린지는 끝까지 함께할 수 있어요. 다만 보증금은 4주 모두 매주 ${challengeInfo.checkinsPerWeek}회 이상 인증했을 때만 돌려드려요. 한 주를 놓친 걸 다음 주에 몰아서 채우는 건 인정되지 않아요. 몰아서 뛰면 습관이 아니라 벼락치기가 되니까요. 대신 매주 중간에 남은 횟수를 알려드려서 놓치지 않게 챙겨드릴게요.`,
     },
     {
       question: "장비가 필요한가요?",
@@ -496,7 +575,7 @@ export const signup = {
     { label: "챌린지 기간", value: "10/5(월) ~ 11/1(일)" },
     { label: "모집 마감", value: challengeInfo.deadlineText },
     { label: "모집 인원", value: `${challengeInfo.capacityText} 한정` },
-    { label: "참가비", value: `${challengeInfo.feeText} (대회비 별도)` },
+    { label: "참가비", value: "5만원 · 완주 시 3만원 환급" },
   ],
 
   /** mode 가 "app" 일 때 보여줄 버튼/안내 */
