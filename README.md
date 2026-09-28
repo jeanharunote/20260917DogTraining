@@ -297,7 +297,19 @@ Footer 에 링크가 걸려 있습니다.
 
 ## 5. 배포 방법
 
-### Netlify (현재 사용 중)
+### Cloudflare Pages (무료 · 권장)
+
+이 사이트는 정적 사이트(`output: "export"`)라서 무료 정적 호스팅에 그대로 올릴 수 있습니다.
+
+1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages → Create → Pages → Connect to Git**
+2. GitHub 저장소를 선택하고 아래처럼 설정합니다.
+   - Production branch: `main`
+   - Framework preset: `Next.js (Static HTML Export)`
+   - Build command: `npm run build` · Build output directory: `out`
+   - Environment variable: `NODE_VERSION` = `22`
+3. 배포 주소(`○○○.pages.dev`)를 **Firebase 콘솔 → Authentication → 설정 → 승인된 도메인**에 추가합니다.
+
+### Netlify
 
 1. [netlify.com](https://netlify.com) → **Add new site → Import an existing project**
 2. GitHub 저장소를 선택하면 `netlify.toml` 이 빌드 설정을 자동으로 잡아줍니다.
