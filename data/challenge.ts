@@ -223,19 +223,30 @@ export const myStory = {
   changes: [
     { label: "달린 기간", value: "5년차" },
     { label: "체중 변화", value: "10kg 감량" },
-    { label: "10km 기록", value: "57분 25초" },
-    { label: "다음 목표", value: "마라톤 완주" },
+    { label: "10km 기록", value: "56분 40초" },
+    { label: "하프 기록", value: "2시간 5분 25초" },
   ],
 
   /**
-   * 직접 달린 대회 사진
-   *   - 사진은 public/story 폴더에 있습니다.
-   *   - 기록판의 이름·배번, 다른 참가자 얼굴은 흐리게 처리했습니다.
-   * TODO: 대회 이름이 정확하지 않으면 caption 을 고쳐주세요.
+   * 직접 달린 대회 — 사진·기록증 (public/story 폴더)
+   *   - 기록은 기록증·기록판에 나온 숫자만 적었습니다. 확인되지 않은 기록은 넣지 마세요.
+   *   - 이름·배번(공식 기록 조회로 이름이 드러남), 다른 사람 얼굴은 흐리게 처리했습니다.
+   * TODO: 대회 이름이 정확하지 않으면 고쳐주세요.
    */
   races: {
     title: "직접 달려본 대회들",
-    description: "처음엔 10분도 못 뛰던 제가 지금은 이렇게 출발선에 섭니다.",
+    description: "처음엔 10분도 못 뛰던 제가, 지금은 하프 마라톤을 달립니다.",
+
+    /** 기록표 — 기록증으로 확인되는 것만 */
+    records: [
+      { date: "2025.05.25", name: "2025 무한도전 RUN", course: "10km", record: "57분 25초", note: "" },
+      { date: "2025.09.21", name: "2025 서울 어스마라톤", course: "하프", record: "2시간 5분 25초", note: "" },
+      { date: "2026.03.15", name: "3월 마라톤 대회", course: "10km", record: "58분 12초", note: "" },
+      { date: "2026.06.28", name: "2026 서울런", course: "하프", record: "2시간 11분 41초", note: "여자 33위 / 191명" },
+      { date: "", name: "두근두근런 with 119REO", course: "10km", record: "56분 40초", note: "" },
+    ],
+
+    /** 대회 사진 — 첫 번째 사진은 크게 보여줍니다 */
     photos: [
       {
         src: "/story/race-10k-record.webp",
@@ -243,6 +254,20 @@ export const myStory = {
         height: 708,
         alt: "2025 무한도전 RUN 10km 완주 기록판 옆에서 웃고 있는 모습. 기록 57분 25초",
         caption: "2025 무한도전 RUN · 10km 57분 25초",
+      },
+      {
+        src: "/story/race-dugeun.webp",
+        width: 742,
+        height: 582,
+        alt: "두근두근런 with 119REO 10km 완주 기록 56분 40초 팻말을 들고 메달을 든 모습",
+        caption: "두근두근런 with 119REO · 10km 56분 40초",
+      },
+      {
+        src: "/story/race-yeouido.webp",
+        width: 732,
+        height: 496,
+        alt: "제13회 여의도 벚꽃 마라톤대회 포토월 앞에서 점프하는 모습",
+        caption: "제13회 여의도 벚꽃 마라톤대회 (2023)",
       },
       {
         src: "/story/race-hangang.webp",
@@ -257,6 +282,31 @@ export const myStory = {
         height: 550,
         alt: "가을 러닝 대회에서 완주 메달을 들고 브이를 하는 모습",
         caption: "가을 러닝 대회 완주",
+      },
+    ],
+
+    /** 기록증 */
+    certificates: [
+      {
+        src: "/story/cert-earth-2025.webp",
+        width: 732,
+        height: 984,
+        alt: "2025 서울 어스마라톤 하프 완주 기록증. 기록 2시간 5분 25초",
+        caption: "2025 서울 어스마라톤 · 하프",
+      },
+      {
+        src: "/story/cert-seoulrun-2026.webp",
+        width: 732,
+        height: 816,
+        alt: "2026 서울런 하프 기록. 2시간 11분 41초, 여자 33위",
+        caption: "2026 서울런 · 하프",
+      },
+      {
+        src: "/story/cert-10k-2026.webp",
+        width: 732,
+        height: 555,
+        alt: "2026년 3월 10km 완주 기록증. 기록 58분 12초",
+        caption: "2026년 3월 · 10km",
       },
     ],
   },

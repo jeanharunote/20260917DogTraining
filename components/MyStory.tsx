@@ -104,19 +104,52 @@ export function MyStory() {
           </dl>
         </Reveal>
 
-        {/* 직접 달린 대회 — 실제 사진과 기록 */}
+        {/* 직접 달린 대회 — 기록표 · 사진 · 기록증 */}
         <Reveal delay={0.1} className="mt-14">
           <h3 className="font-display text-center text-lg text-ink sm:text-xl">{myStory.races.title}</h3>
           <p className="mt-2 text-center text-sm text-ink-muted">{myStory.races.description}</p>
 
-          <div className="mt-7 grid gap-3 sm:grid-cols-2">
+          {/* 기록표 */}
+          <div className="mt-7 overflow-hidden rounded-2xl border border-line bg-surface">
+            <table className="w-full text-left text-[13px] sm:text-sm">
+              <caption className="sr-only">대회별 완주 기록</caption>
+              <thead className="bg-surface-muted text-[11px] text-ink-muted">
+                <tr>
+                  <th scope="col" className="px-4 py-2.5 font-medium">대회</th>
+                  <th scope="col" className="px-3 py-2.5 font-medium">종목</th>
+                  <th scope="col" className="px-4 py-2.5 text-right font-medium">기록</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line">
+                {myStory.races.records.map((race) => (
+                  <tr key={race.name + race.record}>
+                    <td className="px-4 py-3">
+                      <span className="block text-ink">{race.name}</span>
+                      {race.date || race.note ? (
+                        <span className="text-[11px] text-ink-muted">
+                          {[race.date, race.note].filter(Boolean).join(" · ")}
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 text-ink-muted">{race.course}</td>
+                    <td className="font-display whitespace-nowrap px-4 py-3 text-right text-brand-600 dark:text-brand-300">
+                      {race.record}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 대회 사진 */}
+          <div className="mt-4 grid grid-cols-2 gap-3">
             {myStory.races.photos.map((photo, index) => (
               <figure
                 key={photo.src}
                 className={cn(
                   "overflow-hidden rounded-2xl border border-line bg-surface",
                   // 첫 사진(기록판)은 크게 보여줍니다.
-                  index === 0 && "sm:col-span-2",
+                  index === 0 && "col-span-2",
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -128,11 +161,32 @@ export function MyStory() {
                   loading="lazy"
                   className={cn(
                     "w-full object-cover",
-                    index === 0 ? "aspect-[4/3] object-[center_35%]" : "aspect-[4/5]",
+                    index === 0 ? "aspect-[4/3] object-[center_35%]" : "aspect-square",
                   )}
                 />
-                <figcaption className="px-4 py-3 text-center text-xs font-medium text-ink-muted">
+                <figcaption className="px-3 py-2.5 text-center text-[11px] font-medium text-ink-muted sm:text-xs">
                   {photo.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          {/* 기록증 */}
+          <p className="mt-8 text-center text-xs font-semibold text-ink-muted">기록증</p>
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
+            {myStory.races.certificates.map((cert) => (
+              <figure key={cert.src} className="overflow-hidden rounded-xl border border-line bg-surface">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cert.src}
+                  alt={cert.alt}
+                  width={cert.width}
+                  height={cert.height}
+                  loading="lazy"
+                  className="aspect-[3/4] w-full bg-surface-muted object-contain"
+                />
+                <figcaption className="px-2 py-2 text-center text-[10px] leading-snug text-ink-muted sm:text-[11px]">
+                  {cert.caption}
                 </figcaption>
               </figure>
             ))}
