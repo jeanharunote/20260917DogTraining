@@ -23,7 +23,7 @@ export default function ApplyPage() {
         title={`${challengeInfo.name} ${challengeInfo.cohortText} 신청`}
         description={
           <>
-            {challengeInfo.periodText} · {challengeInfo.capacityText} 한정 · 참가비 <FeePrice /> ·{" "}
+            {challengeInfo.periodText} · {challengeInfo.recruitText} {challengeInfo.capacityText} · 참가비 <FeePrice /> ·{" "}
             {challengeInfo.feeNote}
           </>
         }

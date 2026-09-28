@@ -52,7 +52,7 @@ export function StickyCTA() {
             <div className="hidden flex-col sm:flex">
               <span className="font-display text-sm text-ink">{challengeInfo.name}</span>
               <span className="text-xs text-ink-muted">
-                {challengeInfo.capacityText} 한정 · {challengeInfo.deadlineText} 마감
+                {challengeInfo.recruitText} {challengeInfo.capacityText} · {challengeInfo.deadlineText} 마감
               </span>
             </div>
             <Link
