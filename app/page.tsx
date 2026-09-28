@@ -2,6 +2,7 @@
  * page.tsx — 랜딩페이지의 섹션 순서를 정의합니다.
  * 섹션 순서를 바꾸고 싶다면 아래 줄의 순서만 바꾸면 됩니다.
  */
+import { DepositSection } from "@/components/DepositSection";
 import { EmpathySection } from "@/components/EmpathySection";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
@@ -26,6 +27,7 @@ export default function HomePage() {
         <WhyHabit />
         <Roadmap />
         <HabitSystem />
+        <DepositSection />
         <FAQ />
         <SignupForm />
       </main>

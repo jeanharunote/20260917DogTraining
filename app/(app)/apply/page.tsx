@@ -19,7 +19,7 @@ export default function ApplyPage() {
     <>
       <PageTitle
         title={`${challengeInfo.name} ${challengeInfo.cohortText} 신청`}
-        description={`${challengeInfo.periodText} · ${challengeInfo.capacityText} 한정 · 참가비 ${challengeInfo.feeText} · ${challengeInfo.feeNote}`}
+        description={`${challengeInfo.periodText} · ${challengeInfo.capacityText} 한정 · 참가비 ${challengeInfo.feeText} (${challengeInfo.feeBreakdown}) · ${challengeInfo.feeNote}`}
       />
 
       {loading ? (
@@ -66,11 +66,15 @@ function EnrollmentStatusCard() {
             <Row label="은행" value={payment.bankName} />
             <Row label="계좌번호" value={payment.accountNumber} />
             <Row label="예금주" value={payment.accountHolder} />
-            <Row label="입금액" value={challengeInfo.feeText} />
+            <Row label="입금액" value={`${challengeInfo.feeText} (${challengeInfo.feeBreakdown})`} />
             <Row label="입금자명" value={enrollment.name} />
             <Row label="입금 기한" value={payment.dueText} />
           </dl>
           <p className="mt-5 text-xs leading-relaxed text-ink-muted">{payment.notice}</p>
+          <p className="mt-2 text-xs leading-relaxed text-brand-600 dark:text-brand-300">
+            💰 {challengeInfo.depositRule}. 보증금은 챌린지가 끝나고 {challengeInfo.depositReturnDays}일 안에
+            입금하신 계좌로 돌려드리니, 돌려받으실 본인 계좌에서 입금해 주세요.
+          </p>
         </Card>
 
         <Card>

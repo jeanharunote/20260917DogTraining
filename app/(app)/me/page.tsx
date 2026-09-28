@@ -18,7 +18,8 @@ import {
 } from "@/components/app/ui";
 import { challengeInfo } from "@/data/challenge";
 import { useAuth } from "@/lib/auth";
-import { deleteCheckin, listMyCheckins, summarize, todayKST, type Checkin } from "@/lib/data";
+import { deleteCheckin, listMyCheckins, summarize, todayKST, weekIndexOf, type Checkin } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 export default function MyPage() {
   const { user, loading, enrollment, isParticipant, isAdmin } = useAuth();
@@ -139,6 +140,15 @@ function ParticipantDashboard({
   const stats = summarize(checkins);
   const beforeStart = today < challengeInfo.startDate;
   const afterEnd = today > challengeInfo.endDate;
+  // 오늘이 몇 주차인지 (기간 밖이면 null)
+  const currentWeek = weekIndexOf(today);
+  const thisWeekLeft = currentWeek !== null ? Math.max(0, stats.perWeek - stats.weekly[currentWeek]) : 0;
+  // 이미 지나간 주 중에 4회를 못 채운 주
+  const passedWeeks = afterEnd ? challengeInfo.totalWeeks : (currentWeek ?? 0);
+  const missedWeeks = stats.weekly
+    .map((count, index) => ({ count, index }))
+    .filter(({ count, index }) => index < passedWeeks && count < stats.perWeek)
+    .map(({ index }) => index);
 
   return (
     <div className="flex flex-col gap-4">
@@ -181,11 +191,57 @@ function ParticipantDashboard({
           </div>
         </dl>
 
-        {stats.completed ? (
-          <div className="mt-4">
-            <Notice tone="success">🏅 목표 {stats.target}회 달성! 완주를 축하해요.</Notice>
-          </div>
-        ) : null}
+        {/* 주차별 현황 — 매주 4회 이상이어야 인정됩니다 */}
+        <ol className="mt-5 grid grid-cols-4 gap-2">
+          {stats.weekly.map((count, index) => {
+            const done = count >= stats.perWeek;
+            const missed = !done && currentWeek !== null && index < currentWeek;
+            const missedAfterEnd = !done && afterEnd;
+
+            return (
+              <li
+                key={index}
+                className={cn(
+                  "flex flex-col items-center gap-0.5 rounded-xl px-2 py-2.5 text-center ring-1 ring-inset",
+                  done && "bg-brand-50 ring-brand-200 dark:bg-brand-900/30 dark:ring-brand-800",
+                  (missed || missedAfterEnd) && "bg-accent-100 ring-accent-300 dark:bg-accent-500/10 dark:ring-accent-500/30",
+                  !done && !missed && !missedAfterEnd && "bg-surface-muted ring-line",
+                  index === currentWeek && "ring-2 ring-brand-400",
+                )}
+              >
+                <span className="text-[10px] text-ink-muted">{index + 1}주차</span>
+                <span className="font-display text-sm text-ink">
+                  {done ? "✓ " : ""}
+                  {count}/{stats.perWeek}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+
+        {/* 보증금 안내 */}
+        <div className="mt-4">
+          {stats.completed ? (
+            <Notice tone="success">
+              🏅 4주 모두 주 {stats.perWeek}회 달성! 보증금 {challengeInfo.depositText} 환급 대상이에요. 챌린지가 끝나고{" "}
+              {challengeInfo.depositReturnDays}일 안에 입금하신 계좌로 돌려드릴게요.
+            </Notice>
+          ) : missedWeeks.length > 0 ? (
+            <Notice>
+              {missedWeeks.map((index) => `${index + 1}주차`).join(", ")} 인증이 {stats.perWeek}회에 못 미쳐서 이번
+              보증금은 돌려드리기 어려워요. 그래도 끝까지 같이 달려요. 4주 뒤 &lsquo;그냥 뛰는 사람&rsquo;이 된
+              나 자신이 진짜 보상이니까요.
+            </Notice>
+          ) : currentWeek !== null ? (
+            <Notice>
+              💰 이번 주({currentWeek + 1}주차){" "}
+              {thisWeekLeft > 0 ? `${thisWeekLeft}회 더 인증하면 목표 달성!` : "목표 달성! 잘하고 있어요."} 4주 모두
+              주 {stats.perWeek}회를 채우면 보증금 {challengeInfo.depositText}을 돌려받아요.
+            </Notice>
+          ) : (
+            <Notice>💰 {challengeInfo.depositRule}.</Notice>
+          )}
+        </div>
       </Card>
 
       {/* 인증하기 */}
