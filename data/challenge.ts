@@ -188,14 +188,58 @@ export const myStory = {
   },
 
   /**
-   * 변화 요약 — TODO: 반드시 본인의 실제 수치로 채워주세요.
-   *   확인되지 않은 숫자는 쓰지 마세요. 애매하면 항목 자체를 지우는 게 낫습니다.
+   * 간호사로 일하던 모습 (선택)
+   * TODO: /public/story 폴더에 사진을 넣고 경로를 적으면 소개 문구 옆에 나옵니다.
+   */
+  nursePhoto: {
+    src: "",
+    alt: "선별진료소에서 방호복을 입고 일하던 간호사 시절 모습",
+    caption: "선별진료소 간호사 시절",
+  },
+
+  /**
+   * 변화 요약 — 확인되지 않은 숫자는 쓰지 마세요. 애매하면 항목 자체를 지우는 게 낫습니다.
    */
   changes: [
     { label: "달린 기간", value: "5년차" },
     { label: "체중 변화", value: "10kg 감량" },
-    { label: "지금 목표", value: "마라톤 완주" },
+    { label: "10km 기록", value: "57분 25초" },
+    { label: "다음 목표", value: "마라톤 완주" },
   ],
+
+  /**
+   * 직접 달린 대회 사진
+   *   - 사진은 public/story 폴더에 있습니다.
+   *   - 기록판의 이름·배번, 다른 참가자 얼굴은 흐리게 처리했습니다.
+   * TODO: 대회 이름이 정확하지 않으면 caption 을 고쳐주세요.
+   */
+  races: {
+    title: "직접 달려본 대회들",
+    description: "처음엔 10분도 못 뛰던 제가 지금은 이렇게 출발선에 섭니다.",
+    photos: [
+      {
+        src: "/story/race-10k-record.webp",
+        width: 732,
+        height: 708,
+        alt: "2025 무한도전 RUN 10km 완주 기록판 옆에서 웃고 있는 모습. 기록 57분 25초",
+        caption: "2025 무한도전 RUN · 10km 57분 25초",
+      },
+      {
+        src: "/story/race-hangang.webp",
+        width: 728,
+        height: 918,
+        alt: "한강 마라톤 대회 출발 아치 앞에서 완주 메달을 걸고 점프하는 모습",
+        caption: "한강 마라톤 대회 완주",
+      },
+      {
+        src: "/story/race-autumn.webp",
+        width: 732,
+        height: 550,
+        alt: "가을 러닝 대회에서 완주 메달을 들고 브이를 하는 모습",
+        caption: "가을 러닝 대회 완주",
+      },
+    ],
+  },
 
   closing: "이 4주가 끝나면, 여러분도 저처럼 '그냥 뛰는 사람'이 되어 있을 거예요.",
 } as const;
