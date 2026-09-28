@@ -18,8 +18,8 @@
  * 1) 챌린지 기본 정보
  * ======================================================================== */
 export const challengeInfo = {
-  /** 챌린지 이름 */
-  name: "같이 달리기 4주 챌린지",
+  /** 모임 이름 — 기수와 합쳐 "러닝 해빗 클럽 1기"처럼 보입니다 */
+  name: "러닝 해빗 클럽",
   /** 브랜드/운영 주체 이름 (헤더, 푸터에 노출) — TODO: 채널명과 다르면 바꿔주세요 */
   brandName: "러널스하이",
   /** 기수 표시 */
@@ -124,7 +124,7 @@ export const navLinks = [
  * ======================================================================== */
 export const hero = {
   /** 모집 중임을 알리는 작은 뱃지 */
-  badge: `${challengeInfo.cohortText} ${challengeInfo.capacityText} 모집 중`,
+  badge: `${challengeInfo.name} ${challengeInfo.cohortText} · ${challengeInfo.capacityText} 모집 중`,
   /** 가장 큰 제목 (줄바꿈은 배열의 항목을 나누면 됩니다) */
   headline: ["마라톤 나가보고 싶은데,", "같이 나갈 사람이 없다면"],
   /** 제목 아래 한 줄 */
@@ -667,7 +667,7 @@ export const footer = {
 export const siteMeta = {
   title: `${challengeInfo.name} ${challengeInfo.cohortText} | 마라톤, 같이 나가요`,
   description:
-    "4주 동안 같이 뛰고, 같이 대회 신청해요. 레벨별 훈련표와 주 4회 인증으로 함께 준비하는 러닝 챌린지 1기 참가자를 모집합니다.",
+    "4주 동안 같이 뛰고, 같이 대회 신청해요. 레벨별 훈련표와 주 4회 인증으로 함께 준비하는 러닝 해빗 클럽 1기 참가자를 모집합니다.",
   /** 배포된 사이트 주소 — TODO: 도메인을 연결하면 그 주소로 바꿔주세요 */
   url: "https://vermillion-entremet-bec89b.netlify.app",
 } as const;

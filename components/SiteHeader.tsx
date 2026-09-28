@@ -36,7 +36,7 @@ export function SiteHeader() {
             isScrolled ? "text-ink" : "text-white",
           )}
         >
-          {challengeInfo.brandName}
+          {challengeInfo.name}
         </Link>
 
         <nav aria-label="페이지 내 메뉴" className="hidden items-center gap-1 lg:flex">
