@@ -191,15 +191,16 @@ export const myStory = {
   ],
 
   /**
-   * 비포·애프터 사진
-   * TODO: /public 폴더에 사진을 넣고 아래 경로를 적어주세요. (예: "/before.jpg")
-   *       둘 다 비워두면("") 이 부분은 화면에 나오지 않습니다.
+   * 비포·애프터 사진 (public/story 폴더)
+   *   운영자 요청대로 사람만 또렷하게, 배경은 흐리게 처리했고
+   *   두 사진의 사람 크기가 비슷하도록 같은 3:4 구도로 잘랐습니다.
+   *   둘 중 하나라도 비워두면("") 이 부분은 화면에 나오지 않습니다.
    */
   beforeAfter: {
-    beforeImage: "",
+    beforeImage: "/story/before.webp",
     beforeAlt: "러닝을 시작하기 전 모습",
     beforeLabel: "Before",
-    afterImage: "",
+    afterImage: "/story/after.webp",
     afterAlt: "러닝을 이어온 지금의 모습",
     afterLabel: "After",
     /** 사진 아래 설명 */
