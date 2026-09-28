@@ -3,11 +3,10 @@
 /**
  * /admin — 관리자 페이지. 결제자 명단, 입금 확인·환불 처리, 인증 현황을 관리합니다.
  *
- * 관리자 지정 방법 (최초 1회)
- *   1. 이 페이지에 구글로 로그인하면 화면에 내 UID 가 나옵니다.
- *   2. Firebase 콘솔 → Firestore Database → [컬렉션 시작] → 컬렉션 ID: admins
- *   3. 문서 ID 에 내 UID 를 붙여넣고, 아무 필드나 하나 추가(예: note = "운영자")해서 저장
- *   4. 이 페이지를 새로고침하면 관리자 화면이 열립니다.
+ * 누가 관리자인가요?
+ *   - 운영자 구글 계정(data/challenge.ts 의 adminEmails)으로 로그인하면 바로 관리자입니다.
+ *   - 관리자를 더 두려면: 그 사람이 이 페이지에 로그인해 나오는 UID 를 복사한 뒤
+ *     Firebase 콘솔 → Firestore → admins 컬렉션에 그 UID 로 문서를 만들면 됩니다.
  *
  * 보안: 관리자 여부는 firestore.rules 가 서버에서 확인하므로,
  *       화면을 조작해도 관리자가 아니면 명단을 볼 수 없습니다.
@@ -82,7 +81,10 @@ function NotAdmin({ uid }: { uid: string }) {
       <PageTitle title="관리자 권한이 없어요" />
       <Card>
         <p className="text-sm leading-relaxed text-ink-muted">
-          운영자라면 아래 UID 를 Firebase 콘솔에 등록하면 관리자 화면이 열려요.
+          운영자라면 운영자 구글 계정으로 다시 로그인해 주세요. 로그아웃한 뒤 계정을 골라 로그인하면 됩니다.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+          다른 사람을 관리자로 추가하려면 아래 UID 를 Firebase 콘솔에 등록하세요.
         </p>
 
         <div className="mt-4 flex items-center gap-2 rounded-xl bg-surface-muted px-4 py-3">

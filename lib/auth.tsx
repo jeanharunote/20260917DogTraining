@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const [, admin, mine] = await Promise.all([
           saveProfile(nextUser).catch(() => undefined),
-          checkIsAdmin(nextUser.uid),
+          checkIsAdmin(nextUser),
           getMyEnrollment(nextUser.uid).catch(() => null),
         ]);
 

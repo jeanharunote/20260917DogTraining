@@ -101,10 +101,26 @@ export async function saveProfile(user: {
   });
 }
 
-/** 내가 관리자인지 확인합니다. (관리자 지정은 Firebase 콘솔에서만 가능) */
-export async function checkIsAdmin(uid: string): Promise<boolean> {
+/** 운영자 이메일인지 (구글이 인증한 이메일일 때만 인정합니다) */
+export function isAdminEmail(email: string | null | undefined, emailVerified: boolean): boolean {
+  if (!email || !emailVerified) return false;
+
+  return (challengeInfo.adminEmails as readonly string[]).includes(email.toLowerCase());
+}
+
+/**
+ * 내가 관리자인지 확인합니다.
+ * 화면 메뉴를 보여줄지 정하는 용도이고, 실제 권한은 firestore.rules 가 서버에서 확인합니다.
+ */
+export async function checkIsAdmin(user: {
+  uid: string;
+  email: string | null;
+  emailVerified: boolean;
+}): Promise<boolean> {
+  if (isAdminEmail(user.email, user.emailVerified)) return true;
+
   try {
-    const snapshot = await getDoc(doc(getDb(), COLLECTIONS.admins, uid));
+    const snapshot = await getDoc(doc(getDb(), COLLECTIONS.admins, user.uid));
 
     return snapshot.exists();
   } catch {
