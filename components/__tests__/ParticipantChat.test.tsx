@@ -76,9 +76,9 @@ describe.each([
     signInAs("paid");
     render(<Page />);
 
-    expect(await screen.findByText("참가 확정 🎉")).toBeInTheDocument();
-
-    const link = screen.getByRole("link", { name: "오픈채팅방 입장하기" });
+    // 제목은 링크를 불러오는 중에도 보이므로, 링크 자체가 나타날 때까지 기다립니다.
+    const link = await screen.findByRole("link", { name: "오픈채팅방 입장하기" });
+    expect(screen.getByText("참가 확정 🎉")).toBeInTheDocument();
     expect(link).toHaveAttribute("href", CHAT.chatUrl);
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
@@ -94,8 +94,10 @@ describe("비밀번호 복사", () => {
     signInAs("paid");
     render(<ApplyPage />);
 
+    const copyButton = await screen.findByRole("button", { name: "입장 비밀번호 복사" });
+
     await act(async () => {
-      fireEvent.click(screen.getByRole("button", { name: "입장 비밀번호 복사" }));
+      fireEvent.click(copyButton);
     });
 
     expect(writeText).toHaveBeenCalledWith(CHAT.chatPassword);

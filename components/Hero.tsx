@@ -4,8 +4,9 @@
  */
 import { CtaButton } from "@/components/CtaButton";
 import { Countdown } from "@/components/Countdown";
+import { FeePrice } from "@/components/FeePrice";
 import { Reveal } from "@/components/Reveal";
-import { cta, hero } from "@/data/challenge";
+import { challengeInfo, cta, hero } from "@/data/challenge";
 
 export function Hero() {
   return (
@@ -86,7 +87,16 @@ export function Hero() {
               {hero.highlights.map((item) => (
                 <div key={item.label} className="bg-brand-900/40 px-4 py-4 backdrop-blur">
                   <dt className="text-[11px] font-medium tracking-wide text-white/50">{item.label}</dt>
-                  <dd className="font-display mt-1 text-sm text-white sm:text-base">{item.value}</dd>
+                  <dd className="font-display mt-1 text-sm text-white sm:text-base">
+                    {"fee" in item && item.fee ? (
+                      <>
+                        <FeePrice tone="dark" />
+                        <span className="mt-0.5 block text-[11px] font-normal text-white/55">{challengeInfo.feeNote}</span>
+                      </>
+                    ) : (
+                      item.value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>

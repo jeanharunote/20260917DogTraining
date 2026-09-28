@@ -391,7 +391,7 @@ function AdminDashboard() {
                       {stats?.lastDate ? ` · 마지막 인증 ${stats.lastDate}` : " · 아직 인증 없음"}
                       {stats?.completed ? (
                         <span className="ml-2 rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">
-                          보증금 환급 대상
+                          완주 (4주 모두 주 4회)
                         </span>
                       ) : null}
                     </p>
@@ -481,7 +481,7 @@ function downloadCsv(
     "3주차",
     "4주차",
     "누적 거리(km)",
-    "보증금 환급 대상",
+    "완주(4주 모두 주 4회)",
     "참가 동기",
   ];
   const statusText: Record<EnrollmentStatus, string> = {

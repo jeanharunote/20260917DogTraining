@@ -89,7 +89,7 @@ const weeksOf = (counts: number[]) => {
   );
 };
 
-describe("summarize — 진행률과 보증금 환급 (매주 4회 규칙)", () => {
+describe("summarize — 진행률과 완주 (매주 4회 규칙)", () => {
   it("기록이 없으면 0%", () => {
     expect(summarize([])).toMatchObject({ count: 0, percent: 0, totalKm: 0, completed: false });
   });
@@ -98,14 +98,14 @@ describe("summarize — 진행률과 보증금 환급 (매주 4회 규칙)", () 
     expect(summarize(weeksOf([4, 2, 0, 1])).weekly).toEqual([4, 2, 0, 1]);
   });
 
-  it("4주 모두 주 4회를 채우면 환급 대상, 100%", () => {
+  it("4주 모두 주 4회를 채우면 완주, 100%", () => {
     const result = summarize(weeksOf([4, 4, 4, 4]));
 
     expect(result.completed).toBe(true);
     expect(result.percent).toBe(100);
   });
 
-  it("❌ 총 16회를 채워도 한 주가 3회면 환급 대상이 아니다 (몰아서 채우기 불가)", () => {
+  it("❌ 총 16회를 채워도 한 주가 3회면 완주가 아니다 (몰아서 채우기 불가)", () => {
     const result = summarize(weeksOf([5, 4, 3, 4]));
 
     expect(result.total).toBe(16);

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
+import { FeePrice } from "@/components/FeePrice";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { challengeInfo, signup } from "@/data/challenge";
@@ -167,7 +168,16 @@ export function SignupForm() {
             {signup.summary.map((item) => (
               <div key={item.label} className="bg-surface px-4 py-4 text-center">
                 <dt className="text-xs text-ink-muted">{item.label}</dt>
-                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
+                <dd className="font-display mt-1 text-sm text-ink">
+                  {"fee" in item && item.fee ? (
+                    <>
+                      <FeePrice />
+                      <span className="mt-0.5 block text-[11px] font-normal text-ink-muted">{challengeInfo.feeNote}</span>
+                    </>
+                  ) : (
+                    item.value
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
@@ -405,7 +415,16 @@ function AppSignupSection() {
             {signup.summary.map((item) => (
               <div key={item.label} className="bg-surface px-4 py-4 text-center">
                 <dt className="text-xs text-ink-muted">{item.label}</dt>
-                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
+                <dd className="font-display mt-1 text-sm text-ink">
+                  {"fee" in item && item.fee ? (
+                    <>
+                      <FeePrice />
+                      <span className="mt-0.5 block text-[11px] font-normal text-ink-muted">{challengeInfo.feeNote}</span>
+                    </>
+                  ) : (
+                    item.value
+                  )}
+                </dd>
               </div>
             ))}
           </dl>
@@ -452,7 +471,16 @@ function GoogleFormSection() {
             {signup.summary.map((item) => (
               <div key={item.label} className="bg-surface px-4 py-4 text-center">
                 <dt className="text-xs text-ink-muted">{item.label}</dt>
-                <dd className="font-display mt-1 text-sm text-ink">{item.value}</dd>
+                <dd className="font-display mt-1 text-sm text-ink">
+                  {"fee" in item && item.fee ? (
+                    <>
+                      <FeePrice />
+                      <span className="mt-0.5 block text-[11px] font-normal text-ink-muted">{challengeInfo.feeNote}</span>
+                    </>
+                  ) : (
+                    item.value
+                  )}
+                </dd>
               </div>
             ))}
           </dl>

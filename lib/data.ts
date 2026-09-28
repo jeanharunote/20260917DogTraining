@@ -362,9 +362,9 @@ export function weekIndexOf(date: string): number | null {
 /**
  * 진행률 요약
  *
- * 규칙: 4주 동안 "매주" 4회 이상 인증해야 보증금 환급 대상입니다.
+ * 규칙: 4주 동안 "매주" 4회 이상 인증해야 완주로 인정됩니다.
  * 그래서 한 주에 4회를 넘게 해도 그 주는 4회까지만 진행률에 반영합니다.
- * (다른 주에 몰아서 채워 100%가 되는데 환급은 안 되는 혼란을 막기 위해서입니다)
+ * (다른 주에 몰아서 채워 100%가 되는데 완주는 아닌 혼란을 막기 위해서입니다)
  */
 export function summarize(checkins: Checkin[]) {
   const perWeek = challengeInfo.checkinsPerWeek;
@@ -378,7 +378,7 @@ export function summarize(checkins: Checkin[]) {
   const credited = weekly.reduce((sum, count) => sum + Math.min(count, perWeek), 0);
   const totalKm = checkins.reduce((sum, item) => sum + item.distanceKm, 0);
   const target = challengeInfo.targetCheckins;
-  const depositEligible = weekly.every((count) => count >= perWeek);
+  const allWeeksDone = weekly.every((count) => count >= perWeek);
 
   return {
     /** 전체 인증 횟수 */
@@ -391,7 +391,7 @@ export function summarize(checkins: Checkin[]) {
     perWeek,
     totalKm: Math.round(totalKm * 10) / 10,
     percent: Math.min(100, Math.round((credited / target) * 100)),
-    /** 보증금 환급 대상인지 (4주 모두 주 4회 이상) */
-    completed: depositEligible,
+    /** 완주했는지 (4주 모두 주 4회 이상) */
+    completed: allWeeksDone,
   };
 }
