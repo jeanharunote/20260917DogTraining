@@ -185,6 +185,14 @@ export const fit = {
       title: "마라톤에 도전하고 싶은 분",
       body: "나가보고 싶은데 같이 나갈 사람이 없었다면, 레벨별 훈련표로 4주 동안 꾸준히 준비하고 대회 신청도 함께해요.",
       withBeforeAfter: false,
+      /** 카드 안에 넣을 사진 (없으면 이 항목을 지우면 됩니다) */
+      photo: {
+        src: "/story/race-hangang.webp",
+        width: 728,
+        height: 918,
+        alt: "한강 마라톤 대회 출발 아치 앞에서 완주 메달을 걸고 점프하는 모습",
+        caption: "한강 마라톤 대회 완주",
+      },
     },
   ],
 } as const;
@@ -376,16 +384,11 @@ export const myStory = {
       { date: "", name: "두근두근런 with 119REO", course: "10km", record: "56분 40초", note: "" },
     ],
 
-    /** 대회 사진 — 한 장이면 원래 비율 그대로, 여러 장이면 첫 사진을 크게 보여줍니다 */
-    photos: [
-      {
-        src: "/story/race-hangang.webp",
-        width: 728,
-        height: 918,
-        alt: "한강 마라톤 대회 출발 아치 앞에서 완주 메달을 걸고 점프하는 모습",
-        caption: "한강 마라톤 대회 완주",
-      },
-    ],
+    /**
+     * 대회 사진 — 비워두면 이 칸은 나오지 않아요. (한강 마라톤 사진은 '이런 분들께 잘 맞아요'의 마라톤 카드로 옮겼어요)
+     * 한 장이면 원래 비율 그대로, 여러 장이면 첫 사진을 크게 보여줍니다.
+     */
+    photos: [] as Array<{ src: string; width: number; height: number; alt: string; caption: string }>,
 
     /** 기록증 */
     certificates: [

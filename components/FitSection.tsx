@@ -69,6 +69,21 @@ export function FitSection() {
                   </figcaption>
                 </figure>
               ) : null}
+
+              {"photo" in item && item.photo ? (
+                <figure className="flex flex-col gap-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.photo.src}
+                    alt={item.photo.alt}
+                    width={item.photo.width}
+                    height={item.photo.height}
+                    loading="lazy"
+                    className="aspect-[4/5] w-full rounded-xl border border-line object-cover object-[center_40%]"
+                  />
+                  <figcaption className="text-center text-xs text-ink-muted">{item.photo.caption}</figcaption>
+                </figure>
+              ) : null}
             </Reveal>
           ))}
         </ul>
