@@ -10,57 +10,13 @@ import { footer, myStory } from "@/data/challenge";
 import { cn } from "@/lib/utils";
 
 export function MyStory() {
-  // 비포·애프터 사진은 두 장 모두 등록했을 때만 보여줍니다.
-  const hasPhotos = Boolean(myStory.beforeAfter.beforeImage && myStory.beforeAfter.afterImage);
-
   return (
     <section id="my-story" className="bg-surface-muted py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-5">
         <SectionHeading eyebrow={myStory.eyebrow} title={myStory.title} />
 
-        {/* 비포·애프터 사진 */}
-        {hasPhotos ? (
-          <Reveal delay={0.05} className="mt-10">
-            <figure className="flex flex-col gap-3">
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  {
-                    src: myStory.beforeAfter.beforeImage,
-                    alt: myStory.beforeAfter.beforeAlt,
-                    label: myStory.beforeAfter.beforeLabel,
-                  },
-                  {
-                    src: myStory.beforeAfter.afterImage,
-                    alt: myStory.beforeAfter.afterAlt,
-                    label: myStory.beforeAfter.afterLabel,
-                  },
-                ].map((photo) => (
-                  <div
-                    key={photo.label}
-                    className="relative overflow-hidden rounded-2xl border border-line bg-surface"
-                  >
-                    {/* 사진 비율을 모르기 때문에 일반 img 태그로 단순하게 보여줍니다. */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={photo.src}
-                      alt={photo.alt}
-                      className="aspect-[3/4] w-full object-cover"
-                    />
-                    <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">
-                      {photo.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <figcaption className="text-center text-xs text-ink-muted">
-                {myStory.beforeAfter.caption}
-              </figcaption>
-            </figure>
-          </Reveal>
-        ) : null}
-
         {/* 운영자 소개 */}
-        <Reveal delay={0.1} className="mt-6">
+        <Reveal delay={0.05} className="mt-10">
           <div className="flex flex-col items-center gap-4 rounded-2xl border border-line bg-surface px-7 py-7 text-center sm:px-9">
             <p className="font-display text-base text-brand-600 sm:text-lg dark:text-brand-300">{myStory.intro}</p>
             <ul className="flex w-full max-w-sm flex-col gap-2 text-sm">
