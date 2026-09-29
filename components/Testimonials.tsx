@@ -8,7 +8,7 @@ import { testimonials } from "@/data/challenge";
 
 export function Testimonials() {
   return (
-    <section id="reviews" className="bg-surface-muted py-20 sm:py-28">
+    <section id="reviews" className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-5xl px-5">
         <SectionHeading
           eyebrow={testimonials.eyebrow}
@@ -18,7 +18,7 @@ export function Testimonials() {
 
         {/* 설문 결과 — 응답 수가 적어 "8명 중 6명"처럼 인원을 함께 보여줍니다 */}
         <Reveal delay={0.05} className="mt-12">
-          <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
+          <div className="rounded-2xl border border-line bg-surface-muted p-6 sm:p-8">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="font-display text-base text-ink sm:text-lg">{testimonials.survey.title}</h3>
               <span className="text-xs text-ink-muted">응답 {testimonials.survey.total}명</span>
@@ -34,7 +34,7 @@ export function Testimonials() {
                       {testimonials.survey.total}명 중 {result.count}명
                     </span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-surface-muted ring-1 ring-inset ring-line">
+                  <div className="h-2 overflow-hidden rounded-full bg-surface ring-1 ring-inset ring-line">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-400"
                       style={{ width: `${(result.count / testimonials.survey.total) * 100}%` }}
@@ -47,7 +47,7 @@ export function Testimonials() {
             <p className="mt-7 text-xs font-medium text-ink-muted">{testimonials.survey.answersTitle}</p>
             <ul className="mt-2.5 flex flex-col gap-2">
               {testimonials.survey.answers.map((answer) => (
-                <li key={answer} className="rounded-xl bg-surface-muted px-4 py-2.5 text-sm leading-relaxed text-ink">
+                <li key={answer} className="rounded-xl bg-surface px-4 py-2.5 text-sm leading-relaxed text-ink">
                   &ldquo;{answer}&rdquo;
                 </li>
               ))}
@@ -68,7 +68,7 @@ export function Testimonials() {
               </span>
               <figure className="flex min-w-0 flex-col gap-1.5">
                 <figcaption className="text-xs font-medium text-ink-muted">{item.name}</figcaption>
-                <blockquote className="text-pretty rounded-2xl rounded-tl-md border border-line bg-surface px-4 py-3 text-sm leading-relaxed text-ink shadow-sm">
+                <blockquote className="text-pretty rounded-2xl rounded-tl-md border border-line bg-surface-muted px-4 py-3 text-sm leading-relaxed text-ink shadow-sm">
                   {item.text}
                 </blockquote>
               </figure>
