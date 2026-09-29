@@ -2,6 +2,7 @@
  * WhyHabit — 습관이 안 만들어지는 이유(원리)와 이 챌린지의 해결 장치를 소개합니다.
  * 문구 수정은 data/challenge.ts 의 `whyHabit` 을 편집하세요.
  */
+import { IconBadge } from "@/components/IconBadge";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { whyHabit } from "@/data/challenge";
@@ -25,12 +26,7 @@ export function WhyHabit() {
               delay={index * 0.08}
               className="flex flex-col gap-3 rounded-2xl bg-surface p-7 card-soft ring-1 ring-line"
             >
-              <span
-                aria-hidden="true"
-                className="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-lg ring-1 ring-line dark:bg-brand-900/30"
-              >
-                {principle.emoji}
-              </span>
+              <IconBadge name={principle.icon} />
               <h3 className="font-display text-lg text-ink">{principle.title}</h3>
               <p className="text-pretty text-sm leading-relaxed text-ink-muted">{principle.body}</p>
             </Reveal>

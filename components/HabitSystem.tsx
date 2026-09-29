@@ -2,6 +2,7 @@
  * HabitSystem — 습관을 지켜주는 장치(혜택/리워드)와 신뢰 통계 카드를 보여줍니다.
  * 문구/수치 수정은 data/challenge.ts 의 `habitSystem` 을 편집하세요.
  */
+import { IconBadge } from "@/components/IconBadge";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { habitSystem } from "@/data/challenge";
@@ -24,12 +25,7 @@ export function HabitSystem() {
               delay={index * 0.07}
               className="flex gap-5 rounded-2xl bg-surface p-7 card-soft ring-1 ring-line"
             >
-              <span
-                aria-hidden="true"
-                className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent-100 text-lg ring-1 ring-line dark:bg-accent-500/10"
-              >
-                {feature.emoji}
-              </span>
+              <IconBadge name={feature.icon} />
               <div className="flex flex-col gap-2">
                 <h3 className="font-display text-base text-ink sm:text-lg">{feature.title}</h3>
                 <p className="text-pretty text-sm leading-relaxed text-ink-muted">{feature.body}</p>
