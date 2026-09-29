@@ -6,7 +6,7 @@
  */
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { myStory } from "@/data/challenge";
+import { footer, myStory } from "@/data/challenge";
 import { cn } from "@/lib/utils";
 
 export function MyStory() {
@@ -18,29 +18,9 @@ export function MyStory() {
       <div className="mx-auto max-w-3xl px-5">
         <SectionHeading eyebrow={myStory.eyebrow} title={myStory.title} />
 
-        <Reveal delay={0.05} className="mt-10 flex flex-col items-center gap-5">
-          {myStory.nursePhoto.src ? (
-            <figure className="w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-surface">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={myStory.nursePhoto.src}
-                alt={myStory.nursePhoto.alt}
-                loading="lazy"
-                className="aspect-[4/3] w-full object-cover"
-              />
-              <figcaption className="px-4 py-2.5 text-center text-xs text-ink-muted">
-                {myStory.nursePhoto.caption}
-              </figcaption>
-            </figure>
-          ) : null}
-          <p className="text-center text-sm font-medium text-brand-600 dark:text-brand-300">
-            {myStory.intro}
-          </p>
-        </Reveal>
-
         {/* 비포·애프터 사진 */}
         {hasPhotos ? (
-          <Reveal delay={0.1} className="mt-10">
+          <Reveal delay={0.05} className="mt-10">
             <figure className="flex flex-col gap-3">
               <div className="grid grid-cols-2 gap-3">
                 {[
@@ -78,6 +58,34 @@ export function MyStory() {
             </figure>
           </Reveal>
         ) : null}
+
+        {/* 운영자 소개 */}
+        <Reveal delay={0.1} className="mt-6">
+          <div className="flex flex-col items-center gap-4 rounded-2xl border border-line bg-surface px-7 py-7 text-center sm:px-9">
+            <p className="font-display text-base text-brand-600 sm:text-lg dark:text-brand-300">{myStory.intro}</p>
+            <ul className="flex w-full max-w-sm flex-col gap-2 text-sm">
+              {myStory.career.map((item) => (
+                <li key={item.text} className="flex items-baseline justify-between gap-4 border-b border-line pb-2 last:border-0 last:pb-0">
+                  <span className="shrink-0 text-xs text-ink-muted">{item.period}</span>
+                  <span className="text-right font-medium text-ink">{item.text}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex gap-2">
+              {footer.socials.map((social) => (
+                <a
+                  key={social.href}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-line px-3.5 py-1.5 text-xs font-medium text-ink-muted transition-colors hover:border-brand-300 hover:text-ink"
+                >
+                  {social.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Reveal>
 
         {/* 이야기 본문 — 잘못된 믿음 → 진심 → 변화 → 깨달음 순서 (단계 이름은 화면에 보이지 않습니다) */}
         <ol className="mt-10 flex flex-col gap-4">
