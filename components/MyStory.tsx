@@ -119,48 +119,50 @@ export function MyStory() {
             </table>
           </div>
 
-          {/* 대회 사진 — 한 장이면 원래 비율 그대로 가운데에 */}
-          <div
-            className={cn(
-              "mt-4 grid gap-3",
-              myStory.races.photos.length > 1 ? "grid-cols-2" : "mx-auto max-w-sm grid-cols-1",
-            )}
-          >
-            {myStory.races.photos.map((photo, index) => {
-              const single = myStory.races.photos.length === 1;
+          {/* 대회 사진 — 한 장이면 원래 비율 그대로 가운데에 (비어 있으면 칸 자체를 그리지 않습니다) */}
+          {myStory.races.photos.length > 0 ? (
+            <div
+              className={cn(
+                "mt-4 grid gap-3",
+                myStory.races.photos.length > 1 ? "grid-cols-2" : "mx-auto max-w-sm grid-cols-1",
+              )}
+            >
+              {myStory.races.photos.map((photo, index) => {
+                const single = myStory.races.photos.length === 1;
 
-              return (
-                <figure
-                  key={photo.src}
-                  className={cn(
-                    "overflow-hidden rounded-2xl border border-line bg-surface",
-                    // 여러 장일 때 첫 사진은 크게 보여줍니다.
-                    !single && index === 0 && "col-span-2",
-                  )}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    width={photo.width}
-                    height={photo.height}
-                    loading="lazy"
+                return (
+                  <figure
+                    key={photo.src}
                     className={cn(
-                      "w-full",
-                      single
-                        ? "h-auto"
-                        : index === 0
-                          ? "aspect-[4/3] object-cover object-[center_35%]"
-                          : "aspect-square object-cover",
+                      "overflow-hidden rounded-2xl border border-line bg-surface",
+                      // 여러 장일 때 첫 사진은 크게 보여줍니다.
+                      !single && index === 0 && "col-span-2",
                     )}
-                  />
-                  <figcaption className="px-3 py-2.5 text-center text-[11px] font-medium text-ink-muted sm:text-xs">
-                    {photo.caption}
-                  </figcaption>
-                </figure>
-              );
-            })}
-          </div>
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={photo.src}
+                      alt={photo.alt}
+                      width={photo.width}
+                      height={photo.height}
+                      loading="lazy"
+                      className={cn(
+                        "w-full",
+                        single
+                          ? "h-auto"
+                          : index === 0
+                            ? "aspect-[4/3] object-cover object-[center_35%]"
+                            : "aspect-square object-cover",
+                      )}
+                    />
+                    <figcaption className="px-3 py-2.5 text-center text-[11px] font-medium text-ink-muted sm:text-xs">
+                      {photo.caption}
+                    </figcaption>
+                  </figure>
+                );
+              })}
+            </div>
+          ) : null}
 
           {/* 기록증 */}
           <p className="mt-8 text-center text-xs font-semibold text-ink-muted">기록증</p>
