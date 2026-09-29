@@ -12,6 +12,7 @@ import { Roadmap } from "@/components/Roadmap";
 import { SignupForm } from "@/components/SignupForm";
 import { SiteHeader } from "@/components/SiteHeader";
 import { StickyCTA } from "@/components/StickyCTA";
+import { Testimonials } from "@/components/Testimonials";
 import { WhyHabit } from "@/components/WhyHabit";
 
 export default function HomePage() {
@@ -21,6 +22,7 @@ export default function HomePage() {
 
       <main id="main">
         <Hero />
+        <Testimonials />
         <EmpathySection />
         <MyStory />
         <WhyHabit />
