@@ -43,32 +43,8 @@ export function MyStory() {
           </div>
         </Reveal>
 
-        {/* 이야기 본문 — 잘못된 믿음 → 진심 → 변화 → 깨달음 순서 (단계 이름은 화면에 보이지 않습니다) */}
-        <ol className="mt-10 flex flex-col gap-4">
-          {myStory.chapters.map((chapter, index) => (
-            <Reveal
-              key={chapter.title}
-              as="li"
-              delay={0.05 * index}
-              className={cn(
-                "flex flex-col gap-4 rounded-2xl border bg-surface p-7 sm:p-9",
-                index === myStory.chapters.length - 1 ? "border-brand-300 dark:border-brand-700" : "border-line",
-              )}
-            >
-              <h3 className="font-display text-balance text-lg leading-snug text-ink sm:text-xl">
-                {chapter.title}
-              </h3>
-              {chapter.body.map((paragraph) => (
-                <p key={paragraph} className="text-pretty text-sm leading-[1.9] text-ink-muted sm:text-base">
-                  {paragraph}
-                </p>
-              ))}
-            </Reveal>
-          ))}
-        </ol>
-
-        {/* 변화 요약 */}
-        <Reveal delay={0.2} className="mt-6">
+        {/* 성취 요약 — 숫자로 한눈에 */}
+        <Reveal delay={0.1} className="mt-6">
           <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-line sm:grid-cols-4">
             {myStory.changes.map((change) => (
               <div key={change.label} className="flex flex-col gap-1 bg-surface px-4 py-5 text-center">
@@ -79,6 +55,31 @@ export function MyStory() {
               </div>
             ))}
           </dl>
+        </Reveal>
+
+        {/* 성장 기록 — 짧은 타임라인 */}
+        <Reveal delay={0.15} className="mt-6">
+          <div className="rounded-2xl border border-line bg-surface p-7 sm:p-9">
+            <ol className="relative flex flex-col gap-6 border-l-2 border-brand-200 pl-6 dark:border-brand-800">
+              {myStory.milestones.map((item, index) => (
+                <li key={item.title} className="relative">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "absolute -left-[31px] top-1 size-3 rounded-full ring-4 ring-surface",
+                      index === myStory.milestones.length - 1 ? "bg-brand-600 dark:bg-brand-300" : "bg-brand-300 dark:bg-brand-700",
+                    )}
+                  />
+                  <span className="text-xs font-semibold text-brand-600 dark:text-brand-300">{item.when}</span>
+                  <p className="font-display mt-1 text-base leading-snug text-ink sm:text-lg">{item.title}</p>
+                  <p className="mt-1 text-pretty text-sm leading-relaxed text-ink-muted">{item.detail}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-7 text-pretty border-t border-line pt-6 text-center text-sm font-medium leading-relaxed text-ink sm:text-base">
+              {myStory.message}
+            </p>
+          </div>
         </Reveal>
 
         {/* 직접 달린 대회 — 기록표 · 사진 · 기록증 */}
