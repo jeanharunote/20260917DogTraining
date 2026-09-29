@@ -53,9 +53,9 @@ export const challengeInfo = {
    * 형식: "YYYY-MM-DDTHH:mm:ss+09:00" (끝의 +09:00 은 한국 시간대를 뜻해요)
    * 이 날짜가 지나면 카운트다운 자리에 countdownEndedText 문구가 대신 보입니다.
    */
-  deadline: "2026-10-02T23:59:59+09:00",
+  deadline: "2026-10-03T23:59:59+09:00",
   /** 화면에 글자로 보여줄 모집 마감일 */
-  deadlineText: "2026년 10월 2일(금) 자정",
+  deadlineText: "2026년 10월 3일(토) 자정",
   /** 모집 인원 */
   capacityText: "10명",
   /** 정원 (숫자) — 관리자 페이지에서 정원이 찼는지 확인하는 데 씁니다. capacityText 와 같아야 합니다 */
