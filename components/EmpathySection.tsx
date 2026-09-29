@@ -2,6 +2,7 @@
  * EmpathySection — "나만 그런 게 아니었구나" 공감 섹션.
  * 문구 수정은 data/challenge.ts 의 `empathy` 를 편집하세요.
  */
+import { IconBadge } from "@/components/IconBadge";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { empathy } from "@/data/challenge";
@@ -24,12 +25,7 @@ export function EmpathySection() {
               delay={index * 0.08}
               className="flex flex-col gap-3 rounded-2xl border border-line bg-surface-muted p-7"
             >
-              <span
-                aria-hidden="true"
-                className="flex size-10 items-center justify-center rounded-xl bg-surface text-lg ring-1 ring-line"
-              >
-                {point.emoji}
-              </span>
+              <IconBadge name={point.icon} />
               <h3 className="font-display text-base text-ink sm:text-lg">{point.title}</h3>
               <p className="text-pretty text-sm leading-[1.8] text-ink-muted">{point.body}</p>
             </Reveal>

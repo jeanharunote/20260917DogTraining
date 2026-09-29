@@ -2,6 +2,7 @@
  * FitSection — "러닝 해빗 클럽은 이런 분들께 잘 맞아요!" 추천 대상 섹션. 첫 화면 바로 다음에 나옵니다.
  * 문구는 data/challenge.ts 의 `fit` 을, 사진은 `myStory.beforeAfter` 를 편집하세요.
  */
+import { IconBadge } from "@/components/IconBadge";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { fit, myStory } from "@/data/challenge";
@@ -23,12 +24,7 @@ export function FitSection() {
               className="card-soft flex flex-col gap-4 rounded-2xl border border-line bg-surface p-6 sm:p-7"
             >
               <div className="flex items-start gap-3">
-                <span
-                  aria-hidden="true"
-                  className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-xl ring-1 ring-brand-100 dark:bg-brand-900/30 dark:ring-brand-800"
-                >
-                  {item.emoji}
-                </span>
+                <IconBadge name={item.icon} />
                 <div className="flex flex-col gap-1.5">
                   <h3 className="font-display text-balance text-lg leading-snug text-ink">{item.title}</h3>
                   <p className="text-pretty text-sm leading-relaxed text-ink-muted">{item.body}</p>
