@@ -116,6 +116,7 @@ export const cta = {
  * 3) 상단 네비게이션 (앵커 링크)
  * ======================================================================== */
 export const navLinks = [
+  { label: "이런 분께", href: "#fit" },
   { label: "후기", href: "#reviews" },
   { label: "드리는 것", href: "#system" },
   { label: "공감", href: "#empathy" },
@@ -132,14 +133,12 @@ export const hero = {
   /** 모집 중임을 알리는 작은 뱃지 */
   badge: `${challengeInfo.name} ${challengeInfo.cohortText} · ${challengeInfo.recruitText} ${challengeInfo.capacityText} 모집 중`,
   /** 가장 큰 제목 (줄바꿈은 배열의 항목을 나누면 됩니다) */
-  headline: ["마라톤 나가보고 싶은데,", "같이 나갈 사람이 없다면?"],
-  /** 제목 아래 두 번째 질문 — 바로 밑에 비포·애프터 사진(myStory.beforeAfter)이 나옵니다. 비워두면("") 둘 다 숨겨요 */
-  headlineExtra: "다이어트에 성공하고 싶다면?",
+  headline: ["러닝 습관을 통해", "건강한 몸과 마음으로", "변화하기"],
   /** 제목 아래 한 줄 */
-  subCopy: "4주 동안 같이 뛰고, 같이 대회 신청해요. 훈련은 다 떠먹여 드릴게요.",
+  subCopy: "4주 동안 주 4회, 같이 달리며 습관을 만들어요. 뭘 할지는 다 정해드릴게요.",
   /** 조금 더 자세한 설명 */
   description:
-    "혼자였다면 미뤘을 대회 신청을, 같이 하면 그냥 하게 됩니다. 레벨별 러닝 훈련표에 식단 가이드와 헬스 운동 가이드까지 드리고, 주 4회 인증으로 서로를 붙잡아 줍니다.",
+    "변화는 큰 결심이 아니라 매주 반복하는 작은 약속에서 시작돼요. 레벨별 러닝 훈련표에 식단 가이드와 헬스 운동 가이드까지 드리고, 주 4회 인증으로 서로를 붙잡아 줍니다.",
   /** 카운트다운 위에 붙는 설명 */
   countdownLabel: "모집 마감까지 남은 시간",
   /** 마감이 지났을 때 보여줄 문구 */
@@ -158,6 +157,36 @@ export const hero = {
    */
   backgroundImage: "",
   backgroundImageAlt: "해질 무렵 러닝 트랙을 함께 달리는 사람들",
+} as const;
+
+/* ===========================================================================
+ * 4-0) 이런 분들께 잘 맞아요 — 첫 화면 바로 다음에 나옵니다.
+ *   withBeforeAfter: true 인 카드 안에 운영자의 비포·애프터 사진(myStory.beforeAfter)이 들어갑니다.
+ * ======================================================================== */
+export const fit = {
+  eyebrow: "이런 분께 추천해요",
+  title: `${challengeInfo.name}은 이런 분들께 잘 맞아요!`,
+  description: "이런 분을 적극적으로 도와드릴 수 있어요.",
+  items: [
+    {
+      emoji: "🌱",
+      title: "운동이 늘 작심삼일로 끝나는 분",
+      body: "혼자서는 사흘을 넘기기 어려웠다면, 주 4회 인증과 함께 달리는 사람들로 4주를 채워요. 꾸준함이 쌓이면 변화는 따라와요.",
+      withBeforeAfter: false,
+    },
+    {
+      emoji: "🔥",
+      title: "러닝·헬스로 다이어트에 도전하고 싶은 분",
+      body: "굶지 않고 삼시세끼를 챙겨 먹으면서 10kg을 뺀 방법 그대로, 러닝 훈련표에 식단 가이드와 헬스 운동 가이드까지 드려요.",
+      withBeforeAfter: true,
+    },
+    {
+      emoji: "🏅",
+      title: "마라톤에 도전하고 싶은 분",
+      body: "나가보고 싶은데 같이 나갈 사람이 없었다면, 레벨별 훈련표로 4주 동안 꾸준히 준비하고 대회 신청도 함께해요.",
+      withBeforeAfter: false,
+    },
+  ],
 } as const;
 
 /* ===========================================================================
@@ -300,7 +329,7 @@ export const myStory = {
     "재능이 아니라 내 페이스로 꾸준히 달린 결과예요. 맨 뒤에서라도 끝까지 가고 싶은 분들과 함께 달리고 싶어요.",
 
   /**
-   * 비포·애프터 사진 (public/story 폴더) — 첫 화면(히어로)의 "다이어트에 성공하고 싶다면?" 바로 밑에 나옵니다.
+   * 비포·애프터 사진 (public/story 폴더) — '이런 분들께 잘 맞아요' 섹션의 다이어트 카드 안에 나옵니다.
    *   운영자 요청대로 사람만 또렷하게, 배경은 흐리게 처리했고
    *   두 사진의 사람 크기가 비슷하도록 같은 3:4 구도로 잘랐습니다.
    *   둘 중 하나라도 비워두면("") 이 부분은 화면에 나오지 않습니다.
@@ -309,9 +338,11 @@ export const myStory = {
     beforeImage: "/story/before.webp",
     beforeAlt: "러닝을 시작하기 전 모습",
     beforeLabel: "Before",
+    beforeWeight: "60kg",
     afterImage: "/story/after.webp",
     afterAlt: "러닝을 이어온 지금의 모습",
     afterLabel: "After",
+    afterWeight: "50kg",
     /** 사진 아래 설명 */
     caption: "러닝 5년차 · 10kg 감량 · 굶지 않고 삼시세끼 + 간식 끊기",
   },
@@ -396,7 +427,7 @@ export const whyHabit = {
     {
       emoji: "🎯",
       title: "정해진 목표일",
-      body: "대회 날짜가 잡히면 훈련이 '하면 좋은 일'에서 '해야 하는 일'로 바뀝니다. 그래서 같이 신청부터 합니다.",
+      body: "대회처럼 날짜가 정해진 목표가 있으면 훈련이 '하면 좋은 일'에서 '해야 하는 일'로 바뀝니다. 그래서 대회 신청을 권해드려요.",
     },
     {
       emoji: "📋",
@@ -424,8 +455,8 @@ export const whyHabit = {
     },
     {
       step: "04",
-      title: "대회를 같이 신청합니다",
-      body: "혼자라면 미뤘을 신청 버튼을, 같이 누릅니다. 4주 뒤 출발선에 함께 서 있는 게 목표예요.",
+      title: "4주 뒤, 달라진 나를 확인합니다",
+      body: "4주 동안 쌓인 인증 기록이 곧 변화의 증거예요. 대회를 신청했다면 출발선에서 그 변화를 직접 확인해요.",
     },
   ],
 } as const;
@@ -528,13 +559,13 @@ export const habitSystem = {
     },
     {
       emoji: "🏁",
-      title: "서울 대회 같이 신청",
-      body: `${challengeInfo.raceText}을 함께 신청합니다. 혼자라면 미뤘을 신청 버튼을 같이 누르고, 출발선에도 같이 섭니다.`,
+      title: "목표 대회 같이 신청",
+      body: `원하시면 ${challengeInfo.raceText}을 함께 신청해요. 날짜가 정해진 목표가 생기면 4주가 훨씬 단단해져요.`,
     },
     {
       emoji: "📊",
       title: "매주 일요일 결산",
-      body: "한 주 동안 얼마나 달렸는지 정리해 드립니다. 잘한 점과 다음 주 계획을 같이 짚으며 리듬을 유지해요.",
+      body: "한 주 동안 얼마나 달렸는지 정리해 드립니다. 잘한 점과 다음 주 계획을 같이 짚으며 습관의 리듬을 유지해요.",
     },
   ],
   /**
@@ -548,7 +579,7 @@ export const habitSystem = {
     { value: challengeInfo.capacityText, label: `${challengeInfo.cohortText} ${challengeInfo.recruitText} 모집` },
     { value: "주 4회", label: "러닝 인증" },
     { value: "4주", label: "프로그램 기간" },
-    { value: "10K · 하프", label: "목표 대회 종목" },
+    { value: "러닝·식단·헬스", label: "3가지 가이드" },
   ],
 } as const;
 
@@ -605,7 +636,7 @@ export const faq = {
     },
     {
       question: "정해진 시간·장소에 모여서 뛰나요?",
-      answer: `모여서 뛰는 일정은 없습니다. 각자 편한 시간과 장소에서 뛰고 ${challengeInfo.communityText}에 인증만 남기면 돼요. 대회 당일에만 다 같이 만납니다.`,
+      answer: `모여서 뛰는 일정은 없습니다. 각자 편한 시간과 장소에서 뛰고 ${challengeInfo.communityText}에 인증만 남기면 돼요. 대회를 신청한 분들은 대회 당일에 함께 만나요.`,
     },
   ],
 } as const;
@@ -648,7 +679,7 @@ export const signup = {
   googleFormUrl: "https://forms.gle/여기에-구글폼-주소를-넣으세요",
 
   eyebrow: "참가 신청",
-  title: "이번 4주, 같이 뛰어봐요",
+  title: "이번 4주, 같이 습관을 만들어요",
   description: `${challengeInfo.cohortText}는 ${challengeInfo.recruitText} ${challengeInfo.capacityText}만 받아요. 신청이 아니라 ${challengeInfo.recruitRule}. 자리를 잡으려면 신청 후 바로 입금해 주세요.`,
 
   /** 폼 위에 보여줄 요약 정보 */
@@ -716,7 +747,7 @@ export const signup = {
  * 12) Footer — TODO: 실제 문의처와 SNS 주소로 교체하세요
  * ======================================================================== */
 export const footer = {
-  tagline: "혼자였다면 미뤘을 출발선에, 같이 섭니다.",
+  tagline: "혼자서는 작심삼일이던 운동, 같이라면 습관이 됩니다.",
   contact: {
     emailLabel: "문의 이메일",
     email: "runnursehigh@gmail.com",
@@ -742,9 +773,9 @@ export const footer = {
  * 13) 브라우저 탭 제목 / 검색 결과 설명 (SEO)
  * ======================================================================== */
 export const siteMeta = {
-  title: `${challengeInfo.name} ${challengeInfo.cohortText} | 마라톤, 같이 나가요`,
+  title: `${challengeInfo.name} ${challengeInfo.cohortText} | 러닝 습관으로 건강한 변화`,
   description:
-    "4주 동안 같이 뛰고, 같이 대회 신청해요. 레벨별 훈련표와 주 4회 인증으로 함께 준비하는 러닝 해빗 클럽 1기 참가자를 모집합니다.",
+    "러닝 습관을 통해 건강한 몸과 마음으로. 주 4회 인증과 레벨별 훈련표, 식단·헬스 가이드로 4주 동안 꾸준한 습관을 함께 만드는 러닝 해빗 클럽 1기 참가자를 모집합니다.",
   /** 배포된 사이트 주소 — TODO: 도메인을 연결하면 그 주소로 바꿔주세요 */
   url: "https://vermillion-entremet-bec89b.netlify.app",
   /**

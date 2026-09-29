@@ -4,6 +4,7 @@
  */
 import { EmpathySection } from "@/components/EmpathySection";
 import { FAQ } from "@/components/FAQ";
+import { FitSection } from "@/components/FitSection";
 import { Footer } from "@/components/Footer";
 import { HabitSystem } from "@/components/HabitSystem";
 import { Hero } from "@/components/Hero";
@@ -22,6 +23,7 @@ export default function HomePage() {
 
       <main id="main">
         <Hero />
+        <FitSection />
         <Testimonials />
         <HabitSystem />
         <EmpathySection />

@@ -6,7 +6,7 @@ import { CtaButton } from "@/components/CtaButton";
 import { Countdown } from "@/components/Countdown";
 import { FeePrice } from "@/components/FeePrice";
 import { Reveal } from "@/components/Reveal";
-import { challengeInfo, cta, hero, myStory } from "@/data/challenge";
+import { challengeInfo, cta, hero } from "@/data/challenge";
 
 export function Hero() {
   return (
@@ -58,42 +58,8 @@ export function Hero() {
                   {line}
                 </span>
               ))}
-              {hero.headlineExtra ? (
-                <span className="mt-3 block text-brand-200 sm:mt-4">{hero.headlineExtra}</span>
-              ) : null}
             </h1>
           </Reveal>
-
-          {/* 두 번째 질문 바로 밑 — 운영자의 다이어트 비포·애프터 */}
-          {hero.headlineExtra && myStory.beforeAfter.beforeImage && myStory.beforeAfter.afterImage ? (
-            <Reveal delay={0.08} className="w-full max-w-md">
-              <figure className="flex flex-col gap-2.5">
-                <div className="grid grid-cols-2 gap-2.5">
-                  {[
-                    {
-                      src: myStory.beforeAfter.beforeImage,
-                      alt: myStory.beforeAfter.beforeAlt,
-                      label: myStory.beforeAfter.beforeLabel,
-                    },
-                    {
-                      src: myStory.beforeAfter.afterImage,
-                      alt: myStory.beforeAfter.afterAlt,
-                      label: myStory.beforeAfter.afterLabel,
-                    },
-                  ].map((photo) => (
-                    <div key={photo.label} className="relative overflow-hidden rounded-2xl ring-1 ring-white/15">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={photo.src} alt={photo.alt} className="aspect-[3/4] w-full object-cover" />
-                      <span className="absolute left-2.5 top-2.5 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">
-                        {photo.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <figcaption className="text-xs text-white/60">{myStory.beforeAfter.caption}</figcaption>
-              </figure>
-            </Reveal>
-          ) : null}
 
           <Reveal delay={0.1} className="flex flex-col gap-3">
             <p className="font-display text-lg text-brand-200 sm:text-xl">{hero.subCopy}</p>
