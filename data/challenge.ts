@@ -117,11 +117,11 @@ export const cta = {
  * ======================================================================== */
 export const navLinks = [
   { label: "후기", href: "#reviews" },
+  { label: "드리는 것", href: "#system" },
   { label: "공감", href: "#empathy" },
   { label: "제 이야기", href: "#my-story" },
   { label: "습관 원리", href: "#why-habit" },
   { label: "4주 코스", href: "#roadmap" },
-  { label: "지원 장치", href: "#system" },
   { label: "자주 묻는 질문", href: "#faq" },
 ] as const;
 
@@ -345,29 +345,8 @@ export const myStory = {
       { date: "", name: "두근두근런 with 119REO", course: "10km", record: "56분 40초", note: "" },
     ],
 
-    /** 대회 사진 — 첫 번째 사진은 크게 보여줍니다 */
+    /** 대회 사진 — 한 장이면 원래 비율 그대로, 여러 장이면 첫 사진을 크게 보여줍니다 */
     photos: [
-      {
-        src: "/story/race-10k-record.webp",
-        width: 732,
-        height: 708,
-        alt: "2025 무한도전 RUN 10km 완주 기록판 옆에서 웃고 있는 모습. 기록 57분 25초",
-        caption: "2025 무한도전 RUN · 10km 57분 25초",
-      },
-      {
-        src: "/story/race-dugeun.webp",
-        width: 742,
-        height: 582,
-        alt: "두근두근런 with 119REO 10km 완주 기록 56분 40초 팻말을 들고 메달을 든 모습",
-        caption: "두근두근런 with 119REO · 10km 56분 40초",
-      },
-      {
-        src: "/story/race-yeouido.webp",
-        width: 732,
-        height: 496,
-        alt: "제13회 여의도 벚꽃 마라톤대회 포토월 앞에서 점프하는 모습",
-        caption: "제13회 여의도 벚꽃 마라톤대회 (2023)",
-      },
       {
         src: "/story/race-hangang.webp",
         width: 728,
@@ -375,24 +354,10 @@ export const myStory = {
         alt: "한강 마라톤 대회 출발 아치 앞에서 완주 메달을 걸고 점프하는 모습",
         caption: "한강 마라톤 대회 완주",
       },
-      {
-        src: "/story/race-autumn.webp",
-        width: 732,
-        height: 550,
-        alt: "가을 러닝 대회에서 완주 메달을 들고 브이를 하는 모습",
-        caption: "가을 러닝 대회 완주",
-      },
     ],
 
     /** 기록증 */
     certificates: [
-      {
-        src: "/story/cert-earth-2025.webp",
-        width: 732,
-        height: 984,
-        alt: "2025 서울 어스마라톤 하프 완주 기록증. 기록 2시간 5분 25초",
-        caption: "2025 서울 어스마라톤 · 하프",
-      },
       {
         src: "/story/cert-seoulrun-2026.webp",
         width: 732,
@@ -606,6 +571,10 @@ export const faq = {
     {
       question: "어떤 대회에 나가나요?",
       answer: `서울에서 열리는 마라톤 대회를 함께 신청할 예정이에요. ${challengeInfo.raceNote} 대회 참가비는 개인 부담입니다.`,
+    },
+    {
+      question: "대회 참가는 필수인가요?",
+      answer: "필수는 아니에요. 다만 4주 동안 목표를 갖고 꾸준히 달리기 위해 대회 신청을 권장드려요.",
     },
     {
       question: "하프는 누구나 가능한가요?",

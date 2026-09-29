@@ -23,11 +23,11 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Testimonials />
+        <HabitSystem />
         <EmpathySection />
         <MyStory />
         <WhyHabit />
         <Roadmap />
-        <HabitSystem />
         <FAQ />
         <SignupForm />
       </main>
