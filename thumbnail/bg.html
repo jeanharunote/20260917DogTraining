@@ -1,0 +1,111 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0}
+#wrap{position:relative;width:1280px;height:720px;overflow:hidden}
+svg{display:block}
+#preview{position:absolute;inset:0;display:none}
+body.preview #preview{display:block}
+.t{position:absolute;left:0;right:0;text-align:center;font-family:'WenQuanYi Zen Hei';font-weight:900;font-size:92px;letter-spacing:-2px;
+ -webkit-text-stroke:4px #111;paint-order:stroke fill;text-shadow:0 4px 0 #111}
+</style></head><body><div id="wrap">
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3efe9"/><stop offset="1" stop-color="#ddd6cd"/></linearGradient>
+ <radialGradient id="glow" cx=".5" cy=".38" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#5a4a3a" stop-opacity=".22"/></radialGradient>
+ <pattern id="mesh" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2.2" fill="#000" opacity=".13"/></pattern>
+ <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="6" dy="10" stdDeviation="8" flood-color="#6b5a48" flood-opacity=".28"/></filter>
+ <g id="face"><ellipse cx="-22" cy="0" rx="6" ry="8" fill="#2b2b2b"/><ellipse cx="22" cy="0" rx="6" ry="8" fill="#2b2b2b"/>
+  <circle cx="-20" cy="-3" r="2.2" fill="#fff"/><circle cx="24" cy="-3" r="2.2" fill="#fff"/>
+  <ellipse cx="-36" cy="14" rx="9" ry="5.5" fill="#ff7b9c" opacity=".7"/><ellipse cx="36" cy="14" rx="9" ry="5.5" fill="#ff7b9c" opacity=".7"/>
+  <path d="M-8 12 Q0 21 8 12" stroke="#2b2b2b" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+ <g id="hanger" fill="none" stroke="#b9875a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M0 -30 Q0 -48 14 -48 Q26 -48 26 -36 Q26 -26 0 -18 L0 -10" stroke="#9aa0a6" stroke-width="5"/>
+  <path d="M0 -10 L-92 30 Q-100 36 -90 38 L90 38 Q100 36 92 30 Z"/></g>
+ <g id="spark"><path d="M0 -16 Q3 -3 16 0 Q3 3 0 16 Q-3 3 -16 0 Q-3 -3 0 -16Z"/></g>
+ <g id="snow" stroke-linecap="round" stroke-width="3.5" fill="none">
+  <path d="M0 -16V16M-14 -8L14 8M-14 8L14 -8"/><path d="M-5 -12L0 -7L5 -12M-5 12L0 7L5 12" stroke-width="3"/></g>
+ <g id="heart"><path d="M0 8 C-14 -2 -12 -14 -5 -14 C-2 -14 0 -11 0 -9 C0 -11 2 -14 5 -14 C12 -14 14 -2 0 8Z"/></g>
+</defs>
+<rect width="1280" height="720" fill="url(#wall)"/>
+<rect width="1280" height="720" fill="url(#glow)"/>
+<!-- soft shelf line / floor -->
+<rect x="0" y="600" width="1280" height="120" fill="#cfc6ba" opacity=".55"/>
+<rect x="0" y="596" width="1280" height="6" fill="#bfb4a6" opacity=".6"/>
+
+<!-- ===== LEFT : windbreaker ===== -->
+<g transform="translate(250 300) rotate(-6)" filter="url(#sh)">
+ <circle cx="0" cy="-118" r="9" fill="#8a7b6c"/>
+ <g transform="translate(0 -80)"><use href="#hanger"/></g>
+ <g stroke="#2e3a4a" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round">
+  <!-- hood -->
+  <path d="M-58 -62 Q-62 -128 0 -132 Q62 -128 58 -62 Z" fill="#5fb7e8"/>
+  <path d="M-34 -66 Q-34 -106 0 -108 Q34 -106 34 -66 Z" fill="#3f8fc2"/>
+  <!-- sleeves -->
+  <path d="M-88 -52 Q-128 -30 -150 70 L-150 112 L-112 116 L-104 76 Q-98 20 -86 0 Z" fill="#5fb7e8"/>
+  <path d="M88 -52 Q128 -30 150 70 L150 112 L112 116 L104 76 Q98 20 86 0 Z" fill="#5fb7e8"/>
+  <path d="M-150 100 L-112 104 L-112 118 L-150 114Z" fill="#ffd34d"/>
+  <path d="M150 100 L112 104 L112 118 L150 114Z" fill="#ffd34d"/>
+  <!-- body -->
+  <path d="M-90 -58 Q-60 -72 -30 -66 L30 -66 Q60 -72 90 -58 L96 130 Q0 146 -96 130 Z" fill="#7cc8f0"/>
+  <path d="M-96 112 Q0 128 96 112 L96 132 Q0 148 -96 132 Z" fill="#3f8fc2"/>
+  <line x1="0" y1="-66" x2="0" y2="138" stroke-width="4"/>
+ </g>
+ <rect x="-5" y="-50" width="10" height="20" rx="3" fill="#ffd34d" stroke="#2e3a4a" stroke-width="3.5"/>
+ <!-- reflective stripe -->
+ <path d="M-92 -10 L92 -10 L92 4 L-92 4Z" fill="#fff" opacity=".85"/>
+ <path d="M-70 70 Q-48 76 -26 70" stroke="#2e3a4a" stroke-width="4" fill="none" stroke-linecap="round"/>
+ <path d="M26 70 Q48 76 70 70" stroke="#2e3a4a" stroke-width="4" fill="none" stroke-linecap="round"/>
+ <use href="#face" transform="translate(0 32)"/>
+</g>
+
+<!-- ===== RIGHT 1 : running vest ===== -->
+<g transform="translate(985 235) rotate(5)" filter="url(#sh)">
+ <circle cx="0" cy="-122" r="9" fill="#8a7b6c"/>
+ <g transform="translate(0 -84)"><use href="#hanger" transform="scale(.82 1)"/></g>
+ <g stroke="#4a2b2b" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M-62 -78 L-30 -78 Q0 -10 30 -78 L62 -78 Q66 -20 92 0 L92 110 Q0 126 -92 110 L-92 0 Q-66 -20 -62 -78 Z" fill="#ff8f86"/>
+ </g>
+ <path d="M-62 -78 L-30 -78 Q0 -10 30 -78 L62 -78 Q66 -20 92 0 L92 110 Q0 126 -92 110 L-92 0 Q-66 -20 -62 -78 Z" fill="url(#mesh)"/>
+ <!-- flasks -->
+ <g stroke="#4a2b2b" stroke-width="4.5" stroke-linejoin="round">
+  <rect x="-80" y="-22" width="36" height="66" rx="14" fill="#bfe8ff"/>
+  <rect x="-70" y="-38" width="16" height="18" rx="4" fill="#ffd34d"/>
+  <rect x="44" y="-22" width="36" height="66" rx="14" fill="#bfe8ff"/>
+  <rect x="54" y="-38" width="16" height="18" rx="4" fill="#ffd34d"/>
+ </g>
+ <path d="M-74 0 L-74 30" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+ <path d="M50 0 L50 30" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+ <path d="M-40 58 L40 58 M-40 74 L40 74" stroke="#4a2b2b" stroke-width="4" stroke-linecap="round"/>
+ <use href="#face" transform="translate(0 22) scale(.85)"/>
+</g>
+
+<!-- ===== RIGHT 2 : leggings on clothespins ===== -->
+<g transform="translate(1170 330) rotate(-4)" filter="url(#sh)">
+ <path d="M-70 -140 Q0 -120 70 -140" stroke="#8a7b6c" stroke-width="3" fill="none"/>
+ <g stroke="#2a2550" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round">
+  <path d="M-56 -112 L56 -112 L54 140 Q36 146 16 140 L4 -6 L-4 -6 L-16 140 Q-36 146 -54 140 Z" fill="#8b7cf6"/>
+  <rect x="-58" y="-128" width="116" height="24" rx="6" fill="#6c5ce7"/>
+  <path d="M-54 124 Q-36 130 -16 124 M16 124 Q36 130 54 124" fill="none" stroke-width="4"/>
+ </g>
+ <path d="M-46 -98 L-50 120 M46 -98 L50 120" stroke="#ff9ec7" stroke-width="7" stroke-linecap="round"/>
+ <!-- pins -->
+ <g stroke="#7a5230" stroke-width="3.5"><rect x="-44" y="-150" width="14" height="36" rx="4" fill="#ffcf8a"/><rect x="30" y="-150" width="14" height="36" rx="4" fill="#ffcf8a"/></g>
+ <use href="#face" transform="translate(0 -62) scale(.8)"/>
+</g>
+
+<!-- ===== decorations ===== -->
+<g fill="#ffd34d"><use href="#spark" transform="translate(110 120) scale(1.2)"/><use href="#spark" transform="translate(445 150) scale(.9)"/>
+ <use href="#spark" transform="translate(830 110) scale(1.1)"/><use href="#spark" transform="translate(1235 120) scale(.8)"/></g>
+<g stroke="#7cc8f0"><use href="#snow" transform="translate(410 330) scale(1.1)"/><use href="#snow" transform="translate(70 470) scale(.9)"/>
+ <use href="#snow" transform="translate(860 400) scale(1)"/><use href="#snow" transform="translate(1080 470) scale(.8)"/></g>
+<g fill="#ff8fab"><use href="#heart" transform="translate(395 240) scale(1.3) rotate(12)"/><use href="#heart" transform="translate(880 255) scale(1.1) rotate(-14)"/>
+ <use href="#heart" transform="translate(1240 470) scale(1) rotate(10)"/></g>
+<rect width="1280" height="720" fill="url(#vig)"/>
+</svg>
+<div id="preview">
+ <svg width="1280" height="720" style="position:absolute;inset:0"><g fill="#222" opacity=".28">
+  <ellipse cx="640" cy="290" rx="110" ry="135"/><path d="M420 720 Q440 460 640 440 Q840 460 860 720Z"/></g>
+  <text x="640" y="250" text-anchor="middle" font-size="22" fill="#fff" font-family="WenQuanYi Zen Hei">(내 사진 자리)</text></svg>
+ <div class="t" style="top:470px;color:#fff">온도별 겨울 러닝복</div>
+ <div class="t" style="top:580px;color:#e9ff3a">딱 이렇게 입으세요</div>
+</div></div></body></html>
